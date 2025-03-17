@@ -1,16 +1,16 @@
 import { Link, Outlet } from "react-router";
 import reactLogo from "../assets/react.svg"
 
-const OwnerLayout = () => {
+const CustomerLayout = () => {
     return (
         <>
             <header className="header">
                 <nav className="flex flex-row gap-4">
                     <Link to={"/"}><img alt="logo" className="logo react" src={reactLogo} /></Link>
-                    <Link to="/owner">Owner Dashboard</Link>
-                    <Link to="/owner/property-management">Manage Properties</Link>
-                    <Link to="/owner/offers">View Offers</Link>
-                    <Link to="/owner/messages">Messages</Link>
+                    <Link to="/customer">Customer Dashboard</Link>
+                    <Link to="/customer/current-offers">Current Offers</Link>
+                    <Link to="/customer/offer-history">Offer History</Link>
+                    <Link to="/customer/saved-properties">Saved Properties</Link>
                 </nav>
             </header>
             <main id="main">
@@ -20,4 +20,4 @@ const OwnerLayout = () => {
     )
 }
 
-export default OwnerLayout;
+export default CustomerLayout;
