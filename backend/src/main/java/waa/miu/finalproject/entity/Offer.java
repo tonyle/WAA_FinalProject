@@ -13,11 +13,10 @@ public class Offer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
-    long propertyId;
-    long customerId;
-    double offerPrice;
-    int status;
+//    (rent or buy)
+    private String type;
+    private double offerPrice;
+    private int status;
 
     @ManyToOne
     @JoinColumn
