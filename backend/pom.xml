@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>waa.miu</groupId>
-	<artifactId>lap1</artifactId>
+	<artifactId>finalproject</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>lap1</name>
 	<description>Demo project for Spring Boot</description>
