@@ -11,11 +11,6 @@ const OwnerLayout = () => {
 
                     <div className="flex flex-row gap-4 justify-end items-center">
                         <nav>
-                            <Link to="/owner">Owner Dashboard</Link>
-                            <Link to="/owner/property-management">Manage Properties</Link>
-                            <Link to="/owner/offers">View Offers</Link>
-                            <Link to="/owner/messages">Messages</Link>
-
                             {/* Login / Signup / User Info */}
                             <UserDropdown />
                             
