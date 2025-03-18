@@ -29,7 +29,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: java-app
-          path: "./backend/target/*.jar"
+          path: "./backend/target/*.jar"  # Ensure this points to the correct location
 
   deploy:
     runs-on: ubuntu-latest
@@ -47,6 +47,10 @@ jobs:
         with:
           name: java-app
 
+      - name: Check downloaded artifact
+        run: |
+          ls -la  # List all files to verify that the JAR file is downloaded correctly
+
       - name: Login to Azure
         uses: azure/login@v2
         with:
@@ -60,4 +64,4 @@ jobs:
         with:
           app-name: "finalprojectbackend"
           slot-name: "Production"
-          package: "./backend/target/*.jar"
+          package: "./java-app/*.jar"  # Ensure the correct path to the artifact after download
