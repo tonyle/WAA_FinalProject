@@ -1,11 +1,9 @@
 package waa.miu.finalproject.entity;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import waa.miu.finalproject.enums.*;
 import jakarta.persistence.*;
 import lombok.Data;
-import org.hibernate.annotations.BatchSize;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
 import java.util.List;
 
@@ -20,13 +18,16 @@ public class User {
     String email;
     String password;
     String phone;
-    String status;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @Enumerated(EnumType.STRING)
+    OwnerStatusEnum status;
+
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable
     private List<Role> roles;
 
     @OneToMany(fetch = FetchType.LAZY)
+    @JsonManagedReference
     private List<Property> ownedProperties;
 
     @OneToMany(fetch = FetchType.LAZY)

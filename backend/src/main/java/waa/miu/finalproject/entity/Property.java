@@ -1,5 +1,6 @@
 package waa.miu.finalproject.entity;
-
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import waa.miu.finalproject.enums.*;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -15,13 +16,15 @@ public class Property {
     String name;
     String description;
     // (rent or sell or both)
-    String type;
+    @Enumerated(EnumType.STRING)
+    PropertyTypeEnum type;
     long addressId;
     double price;
     int bed;
     int bath;
     double sqft;
-    int status;
+    @Enumerated(EnumType.STRING)
+    PropertyStatusEnum status;
     double view;
     double save;
     int yearBuilt;
@@ -32,7 +35,8 @@ public class Property {
     @JoinColumn
     private List<Photo> photos;
 
-    @ManyToOne(fetch=FetchType.EAGER)
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JsonBackReference
     @JoinColumn
     private User user;
 
