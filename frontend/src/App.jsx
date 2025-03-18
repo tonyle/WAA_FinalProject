@@ -1,18 +1,9 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-// import './App.css'
-// admin
-import ApproveOwners from './components/Admin/ApproveOwners.jsx';
-import ManageOwners from './components/Admin/ManageOwners.jsx';
-import AdminDashboard from './components/Admin/AdminDashboard.jsx';
-
 // owner 
 import OwnerDashboard from './components/Owner/OwnerDashboard.jsx';
 import PropertyManagement from './components/Owner/PropertyManagement.tsx';
 import Offers from './components/Owner/Offers.tsx';
 import Messages from './components/Owner/Messages.tsx';
-import { Route, Routes } from 'react-router'
+import { Navigate, Route, Routes } from 'react-router'
 import AuthLayout from './containers/AuthLayout'
 import Login from './components/Auth/Login'
 import Logout from './components/Auth/Logout'
@@ -29,6 +20,11 @@ import SavedProperties from './components/Customer/SavedProperties.jsx';
 import NotFound from './components/NotFound.jsx';
 import ProtectedRoute from './containers/ProtectedRoute.jsx';
 import { UserRole } from './constants/role.js';
+
+// admin
+import CustomerManagement from './components/Admin/CustomerManagement.jsx';
+import PropertiesManagement from './components/Admin/PropertiesManagement.jsx';
+import OwnerManagement from './components/Admin/OwnerManagement.jsx';
 
 function App() {
   return (
@@ -48,9 +44,10 @@ function App() {
 
       <Route path="/admin" element={<ProtectedRoute allowedRoles={[UserRole.ADMIN]}/>}>
           <Route element={<AdminLayout />}>
-            <Route index element={<AdminDashboard />} /> {/* Default page for /admin */}
-            <Route path="approve-owners" element={<ApproveOwners />} />
-            <Route path="manage-owners" element={<ManageOwners />} />
+            <Route index element={<Navigate to="/admin/properties" replace />} />
+            <Route path="properties" element={<PropertiesManagement />} />
+            <Route path="owners" element={<OwnerManagement />} />
+            <Route path="customers" element={<CustomerManagement />} />
           </Route>
       </Route>
 
