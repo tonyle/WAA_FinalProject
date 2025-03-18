@@ -1,2 +1,51 @@
 node_modules
-.vite
+.vitegi
+
+# Compiled class files
+*.class
+*.war
+*.ear
+
+# Log files
+*.log
+
+# Maven
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+
+# Gradle
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# Java IDE settings (IntelliJ IDEA, Eclipse, NetBeans)
+.idea/
+*.iml
+*.ipr
+*.iws
+*.swp
+
+# IntelliJ IDEA specific
+out/
+*.jar
+*.jpd
+*.tmp
+
+# Lombok cache
+.lombok/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Test reports
+test-output/
+surefire-reports/

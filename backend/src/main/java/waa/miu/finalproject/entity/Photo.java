@@ -13,5 +13,4 @@ public class Photo {
     private long id;
 
     String path;
-    long propertyId;
 }
