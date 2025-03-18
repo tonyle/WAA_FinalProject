@@ -54,7 +54,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional
-    public void updatePost(int id, PostDto post) {
+    public void updatePost(long id, PostDto post) {
         Post p = postRepo.findById(id).orElseThrow(() -> new RuntimeException("Post not found"));
         p.setTitle(post.getTitle());
         //entityManager.flush(); // already manage new title in persistent context
@@ -64,12 +64,12 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public void deletePost(int id) {
+    public void deletePost(long id) {
         entityManager.remove(userRepo.findById(id));
     }
 
     @Override
-    public PostDto getPost(int id) {
+    public PostDto getPost(long id) {
         Post p = postRepo.findById(id).orElseThrow(() -> new RuntimeException("Post not found"));
         return modelMapper.map(p, PostDto.class);
     }
@@ -95,7 +95,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<CommentDto> getCommentsByPost(int postId) {
+    public List<CommentDto> getCommentsByPost(long postId) {
         List<Comment> comments = commentRepo.getCommentsByPostId(postId);
         return comments.stream().map(c -> modelMapper.map(c, CommentDto.class)).collect(Collectors.toList());
     }

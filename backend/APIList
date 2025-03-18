@@ -7,79 +7,77 @@ endpoint http://localhost:8080/api/v1/auth
 
     ResetPassword
     **Customer
-        1. Get list of viewed Property:
-            Get http://localhost:8080/api/v1/auth/user/userId/view/?search=..
-        2. Get list of saved Property:
-            Get http://localhost:8080/api/v1/auth/user/userId/save/?search=..
-        3. Get list of all offers:
-            Get http://localhost:8080/api/v1/auth/user/userId/offer/?search=..
-        3. Get list of current activate offers:
-            Get http://localhost:8080/api/v1/auth/user/userId/offer/current
-        4. View a Property (save propertyId into list of viewed properties)
-            Put: http://localhost:8080/api/v1/auth/user/userId/view/propertyId
-        5. Save a Property:
-            Put: http://localhost:8080/api/v1/auth/user/userId/save/propertyId
-        6. Make an offer:
-            Post http://localhost:8080/api/v1/auth/user/userId/offer/propertyId
+
+        1. Get list of all offers:
+            Get http://localhost:8080/api/v1/offers?search=..
+
+        2. Get property detail
+            Get: http://localhost:8080/api/v1/properties/:propertyId
+
+        3. Add a Property in favourites:
+            Put: http://localhost:8080/api/v1/favourites/:favouriteId/properties/:propertyId
+
+        4. Remove property from favouriteList:
+            Delete: http://localhost:8080/api/v1/favourites/:favouriteId/properties/:propertyId
+
+        5. Make an offer:
+            Post http://localhost:8080/api/v1/offers
             {
+                propertyId,
                 offeredPrice
             }
+
+        6. Get list of saved Property:
+            Get http://localhost:8080/api/v1/favourites?search=..
+
         7. Create new favouriteList:
-            Post http://localhost:8080/api/v1/auth/user/userId/favouritelist/
+            Post http://localhost:8080/api/v1/favourites
             {
                 name:
             }
-        7. Modify a property into a favouriteList:
-            Put http://localhost:8080/api/v1/auth/user/:userId/favouritelist/:favouriteListId/:propertyId
+
 
     **Owner
         1. Post a property:
-            Post http://localhost:8080/api/v1/auth/user/userId/property
+            Post http://localhost:8080/api/v1/properties
             {
 
             }
         Modify, Delete property
 
-        2. Get list of all offers:
-            Get http://localhost:8080/api/v1/auth/user/userId/offers/?search=..
-        2. Get list of current offers:
-            Get http://localhost:8080/api/v1/auth/user/userId/offers/current/?search=..
-        3. Get list of offers of a specific property:
-            Get http://localhost:8080/api/v1/auth/user/userId/offers/propertyId
-        4. Respond offer
-            Put http://localhost:8080/api/v1/auth/user/userId/offers/?desision = reject
-            Put http://localhost:8080/api/v1/auth/user/userId/offers/?desision = accept
-        5. Set sold property
-            Put http://localhost:8080/api/v1/auth/user/userId/property/propertyId
-    **Admin
-        1. Get list of rented Properties:
-            Get http://localhost:8080/api/v1/auth/admin/properties/rent/?search=..
-        2. Get list of sold Properties:
-            Get http://localhost:8080/api/v1/auth/admin/properties/sold/?search=..
-        3. Get list of customers:
-            Get http://localhost:8080/api/v1/auth/admin/customers/?search=..
-        4. Get list of owners:
-            Get http://localhost:8080/api/v1/auth/admin/owners/?search=..
-        5. Get list of activate customers:
-            Get http://localhost:8080/api/v1/auth/admin/customers/activate/?search=..
-        6. Get list of activate owners:
-            Get http://localhost:8080/api/v1/auth/admin/owners/activate/?search=..
-        7. Get list of all offers:
-            Get http://localhost:8080/api/v1/auth/admin/offers/?search=..
-        8. Get list of new properties which need to assess:
-            Get http://localhost:8080/api/v1/auth/admin/properties/new/?search=..
-        9. Activate/Deactivate an owner account:
-            Put http://localhost:8080/api/v1/auth/admin/users/userId/
-        9. Activate/Deactivate a property:
-            Put http://localhost:8080/api/v1/auth/admin/properties/propertyId/
-**Property
-    GetAllProperty:
-    http://localhost:8080/api/v1/auth/properties/?search=..
-    GetPropertyById:
-    http://localhost:8080/api/v1/auth/properties/id
-**Offer
+        2. Get list of all offers: (available in customer API)
+            Get http://localhost:8080/api/v1/users/:ownerId/offers?search=..
+        3. Respond offer
+            Put http://localhost:8080/api/v1/offers/:offerId
+            {
+                status: ACCEPTED or REJECTED
+            }
 
-**
+    **Admin
+        1. Get list of Properties:
+            Get http://localhost:8080/api/v1/properties?search=..
+        2. Get list of customers:
+            Get http://localhost:8080/api/v1/users?search=..
+        3. Get list of all offers:
+            Get http://localhost:8080/api/v1/offers?search=..
+        4. Activate/Deactivate an owner account:
+            Put http://localhost:8080/api/v1/users/:userId
+            {
+                status: Activate/Deactivate
+            }
+        5. Activate/Deactivate a property:
+            Put http://localhost:8080/api/v1/properties/:propertyId/
+            {
+                status: Activate/Deactivate
+            }
 
 ** Email
     Send email
+    post http://localhost:8080/api/v1/emails
+    {
+        customerName,
+        customerPhone,
+        customerEmail,
+        propertyId,
+        content
+    }

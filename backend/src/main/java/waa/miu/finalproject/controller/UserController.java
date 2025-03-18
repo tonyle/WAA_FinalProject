@@ -31,7 +31,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserDto> findById(@PathVariable("id") int id) {
+    public ResponseEntity<UserDto> findById(@PathVariable("id") long id) {
         UserDto userDto = userService.findById(id);
         return ResponseEntity.ok(userDto);
     }
@@ -42,13 +42,13 @@ public class UserController {
     }
 
     @GetMapping("/{id}/posts")
-    public ResponseEntity<List<PostNoAuthorDto>> getPosts(@PathVariable("id") int id) {
+    public ResponseEntity<List<PostNoAuthorDto>> getPosts(@PathVariable("id") long id) {
         List<PostNoAuthorDto> posts = userService.getPosts(id);
         return ResponseEntity.ok(posts);
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable("id") int id) {
+    public void delete(@PathVariable("id") long id) {
         userService.delete(id);
     }
 }

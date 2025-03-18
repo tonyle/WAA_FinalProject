@@ -9,5 +9,5 @@ import lombok.Setter;
 @Setter
 public class InputCommentDto {
     String text;
-    int post_id;
+    long post_id;
 }

@@ -8,8 +8,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class InputPostDto {
-    int id;
+    long id;
     String title;
     String content;
-    int author_id;
+    long author_id;
 }

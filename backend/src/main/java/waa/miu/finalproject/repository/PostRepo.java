@@ -8,7 +8,7 @@ import waa.miu.finalproject.repository.custom.PostCustomRepo;
 
 import java.util.List;
 
-public interface PostRepo extends JpaRepository<Post, Integer>, PostCustomRepo {
+public interface PostRepo extends JpaRepository<Post, Long>, PostCustomRepo {
     @Query("select p from Post p Join p.author u where u.name = :author")
     public List<Post> getPostsByAuthor(@Param("author") String author);
 

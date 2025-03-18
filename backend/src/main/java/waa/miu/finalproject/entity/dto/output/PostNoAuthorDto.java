@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PostNoAuthorDto {
-    private int id;
+    private long id;
     private String title;
     private String content;
 }
