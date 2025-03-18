@@ -28,6 +28,7 @@ import OfferHistory from './components/Customer/OfferHistory.jsx';
 import SavedProperties from './components/Customer/SavedProperties.jsx';
 import NotFound from './components/NotFound.jsx';
 import ProtectedRoute from './containers/ProtectedRoute.jsx';
+import { UserRole } from './constants/role.js';
 
 function App() {
   return (
@@ -45,7 +46,7 @@ function App() {
         <Route index element={<Homepage />}/>
       </Route>
 
-      <Route path="/admin" element={<ProtectedRoute />}>
+      <Route path="/admin" element={<ProtectedRoute allowedRoles={[UserRole.ADMIN]}/>}>
           <Route element={<AdminLayout />}>
             <Route index element={<AdminDashboard />} /> {/* Default page for /admin */}
             <Route path="approve-owners" element={<ApproveOwners />} />
@@ -53,7 +54,7 @@ function App() {
           </Route>
       </Route>
 
-      <Route path="/owner" element={<ProtectedRoute />}>
+      <Route path="/owner" element={<ProtectedRoute allowedRoles={[UserRole.OWNER]}/>}>
         <Route element={<OwnerLayout />}>
           <Route index element={<OwnerDashboard />} />
           
@@ -63,7 +64,7 @@ function App() {
         </Route>
       </Route>
 
-      <Route path="/customer" element={<ProtectedRoute />}>
+      <Route path="/customer" element={<ProtectedRoute allowedRoles={[UserRole.CUSTOMER]}/>}>
         <Route element={<CustomerLayout />}>
           <Route index element={<CustomerDashboard />} />
           

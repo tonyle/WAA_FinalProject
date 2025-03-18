@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useRef } from "react";
 import { login } from "../../store/auth/authSlice";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -12,15 +12,15 @@ const Login = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     
-    const username = refForm.current.elements.username.value;
+    const email = refForm.current.elements.email.value;
     const password = refForm.current.elements.password.value;
 
-    if (!username || !password) {
+    if (!email || !password) {
         alert("Both fields must be required!");
         return;
     }
 
-    dispatch(login({user: {username, password}, accessToken: "#dsfsfbsdbfsljdfblsjfbds"}));
+    dispatch(login({user: {email, password}, accessToken: "#dsfsfbsdbfsljdfblsjfbds"}));
   };
 
   useEffect(() => {
@@ -35,8 +35,8 @@ const Login = () => {
 
         <form ref={refForm} onSubmit={handleSubmit} className="flex flex-col gap-4 justify-center w-[400px]">
             <div className="flex flex-col gap-2 items-start w-full">
-                <label htmlFor="username" className="font-bold text-base">Username</label>
-                <input type="text" name="username" className="border border-gray-300 p-2 rounded w-full" placeholder="Username" />
+                <label htmlFor="email" className="font-bold text-base">Email</label>
+                <input type="email" name="email" className="border border-gray-300 p-2 rounded w-full" placeholder="Username" />
             </div>
             <div className="flex flex-col gap-2 items-start">
                 <label htmlFor="username" className="font-bold text-base">Password</label>
@@ -46,6 +46,8 @@ const Login = () => {
 
             {error && <p style={{ color: "red" }}>{error}</p>}
         </form>
+
+        <Link to="/auth/signup"><span className="text-sky-600 underline">Sign up?</span></Link>
     </div>
   );
 };

@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { UserRole } from "../../constants/role";
 
 const initialState = {
   user: null,
@@ -8,6 +7,8 @@ const initialState = {
   refreshToken: null,
   error: null,
   role: null,
+  allUsers: [],
+  success: false
 };
 
 export const authSlice = createSlice({
@@ -15,16 +16,25 @@ export const authSlice = createSlice({
   initialState: initialState,
   reducers: {
     login: (state, actions) => {
-      state.user = actions.payload.user;
-      state.accessToken = actions.payload.accessToken;
-      state.isAuthenticated = true;
-      state.role = UserRole.ADMIN;
+      const curUser = state.allUsers.find(
+        (item) => item.email == actions.payload.user.email
+      );
+      if (curUser) {
+        state.user = curUser;
+        state.accessToken = actions.payload.accessToken;
+        state.isAuthenticated = true;
+        state.role = curUser.role;
 
-      localStorage.setItem("token", JSON.stringify({state}));
+        localStorage.setItem("token", JSON.stringify({ state }));
+      }
     },
     logout: (state) => {
       Object.assign(state, initialState);
       localStorage.removeItem("token");
+    },
+    signupUser: (state, actions) => {
+      state.allUsers.push(actions.payload);
+      state.success = true;
     },
   },
 });
@@ -42,7 +52,7 @@ export const authSlice = createSlice({
 //   }
 // );
 
-export const { login, logout } = authSlice.actions;
+export const { login, logout, signupUser } = authSlice.actions;
 
 export const refreshToken = createAsyncThunk(
   "auth/refreshToken",
