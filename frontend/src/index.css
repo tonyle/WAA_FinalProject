@@ -80,7 +80,7 @@ button:focus-visible {
   @apply w-1/3;
 }
 .header {
-  @apply fixed top-0 left-0 w-full flex flex-row px-16 shadow shadow-gray-300;
+  @apply fixed top-0 left-0 w-full flex flex-row px-16 shadow shadow-gray-300 bg-white;
 }
 
 @media (prefers-color-scheme: light) {
