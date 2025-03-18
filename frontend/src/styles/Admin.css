@@ -1,0 +1,24 @@
+@import "tailwindcss";
+
+.admin-nav {
+    @apply flex flex-col gap-3 justify-start items-start;
+}
+
+.admin-nav > * {
+    @apply border-b border-gray-200 p-2 w-full text-left text-sky-600;
+}
+
+.admin-nav>*.active-link,
+.admin-nav>*:hover {
+    @apply bg-slate-100;
+}
+
+.tabs {}
+
+.tabs .tab-item {
+    @apply px-10 py-2 rounded-t-md cursor-pointer;
+}
+
+.tabs .tab-item.active {
+    @apply border-sky-600 border-b-2 text-sky-600 bg-slate-100 font-bold;
+}

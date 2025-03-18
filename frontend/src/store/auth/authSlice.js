@@ -1,14 +1,19 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { UserRole } from "../../constants/role";
 
 const initialState = {
-  user: null,
-  isAuthenticated: false,
-  accessToken: null,
+  user: {
+    email: "admin.example@gamil.com",
+    name: "Admin",
+    role: UserRole.ADMIN,
+  },
+  isAuthenticated: true,
+  accessToken: "123",
   refreshToken: null,
   error: null,
-  role: null,
+  role: UserRole.ADMIN,
   allUsers: [],
-  success: false
+  success: false,
 };
 
 export const authSlice = createSlice({
@@ -29,7 +34,8 @@ export const authSlice = createSlice({
       }
     },
     logout: (state) => {
-      Object.assign(state, initialState);
+      const users = state.allUsers;
+      Object.assign(state, { ...initialState, allUsers: users });
       localStorage.removeItem("token");
     },
     signupUser: (state, actions) => {

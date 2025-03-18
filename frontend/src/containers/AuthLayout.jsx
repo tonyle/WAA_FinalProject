@@ -9,7 +9,7 @@ const AuthLayout = () => {
                     <Link to={"/"}><img alt="logo" className="logo react" src={reactLogo} /></Link>
                 </nav>
             </header>
-            <main id="main">
+            <main id="main" className="auth-layout">
                 <Outlet/>
             </main>
         </>
