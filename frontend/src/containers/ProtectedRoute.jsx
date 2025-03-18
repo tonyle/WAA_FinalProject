@@ -4,7 +4,7 @@ import { UserRole } from "../constants/role";
 import { useEffect } from "react";
 import { login } from "../store/auth/authSlice";
 
-const ProtectedRoute = () => {
+const ProtectedRoute = ({ allowedRoles }) => {
     const { isAuthenticated, role, user } = useSelector((state) => state.auth);
     const dispatch = useDispatch();
 
@@ -13,11 +13,11 @@ const ProtectedRoute = () => {
             const token = localStorage.getItem("token");
             dispatch(login(JSON.parse(token).state));
         }
-    }, []);
+    }, [dispatch, user]);
 
     if (!isAuthenticated) return <Navigate to="/auth/login" replace />;
 
-    if (role !== UserRole.ADMIN) return <Navigate to="/" replace />;
+    if (!allowedRoles.includes(role)) return <Navigate to="/" replace />;
 
     return <Outlet />; // Render child routes
 };
