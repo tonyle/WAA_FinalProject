@@ -19,8 +19,23 @@ public class User {
     String name;
     String email;
     String password;
+    String phone;
+    String status;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable
     private List<Role> roles;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    private List<Property> ownedProperties;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    private List<Property> favouriteProperties;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    private List<Property> viewedProperties;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn
+    private List<Offer> offers;
 }
