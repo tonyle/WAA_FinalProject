@@ -14,6 +14,8 @@ public class Property {
     private long id;
     String name;
     String description;
+    // (rent or sell or both)
+    String type;
     long addressId;
     double price;
     int bed;

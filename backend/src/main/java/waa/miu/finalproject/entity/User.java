@@ -29,8 +29,8 @@ public class User {
     @OneToMany(fetch = FetchType.LAZY)
     private List<Property> ownedProperties;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    private List<Property> favouriteProperties;
+    @OneToMany(fetch = FetchType.LAZY)
+    private List<FavouriteList> favouriteLists;
 
     @ManyToMany(fetch = FetchType.LAZY)
     private List<Property> viewedProperties;
