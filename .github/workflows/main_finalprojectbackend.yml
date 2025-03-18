@@ -64,4 +64,4 @@ jobs:
         with:
           app-name: "finalprojectbackend"
           slot-name: "Production"
-          package: "./java-app/*.jar"  # Ensure the correct path to the artifact after download
+          package: "*.jar"  # Ensure the correct path to the artifact after download
