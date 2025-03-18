@@ -26,13 +26,18 @@ import CustomerDashboard from './components/Customer/CustomerDashboard.jsx';
 import CurrentOffers from './components/Customer/CurrentOffers.jsx';
 import OfferHistory from './components/Customer/OfferHistory.jsx';
 import SavedProperties from './components/Customer/SavedProperties.jsx';
+import NotFound from './components/NotFound.jsx';
+import ProtectedRoute from './containers/ProtectedRoute.jsx';
 
 function App() {
   return (
     <Routes>
+      <Route path='*' element={<NotFound />}/>
+
+      <Route path="/logout" element={<Logout />}/>
+
       <Route path="/auth" element={<AuthLayout />}>
         <Route path="login" element={<Login />}/>
-        <Route path="logout" element={<Logout />}/>
         <Route path="signup" element={<Signup />}/>
       </Route>
 
@@ -40,28 +45,33 @@ function App() {
         <Route index element={<Homepage />}/>
       </Route>
 
-      <Route path="/admin" element={<AdminLayout />}>
-          <Route index element={<AdminDashboard />} /> {/* Default page for /admin */}
-          <Route path="approve-owners" element={<ApproveOwners />} />
-          <Route path="manage-owners" element={<ManageOwners />} />
+      <Route path="/admin" element={<ProtectedRoute />}>
+          <Route element={<AdminLayout />}>
+            <Route index element={<AdminDashboard />} /> {/* Default page for /admin */}
+            <Route path="approve-owners" element={<ApproveOwners />} />
+            <Route path="manage-owners" element={<ManageOwners />} />
+          </Route>
       </Route>
 
-      <Route path="/owner" element={<OwnerLayout />}>
-        <Route index element={<OwnerDashboard />} />
-        
-        <Route path="property-management" element={<PropertyManagement/>} />
-        <Route path="offers" element={<Offers/>} />
-        <Route path="messages" element={<Messages/>} />
+      <Route path="/owner" element={<ProtectedRoute />}>
+        <Route element={<OwnerLayout />}>
+          <Route index element={<OwnerDashboard />} />
+          
+          <Route path="property-management" element={<PropertyManagement/>} />
+          <Route path="offers" element={<Offers/>} />
+          <Route path="messages" element={<Messages/>} />
+        </Route>
       </Route>
 
-      <Route path="/customer" element={<CustomerLayout />}>
-        <Route index element={<CustomerDashboard />} />
-        
-        <Route path="current-offers" element={<CurrentOffers/>} />
-        <Route path="offer-history" element={<OfferHistory/>} />
-        <Route path="saved-properties" element={<SavedProperties/>} />
+      <Route path="/customer" element={<ProtectedRoute />}>
+        <Route element={<CustomerLayout />}>
+          <Route index element={<CustomerDashboard />} />
+          
+          <Route path="current-offers" element={<CurrentOffers/>} />
+          <Route path="offer-history" element={<OfferHistory/>} />
+          <Route path="saved-properties" element={<SavedProperties/>} />
+        </Route>
       </Route>
-
       
     </Routes>
   )
