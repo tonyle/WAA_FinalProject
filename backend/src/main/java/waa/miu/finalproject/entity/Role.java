@@ -1,5 +1,5 @@
 package waa.miu.finalproject.entity;
-
+import waa.miu.finalproject.enums.*;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -11,7 +11,8 @@ public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private String role;
+    @Enumerated(EnumType.STRING)
+    private RoleEnum role;
 
     @ManyToMany(mappedBy = "roles")
     private List<User> users;

@@ -40,7 +40,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public SimpleCommentDto getComment(int id) {
+    public SimpleCommentDto getComment(long id) {
         Comment comment = entityManager.find(Comment.class, id);
         return modelMapper.map(comment, SimpleCommentDto.class);
     }
