@@ -1,17 +1,12 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { UserRole } from "../../constants/role";
 
 const initialState = {
-  user: {
-    email: "admin.example@gamil.com",
-    name: "Admin",
-    role: UserRole.ADMIN,
-  },
+  user: null,
   isAuthenticated: true,
-  accessToken: "123",
+  accessToken: null,
   refreshToken: null,
   error: null,
-  role: UserRole.ADMIN,
+  role: null,
   allUsers: [],
   success: false,
 };
