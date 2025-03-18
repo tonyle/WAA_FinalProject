@@ -1,11 +1,13 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { UserRole } from "../../constants/role";
 
 const initialState = {
   user: null,
   isAuthenticated: false,
   accessToken: null,
   refreshToken: null,
-  error: null
+  error: null,
+  role: null,
 };
 
 export const authSlice = createSlice({
@@ -16,7 +18,14 @@ export const authSlice = createSlice({
       state.user = actions.payload.user;
       state.accessToken = actions.payload.accessToken;
       state.isAuthenticated = true;
-    }
+      state.role = UserRole.ADMIN;
+
+      localStorage.setItem("token", JSON.stringify({state}));
+    },
+    logout: (state) => {
+      Object.assign(state, initialState);
+      localStorage.removeItem("token");
+    },
   },
 });
 
@@ -33,7 +42,7 @@ export const authSlice = createSlice({
 //   }
 // );
 
-export const {login} = authSlice.actions;
+export const { login, logout } = authSlice.actions;
 
 export const refreshToken = createAsyncThunk(
   "auth/refreshToken",
@@ -46,9 +55,5 @@ export const refreshToken = createAsyncThunk(
     }
   }
 );
-
-export const logout = createAsyncThunk("auth/logout", async () => {
-  await logoutUser();
-});
 
 export default authSlice.reducer;
