@@ -10,4 +10,12 @@ public interface OfferService {
     public List<OfferDto> findAll();
     public Offer findById(long id);
     public void save(InputOfferDto inputOffer);
+
+    List<Offer> findByOwnerId(long ownerId);
+
+    void setOfferStatus(long offerId, String status);
+
+    List<Offer> findByPropertyId(long l);
+
+    List<Offer> findByLocation(String searchValue);
 }

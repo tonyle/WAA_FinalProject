@@ -58,4 +58,26 @@ public class OfferServiceImpl implements OfferService {
         offer.setProperty(property);
         offerRepo.save(offer);
     }
+
+    @Override
+    public List<Offer> findByOwnerId(long ownerId) {
+        return  offerRepo.getOffersByOwnerId(ownerId);
+    }
+
+    @Override
+    public void setOfferStatus(long offerId, String status) {
+        Offer offer = offerRepo.findById(offerId).orElseThrow(() -> new RuntimeException("Offer not found"));
+        offer.setStatus(OfferStatusEnum.valueOf(status));
+        offerRepo.save(offer);
+    }
+
+    @Override
+    public List<Offer> findByPropertyId(long id) {
+        return offerRepo.findByPropertyId(id);
+    }
+
+    @Override
+    public List<Offer> findByLocation(String location) {
+        return offerRepo.findByLocation(location);
+    }
 }
