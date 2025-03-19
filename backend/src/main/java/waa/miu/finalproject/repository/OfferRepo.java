@@ -20,6 +20,9 @@ public interface OfferRepo extends JpaRepository<Offer, Long> {
     @Query("select o from Offer o join o.property p where p.id=:id")
     List<Offer> findByPropertyId(@Param("id") long id);
 
+    @Query("select o from Offer o where o.user.id =:userId")
+    List<Offer> findAllOfferByUserId(long userId);
+
     @Query("select o from Offer o join o.property p join p.address a where" +
             " (:propertyId IS NULL OR p.id=:propertyId)" +
             " AND (:location IS NULL OR a.city = :location)" +

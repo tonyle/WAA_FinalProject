@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.*;
 import waa.miu.finalproject.entity.Offer;
 import waa.miu.finalproject.entity.dto.TokenDto;
 import waa.miu.finalproject.entity.dto.input.InputOfferDto;
+import waa.miu.finalproject.entity.dto.output.OfferDto;
+import waa.miu.finalproject.helper.JwtUtil;
 import waa.miu.finalproject.entity.dto.input.InputUpdateOfferStatusDto;
 import waa.miu.finalproject.entity.dto.output.PropertyDto;
 import waa.miu.finalproject.enums.RoleEnum;
@@ -25,6 +27,7 @@ public class OfferController {
     private OfferService offerService;
     @Autowired
     private JwtUtil jwtUtil;
+
     @GetMapping()
     public ResponseEntity<List<Offer>> getAllOffers(
             HttpServletRequest request,
