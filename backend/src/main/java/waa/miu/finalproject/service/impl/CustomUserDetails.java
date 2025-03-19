@@ -16,11 +16,13 @@ public class CustomUserDetails implements UserDetails {
     @JsonIgnore
     private String password;
     private List<Role> roles;
+    private long userId;
 
     public CustomUserDetails(User user) {
         this.email = user.getEmail();
         this.password = user.getPassword();
         this.roles = user.getRoles();
+        this.userId = user.getId();
     }
 
     @Override
@@ -38,5 +40,9 @@ public class CustomUserDetails implements UserDetails {
     @Override
     public String getUsername() {
         return email;
+    }
+
+    public Long getUserId() {
+        return userId;
     }
 }
