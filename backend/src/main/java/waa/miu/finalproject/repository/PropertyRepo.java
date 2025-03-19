@@ -18,27 +18,31 @@ public interface PropertyRepo extends JpaRepository<Property, Long> {
 
     @Query("SELECT p FROM Property p WHERE " +
             "(:ownerId IS NULL OR p.user.id = :ownerId) " +
-            "AND (:price IS NULL OR p.price = :price) " +
+            "AND (:priceFrom IS NULL OR p.price >= :priceFrom) " +
+            "AND (:priceTo IS NULL OR p.price <= :priceTo) " +
             "AND (:propertyType IS NULL OR p.type = :propertyType) " +
             "AND (:bed IS NULL OR p.bed = :bed) " +
             "AND (:bath IS NULL OR p.bath = :bath) " +
             "AND (:location IS NULL OR p.address.city = :location)")
     List<Property> findPropertiesByOwnerIdWithFilters(
             @Param("ownerId") Long ownerId,
-            @Param("price") Double price,
+            @Param("priceFrom") Double priceFrom,
+            @Param("priceTo") Double priceTo,
             @Param("propertyType") PropertyTypeEnum propertyType,
             @Param("bed") Integer bed,
             @Param("bath") Integer bath,
             @Param("location") String location);
 
     @Query("SELECT p FROM Property p WHERE " +
-            "(:price IS NULL OR p.price = :price) " +
+            "(:priceFrom IS NULL OR p.price >= :priceFrom) " +
+            "AND (:priceTo IS NULL OR p.price <= :priceTo) " +
             "AND (:propertyType IS NULL OR p.type = :propertyType) " +
             "AND (:bed IS NULL OR p.bed = :bed) " +
             "AND (:bath IS NULL OR p.bath = :bath) " +
             "AND (:location IS NULL OR p.address.city = :location)")
     List<Property> findPropertiesByFilters(
-            @Param("price") Double price,
+            @Param("priceFrom") Double priceFrom,
+            @Param("priceTo") Double priceTo,
             @Param("propertyType") PropertyTypeEnum propertyType,
             @Param("bed") Integer bed,
             @Param("bath") Integer bath,

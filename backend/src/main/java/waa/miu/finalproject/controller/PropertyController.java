@@ -32,7 +32,8 @@ public class PropertyController {
     private JwtUtil jwtUtil;
 
     @GetMapping
-    public ResponseEntity<List<PropertyDto>> findAll(HttpServletRequest request, @RequestParam(value = "price", required = false) Double price,
+    public ResponseEntity<List<PropertyDto>> findAll(HttpServletRequest request, @RequestParam(value = "priceFrom", required = false) Double priceFrom,
+                                                     @RequestParam(value = "priceTo", required = false) Double priceTo,
                                                      @RequestParam(value = "propertyType", required = false) PropertyTypeEnum propertyType,
                                                      @RequestParam(value = "bed", required = false) Integer bed,
                                                      @RequestParam(value = "bath", required = false) Integer bath,
@@ -43,13 +44,13 @@ public class PropertyController {
         if (token != null) {
             TokenDto tokenDto = jwtUtil.getUserDtoFromClaims(token);
             if (tokenDto == null || tokenDto.getRoles().contains(RoleEnum.ADMIN) || tokenDto.getRoles().contains(RoleEnum.CUSTOMER)) {
-                properties = propertyService.findPropertiesByOwnerIdWithFilters(ownerId, price, propertyType, bed, bath, location);
+                properties = propertyService.findPropertiesByOwnerIdWithFilters(ownerId, priceFrom, priceTo, propertyType, bed, bath, location);
             } else if (tokenDto.getRoles().contains(RoleEnum.OWNER)) {
                 ownerId = tokenDto.getUserId();
-                properties = propertyService.findPropertiesByOwnerIdWithFilters(ownerId, price, propertyType, bed, bath, location);
+                properties = propertyService.findPropertiesByOwnerIdWithFilters(ownerId, priceFrom, priceTo, propertyType, bed, bath, location);
             }
         } else {
-            properties = propertyService.findPropertiesByOwnerIdWithFilters(null, price, propertyType, bed, bath, location);
+            properties = propertyService.findPropertiesByOwnerIdWithFilters(null, priceFrom, priceTo, propertyType, bed, bath, location);
         }
 
         return ResponseEntity.ok(properties);

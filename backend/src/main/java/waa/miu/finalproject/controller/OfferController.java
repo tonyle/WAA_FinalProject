@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import waa.miu.finalproject.entity.Offer;
 import waa.miu.finalproject.entity.dto.input.InputOfferDto;
+import waa.miu.finalproject.entity.dto.output.OfferDto;
 import waa.miu.finalproject.service.OfferService;
 
 import java.util.List;
@@ -17,7 +18,7 @@ public class OfferController {
     private OfferService offerService;
 
     @GetMapping()
-    public ResponseEntity<List<Offer>> getAllOffers() {
+    public ResponseEntity<List<OfferDto>> getAllOffers() {
         return ResponseEntity.ok(offerService.findAll());
     }
 

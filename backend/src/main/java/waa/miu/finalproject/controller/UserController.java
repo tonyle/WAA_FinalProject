@@ -1,5 +1,6 @@
 package waa.miu.finalproject.controller;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -8,7 +9,9 @@ import waa.miu.finalproject.entity.dto.PostDto;
 import waa.miu.finalproject.entity.dto.UserDto;
 import waa.miu.finalproject.entity.dto.input.InputUpdateUserDto;
 import waa.miu.finalproject.entity.dto.output.PostNoAuthorDto;
+import waa.miu.finalproject.entity.dto.output.PropertyDetailDto;
 import waa.miu.finalproject.entity.dto.output.PropertyDto;
+import waa.miu.finalproject.entity.dto.output.UserDetailDto;
 import waa.miu.finalproject.repository.UserRepo;
 import waa.miu.finalproject.service.UserService;
 
@@ -22,6 +25,8 @@ public class UserController {
     private UserService userService;
     @Autowired
     private UserRepo userRepo;
+    @Autowired
+    private ModelMapper modelMapper;
 
     @GetMapping
     public ResponseEntity<List<UserDto>> findAll(@RequestParam(required = false) String status) {
@@ -41,11 +46,11 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateById(@PathVariable("id") long id, @RequestBody InputUpdateUserDto inputUpdateUserDto) {
+    public ResponseEntity<UserDetailDto> updateById(@PathVariable("id") long id, @RequestBody InputUpdateUserDto inputUpdateUserDto) {
         User user = userService.getById(id);
         user.setStatus(inputUpdateUserDto.getStatus());
         userRepo.save(user);
-        return ResponseEntity.ok(user);
+        return ResponseEntity.ok(modelMapper.map(user, UserDetailDto.class));
     }
 
 
