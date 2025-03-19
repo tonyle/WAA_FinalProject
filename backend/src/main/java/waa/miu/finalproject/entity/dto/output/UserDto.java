@@ -1,4 +1,4 @@
-package waa.miu.finalproject.entity;
+package waa.miu.finalproject.entity.dto.output;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
@@ -16,7 +16,4 @@ public class UserDto {
     long id;
     String name;
     String email;
-    String password;
-
-    private List<Role> roles;
 }

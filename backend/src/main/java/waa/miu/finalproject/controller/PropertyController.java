@@ -33,7 +33,7 @@ public class PropertyController {
                                                      @RequestParam(value = "propertyType", required = false) PropertyTypeEnum propertyType,
                                                      @RequestParam(value = "bed", required = false) Integer bed,
                                                      @RequestParam(value = "bath", required = false) Integer bath,
-                                                     @RequestParam(value = "location", required = false) Long location) {
+                                                     @RequestParam(value = "location", required = false) String location) {
         Long ownerId = null;
         List<PropertyDto> properties = new ArrayList<>();
         String token = jwtUtil.extractTokenRequest(request);

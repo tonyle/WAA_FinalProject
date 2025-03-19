@@ -15,5 +15,5 @@ public interface PropertyService {
             PropertyTypeEnum propertyType,
             Integer bed,
             Integer bath,
-            Long location);
+            String location);
 }

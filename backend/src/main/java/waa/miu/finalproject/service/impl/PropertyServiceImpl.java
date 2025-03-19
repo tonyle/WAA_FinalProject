@@ -41,7 +41,7 @@ public class PropertyServiceImpl implements PropertyService {
             PropertyTypeEnum propertyType,
             Integer bed,
             Integer bath,
-            Long location) {
+            String location) {
         List<Property> properties = new ArrayList<>();
         if (ownerId == null) {
             properties = propertyRepo.findPropertiesByFilters(price, propertyType, bed, bath, location);
@@ -54,6 +54,8 @@ public class PropertyServiceImpl implements PropertyService {
     @Override
     public PropertyDetailDto findById(long id) {
         Property p = propertyRepo.findById(id).orElseThrow(() -> new RuntimeException("Property not found"));
+        p.setView(p.getView() + 1);
+        propertyRepo.save(p);
         return modelMapper.map(p, PropertyDetailDto.class);
     }
 }
