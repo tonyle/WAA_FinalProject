@@ -1,10 +1,7 @@
 package waa.miu.finalproject.entity;
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import waa.miu.finalproject.enums.*;
 import jakarta.persistence.*;
 import lombok.Data;
-
-import java.util.List;
 
 @Entity
 @Data
@@ -14,10 +11,12 @@ public class Offer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    long propertyId;
-    long customerId;
-    double offerPrice;
-    int status;
+    @Enumerated(EnumType.STRING)
+    private OfferTypeEnum type;
+    private double offerPrice;
+
+    @Enumerated(EnumType.STRING)
+    private OfferStatusEnum status;
 
     @ManyToOne
     @JoinColumn

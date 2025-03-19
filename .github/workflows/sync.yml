@@ -1,0 +1,30 @@
+name: Sync from quangnhien
+
+on:
+  schedule:
+    - cron: '0 * * * *' # run every hour
+  workflow_dispatch: # allow run manual
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v4
+
+      - name: Set up Git
+        run: |
+          git config --global user.email "actions@github.com"
+          git config --global user.name "GitHub Actions"
+
+      - name: Add Remote and Fetch Changes
+        run: |
+          git remote add upstream https://github.com/quangnhien/WAA_FinalProject.git || echo "Remote already exists"
+          git fetch upstream
+          git merge upstream/main --allow-unrelated-histories -m "Auto-sync from quangnhien" || echo "No changes to merge"
+
+      - name: Push Changes to Main
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
+        run: |
+          git push origin main

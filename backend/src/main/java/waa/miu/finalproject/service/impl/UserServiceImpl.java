@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @ExecutionTime
-    public UserDto findById(int id) {
+    public UserDto findById(long id) {
         User u = userRepo.findById(id).orElseThrow(() -> new RuntimeException("User with id " + id + " not found"));
 
         return modelMapper.map(u, UserDto.class);
@@ -51,7 +51,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<PostNoAuthorDto> getPosts(int id) {
+    public List<PostNoAuthorDto> getPosts(long id) {
         User user = userRepo.findById(id).orElseThrow(() -> new RuntimeException("User with id " + id + " not found"));
 
         return null;
@@ -70,7 +70,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void delete(int id) {
+    public void delete(long id) {
         entityManager.remove(userRepo.findById(id));
     }
 }

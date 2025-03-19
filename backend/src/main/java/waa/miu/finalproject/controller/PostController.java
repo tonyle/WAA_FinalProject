@@ -39,7 +39,7 @@ public class PostController {
     }
 
     @GetMapping("/{id}") // GET - localhost:8080/posts/{id}
-    public ResponseEntity<PostDto> getPost(@PathVariable("id") int id) {
+    public ResponseEntity<PostDto> getPost(@PathVariable("id") long id) {
         PostDto post = postService.getPost(id);
 
         return ResponseEntity.ok(post);
@@ -51,17 +51,17 @@ public class PostController {
     }
 
     @DeleteMapping("/{id}") // DELETE - localhost:8080/posts/{id}
-    public void deletePost(@PathVariable("id") int id) {
+    public void deletePost(@PathVariable("id") long id) {
         postService.deletePost(id);
     }
 
     @PutMapping("/{id}") // PUT - localhost:8080/posts/{id}
-    public void updatePost(@PathVariable("id") int id, @RequestBody PostDto post) {
+    public void updatePost(@PathVariable("id") long id, @RequestBody PostDto post) {
         postService.updatePost(id, post);
     }
 
     @GetMapping("/{id}/comments")
-    public ResponseEntity<List<CommentDto>> getComments(@PathVariable("id") int id) {
+    public ResponseEntity<List<CommentDto>> getComments(@PathVariable("id") long id) {
         List<CommentDto> comments = postService.getCommentsByPost(id);
         return ResponseEntity.ok(comments);
     }

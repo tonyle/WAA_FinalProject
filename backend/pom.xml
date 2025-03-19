@@ -11,8 +11,8 @@
 	<groupId>waa.miu</groupId>
 	<artifactId>finalproject</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>lap1</name>
-	<description>Demo project for Spring Boot</description>
+	<name>FinalProject</name>
+	<description>Final project for Spring Boot</description>
 	<url/>
 	<licenses>
 		<license/>
