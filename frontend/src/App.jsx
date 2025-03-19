@@ -17,6 +17,7 @@ import CustomerDashboard from './components/Customer/CustomerDashboard.jsx';
 import CurrentOffers from './components/Customer/CurrentOffers.jsx';
 import OfferHistory from './components/Customer/OfferHistory.jsx';
 import SavedProperties from './components/Customer/SavedProperties.jsx';
+import PropertyDetails from './components/Customer/PropertyDetails.jsx';
 import NotFound from './components/NotFound.jsx';
 import ProtectedRoute from './containers/ProtectedRoute.jsx';
 import { UserRole } from './constants/role.js';
@@ -75,10 +76,10 @@ function App() {
       <Route path="/customer" element={<ProtectedRoute allowedRoles={[UserRole.CUSTOMER]}/>}>
         <Route element={<CustomerLayout />}>
           <Route index element={<CustomerDashboard />} />
-          
           <Route path="current-offers" element={<CurrentOffers/>} />
           <Route path="offer-history" element={<OfferHistory/>} />
           <Route path="saved-properties" element={<SavedProperties/>} />
+          <Route path="property/:id" element={<PropertyDetails />} />
         </Route>
       </Route>
       
