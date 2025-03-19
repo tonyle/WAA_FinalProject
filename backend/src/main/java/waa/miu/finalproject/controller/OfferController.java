@@ -1,13 +1,20 @@
 package waa.miu.finalproject.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import waa.miu.finalproject.entity.Offer;
+import waa.miu.finalproject.entity.dto.TokenDto;
 import waa.miu.finalproject.entity.dto.input.InputOfferDto;
-import waa.miu.finalproject.entity.dto.output.OfferDto;
+import waa.miu.finalproject.entity.dto.input.InputUpdateOfferStatusDto;
+import waa.miu.finalproject.entity.dto.output.PropertyDto;
+import waa.miu.finalproject.enums.RoleEnum;
+import waa.miu.finalproject.filter.JwtFilter;
+import waa.miu.finalproject.helper.JwtUtil;
 import waa.miu.finalproject.service.OfferService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -16,10 +23,34 @@ import java.util.List;
 public class OfferController {
     @Autowired
     private OfferService offerService;
-
+    @Autowired
+    private JwtUtil jwtUtil;
     @GetMapping()
-    public ResponseEntity<List<OfferDto>> getAllOffers() {
-        return ResponseEntity.ok(offerService.findAll());
+    public ResponseEntity<List<Offer>> getAllOffers(
+            HttpServletRequest request,
+            @RequestParam(value = "propertyId", required = false) Long propertyId,
+            @RequestParam(value = "location", required = false) String location,
+            @RequestParam(value = "submissionDate", required = false) String submissionDate
+    ) {
+        Long ownerId = null;
+        List<Offer> offers = new ArrayList<>();
+        String token = jwtUtil.extractTokenRequest(request);
+
+        if (token != null) {
+
+            TokenDto tokenDto = jwtUtil.getUserDtoFromClaims(token);
+            System.out.println(tokenDto);
+            if (tokenDto.getRoles().contains(RoleEnum.ADMIN.toString())) {
+                offers = offerService.findAllByOwnerIdWithFilter(ownerId,propertyId, location, submissionDate);
+            } else if (tokenDto.getRoles().contains(RoleEnum.OWNER.toString())) {
+                ownerId = tokenDto.getUserId();
+                System.out.println(ownerId);
+                offers = offerService.findAllByOwnerIdWithFilter(ownerId,propertyId, location, submissionDate);
+            }
+        }
+
+        return ResponseEntity.ok(offers);
+
     }
 
     @GetMapping("/{id}")
@@ -38,8 +69,9 @@ public class OfferController {
     }
 
     @PutMapping("/{id}")
-    public void setOfferStatus(@RequestBody String status, @PathVariable("id") long offerId) {
-        offerService.setOfferStatus(offerId,status);
+    public void setOfferStatus(@RequestBody InputUpdateOfferStatusDto status, @PathVariable("id") long offerId) {
+        offerService.setOfferStatus(offerId,status.getStatus());
+
 
     }
 

@@ -10,14 +10,16 @@ import waa.miu.finalproject.entity.Property;
 import waa.miu.finalproject.entity.User;
 import waa.miu.finalproject.entity.dto.UserDto;
 import waa.miu.finalproject.entity.dto.input.InputOfferDto;
-import waa.miu.finalproject.entity.dto.output.OfferDto;
 import waa.miu.finalproject.entity.dto.output.PropertyDto;
 import waa.miu.finalproject.enums.OfferStatusEnum;
 import waa.miu.finalproject.enums.OfferTypeEnum;
+import waa.miu.finalproject.enums.PropertyStatusEnum;
 import waa.miu.finalproject.enums.PropertyTypeEnum;
 import waa.miu.finalproject.repository.OfferRepo;
 import waa.miu.finalproject.repository.PropertyRepo;
 import waa.miu.finalproject.service.OfferService;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,9 +39,8 @@ public class OfferServiceImpl implements OfferService {
     private PropertyRepo propertyRepo;
 
     @Override
-    public List<OfferDto> findAll() {
-        List<Offer> offers =  offerRepo.findAll();
-        return offers.stream().map(p -> modelMapper.map(p, OfferDto.class)).collect(Collectors.toList());
+    public List<Offer> findAll() {
+        return offerRepo.findAll();
     }
 
     @Override
@@ -65,9 +66,12 @@ public class OfferServiceImpl implements OfferService {
     }
 
     @Override
-    public void setOfferStatus(long offerId, String status) {
+    public void setOfferStatus(long offerId, OfferStatusEnum status) {
         Offer offer = offerRepo.findById(offerId).orElseThrow(() -> new RuntimeException("Offer not found"));
-        offer.setStatus(OfferStatusEnum.valueOf(status));
+        offer.setStatus(status);
+        if (status == OfferStatusEnum.ACCEPTED) {
+            offer.getProperty().setStatus(PropertyStatusEnum.PENDING);
+        }
         offerRepo.save(offer);
     }
 
@@ -79,5 +83,17 @@ public class OfferServiceImpl implements OfferService {
     @Override
     public List<Offer> findByLocation(String location) {
         return offerRepo.findByLocation(location);
+    }
+
+    @Override
+    public List<Offer> findAllByOwnerIdWithFilter(Long ownerId,Long propertyId, String location, String submissionDate) {
+        List<Offer> offers = new ArrayList<>();
+        if (ownerId == null) {
+            offers = offerRepo.findOffersByFilters(propertyId, location, submissionDate);
+            System.out.println(propertyId);
+        } else {
+            offers = offerRepo.findOffersByOwnerIdWithFilters(ownerId, propertyId, location, submissionDate);
+        }
+        return offers;
     }
 }
