@@ -10,7 +10,7 @@ import waa.miu.finalproject.entity.*;
 import waa.miu.finalproject.repository.*;
 import waa.miu.finalproject.enums.*;
 import java.util.List;
-import java.util.Set;
+import java.util.Optional;
 
 @Component
 public class DataInitializer implements CommandLineRunner {
@@ -41,6 +41,7 @@ public class DataInitializer implements CommandLineRunner {
     public void run(String... args) throws Exception {
         seedRoles();
         seedUsers();
+        seedAddress();
         seedProperties();
         seedOffers();
         seedFavouriteLists();
@@ -94,10 +95,38 @@ public class DataInitializer implements CommandLineRunner {
             userRepository.saveAll(List.of(adminUser, customerUser, ownerUser));
         }
     }
+    private void seedAddress() {
+        if (addressRepository.count() == 0) {
 
+
+            Address address1 = new Address();
+            address1.setCity("FairField");
+            address1.setStreet("Street 1");
+            address1.setState("Iowa");
+            address1.setPostalCode("12345");
+
+
+            Address address2 = new Address();
+            address2.setCity("Keosauqua");
+            address2.setStreet("Street 2");
+            address2.setState("Iowa");
+            address2.setPostalCode("33333");
+
+            Address address3 = new Address();
+            address3.setCity("Iowa");
+            address3.setStreet("Street 3");
+            address1.setState("Iowa");
+            address3.setPostalCode("22222");
+
+            addressRepository.saveAll(List.of(address1, address2, address3));
+        }
+    }
     private void seedProperties() {
         if (propertyRepository.count() == 0) {
-            User owner = userRepository.findByEmail("jane@example.com");
+            Optional<User> owner = userRepository.findById(Long.valueOf(3));
+
+            Address address1 = addressRepository.findByCity("Keosauqua");
+            Address address2 = addressRepository.findByCity("FairField");
 
             Property property1 = new Property();
             property1.setName("Luxury Apartment");
@@ -110,7 +139,9 @@ public class DataInitializer implements CommandLineRunner {
             property1.setStatus(PropertyStatusEnum.AVAILABLE);
             property1.setMaterial("Brick");
             property1.setStyle("Modern");
-            property1.setUser(owner);
+            property1.setUser(owner.get());
+            property1.setAddress(address1);
+            property1.setHouseType("Apartment");
 
             Property property2 = new Property();
             property2.setName("Suburban House");
@@ -120,10 +151,12 @@ public class DataInitializer implements CommandLineRunner {
             property2.setBed(4);
             property2.setBath(3);
             property2.setSqft(2500);
-            property2.setStatus(PropertyStatusEnum.ACTIVE);
+            property2.setStatus(PropertyStatusEnum.AVAILABLE);
             property2.setMaterial("Wood");
             property2.setStyle("Rustic");
-            property2.setUser(owner);
+            property2.setUser(owner.get());
+            property2.setAddress(address2);
+            property2.setHouseType("House");
 
             propertyRepository.saveAll(List.of(property1, property2));
         }

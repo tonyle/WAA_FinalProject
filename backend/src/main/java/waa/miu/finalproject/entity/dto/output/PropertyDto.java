@@ -1,6 +1,7 @@
 package waa.miu.finalproject.entity.dto.output;
 
 import lombok.Data;
+import waa.miu.finalproject.entity.Address;
 import waa.miu.finalproject.enums.PropertyStatusEnum;
 import waa.miu.finalproject.enums.PropertyTypeEnum;
 
@@ -18,4 +19,7 @@ public class PropertyDto {
     private double view;
     private double save;
     private int yearBuilt;
+    private String houseType;
+    private Address address;
+    private UserDto user;
 }

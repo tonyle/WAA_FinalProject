@@ -20,25 +20,25 @@ public interface PropertyRepo extends JpaRepository<Property, Long> {
             "AND (:propertyType IS NULL OR p.type = :propertyType) " +
             "AND (:bed IS NULL OR p.bed = :bed) " +
             "AND (:bath IS NULL OR p.bath = :bath) " +
-            "AND (:location IS NULL OR p.addressId = :location)")
+            "AND (:location IS NULL OR p.address.city = :location)")
     List<Property> findPropertiesByOwnerIdWithFilters(
             @Param("ownerId") Long ownerId,
             @Param("price") Double price,
             @Param("propertyType") PropertyTypeEnum propertyType,
             @Param("bed") Integer bed,
             @Param("bath") Integer bath,
-            @Param("location") Long location);
+            @Param("location") String location);
 
     @Query("SELECT p FROM Property p WHERE " +
             "(:price IS NULL OR p.price = :price) " +
             "AND (:propertyType IS NULL OR p.type = :propertyType) " +
             "AND (:bed IS NULL OR p.bed = :bed) " +
             "AND (:bath IS NULL OR p.bath = :bath) " +
-            "AND (:location IS NULL OR p.addressId = :location)")
+            "AND (:location IS NULL OR p.address.city = :location)")
     List<Property> findPropertiesByFilters(
             @Param("price") Double price,
             @Param("propertyType") PropertyTypeEnum propertyType,
             @Param("bed") Integer bed,
             @Param("bath") Integer bath,
-            @Param("location") Long location);
+            @Param("location") String location);
 }

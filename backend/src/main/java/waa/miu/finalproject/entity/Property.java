@@ -15,10 +15,10 @@ public class Property {
     private long id;
     String name;
     String description;
+    String houseType;
     // (rent or sell or both)
     @Enumerated(EnumType.STRING)
     PropertyTypeEnum type;
-    long addressId;
     double price;
     int bed;
     int bath;
@@ -31,12 +31,16 @@ public class Property {
     String material;
     String style;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn
     private List<Photo> photos;
 
-    @ManyToOne(fetch=FetchType.LAZY)
-    @JsonBackReference
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn
+    private Address address;
+
+    @ManyToOne(fetch=FetchType.EAGER)
+//    @JsonBackReference
     @JoinColumn
     private User user;
 

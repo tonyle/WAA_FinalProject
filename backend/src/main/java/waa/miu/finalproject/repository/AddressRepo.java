@@ -7,4 +7,5 @@ import waa.miu.finalproject.entity.Property;
 public interface AddressRepo extends JpaRepository<Address, Long> {
 
 
+    Address findByCity(String city);
 }
