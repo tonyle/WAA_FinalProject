@@ -67,6 +67,7 @@ public class AuthServiceImpl implements AuthService {
         final String accessToken = jwtUtil.generateToken(userDetails, userId);
         final String refreshToken = jwtUtil.generateRefreshToken(loginRequest.getEmail());
         UserLoginInfo user = modelMapper.map(userData, UserLoginInfo.class);
+        user.setRole(userData.getRoles().get(0).getRole());
         return new LoginResponse(accessToken, refreshToken, user);
     }
 
@@ -80,12 +81,14 @@ public class AuthServiceImpl implements AuthService {
                 TokenDto tokenDto = jwtUtil.getUserDtoFromClaims(accessToken);
                 User userdata = userRepo.findById(tokenDto.getUserId()).orElse(null);
                 UserLoginInfo user = modelMapper.map(userdata, UserLoginInfo.class);
+                user.setRole(userdata.getRoles().get(0).getRole());
                 return new LoginResponse(accessToken, refreshTokenRequest.getRefreshToken(), user);
             } else {
                 log.info("Refresh token expired");
                 TokenDto tokenDto = jwtUtil.getUserDtoFromClaims(refreshTokenRequest.getAccessToken());
                 User userData = userRepo.findById(tokenDto.getUserId()).orElse(null);
                 UserLoginInfo user = modelMapper.map(userData, UserLoginInfo.class);
+                user.setRole(userData.getRoles().get(0).getRole());
                 return new LoginResponse(refreshTokenRequest.getAccessToken(), refreshTokenRequest.getRefreshToken(),
                         user);
             }
