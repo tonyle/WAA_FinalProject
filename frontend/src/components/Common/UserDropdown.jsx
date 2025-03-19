@@ -26,10 +26,23 @@ const UserDropdown = () => {
                     </Link>
                 );
             case UserRole.CUSTOMER:
-                return (
-                    <Link to="/admin"><span className="block px-4 py-2 text-sky-600 hover:bg-gray-100">
+                return (<>
+                <Link to="/customer"><span className="block px-4 py-2 text-sky-600 hover:bg-gray-100">
                         Dashboard</span>
-                    </Link>
+                </Link>
+            
+                <Link to="/customer/current-offers"><span className="block px-4 py-2 text-sky-600 hover:bg-gray-100">
+                    Current Offers</span>
+                </Link>
+                <Link to="/customer/offer-history"><span className="block px-4 py-2 text-sky-600 hover:bg-gray-100">
+                    Offer History</span>
+                </Link>
+                <Link to="/customer/saved-properties"><span className="block px-4 py-2 text-sky-600 hover:bg-gray-100">
+                    Saved Properties</span>
+                </Link>
+                </>
+                    
+
                 );
             default: 
                 return null;

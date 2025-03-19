@@ -1,6 +1,7 @@
-import { Link, Outlet } from "react-router";
+import { Link, NavLink, Outlet } from "react-router";
 import reactLogo from "../assets/react.svg"
 import UserDropdown from "../components/Common/UserDropdown";
+import "../styles/Admin.css";
 
 const AdminLayout = () => {
     return (
@@ -17,8 +18,17 @@ const AdminLayout = () => {
                     </div>
                 </nav>
             </header>
-            <main id="main">
-                <Outlet/>
+            <main id="main" className="main-admin">
+                <div className="col-span-1 border-r border-slate-100">
+                    <nav className="admin-nav">
+                        <NavLink to="/admin/properties" className={({ isActive }) => isActive ? "active-link" : ""}><span>Properties</span></NavLink>
+                        <NavLink to="/admin/owners" className={({ isActive }) => isActive ? "active-link" : ""}><span>Onwers</span></NavLink>
+                        <NavLink to="/admin/customers" className={({ isActive }) => isActive ? "active-link" : ""}><span>Customers</span></NavLink>
+                    </nav>
+                </div>
+                <div className="col-span-4 w-full">
+                    <Outlet/>
+                </div>
             </main>
         </>
     )
