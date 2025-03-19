@@ -7,7 +7,7 @@ import waa.miu.finalproject.entity.dto.output.OfferDto;
 import java.util.List;
 
 public interface OfferService {
-    public List<OfferDto> findAll();
+    public List<OfferDto> findAll(long userId);
     public Offer findById(long id);
     public void save(InputOfferDto inputOffer);
 
