@@ -1,14 +1,31 @@
 import api from "../api";
 
 export const loginUser = async (credentials) => {
-  const response = await api.post("/login", credentials);
-  return response.data;
+  try {
+    const response = await api.post("/auth", credentials);
+    return response;
+  } catch (err) {
+    throw err;
+  }
 };
 
+export const signup = async (data) => {
+  try {
+    const response = await api.post("/auth/signup", data);
+    return response;
+  } catch (err) {
+    throw err;
+  }
+}
+
 export const refreshAccessToken = async () => {
-  const refreshToken = localStorage.getItem("refreshToken");
-  const response = await api.post("/refresh", { token: refreshToken });
-  return response.data.accessToken;
+  try {
+    const { refreshToken, accessToken } = JSON.parse(localStorage.getItem("token"));
+    const response = await api.post("/refreshToken", { refreshToken, accessToken });
+    return response;
+  } catch (err) {
+    throw err;
+  }
 };
 
 export const logoutUser = async () => {

@@ -12,7 +12,7 @@ const MainLayout = () => {
     useEffect(() => {
         if (!user && localStorage.getItem("token")) {
             const token = localStorage.getItem("token");
-            dispatch(login(JSON.parse(token).state));
+            dispatch(login(JSON.parse(token)));
         }
     }, []);
 
