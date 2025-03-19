@@ -4,34 +4,32 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import waa.miu.finalproject.entity.Property;
-import waa.miu.finalproject.entity.dto.UserDto;
-import waa.miu.finalproject.entity.dto.output.PostNoAuthorDto;
-import waa.miu.finalproject.repository.PropertyRepo;
-import waa.miu.finalproject.repository.UserRepo;
-import waa.miu.finalproject.service.UserService;
+import waa.miu.finalproject.entity.dto.output.PropertyDetailDto;
+import waa.miu.finalproject.entity.dto.output.PropertyDto;
+import waa.miu.finalproject.service.PropertyService;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1/auth/properties")
+@RequestMapping("api/v1/properties")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class PropertyController {
+
     @Autowired
-    private PropertyRepo propertyRepo;
+    private PropertyService propertyService;
+
 
     @GetMapping
-    public ResponseEntity<List<Property>> findAll() {
-
-        List<Property >property = propertyRepo.findAll();
-
+    public ResponseEntity<List<PropertyDto>> findAll() {
+        List<PropertyDto>property = propertyService.findAll();
         return ResponseEntity.ok(property);
     }
 
-//    @GetMapping("/{id}")
-//    public ResponseEntity<UserDto> findById(@PathVariable("id") long id) {
-//        UserDto userDto = userService.findById(id);
-//        return ResponseEntity.ok(userDto);
-//    }
+    @GetMapping("/{id}")
+    public ResponseEntity<PropertyDetailDto> findById(@PathVariable("id") long id) {
+        PropertyDetailDto property = propertyService.findById(id);
+        return ResponseEntity.ok(property);
+    }
 //
 //    @PostMapping
 //    public void save(@RequestBody UserDto userDto) {

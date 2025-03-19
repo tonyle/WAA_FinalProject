@@ -1,20 +1,21 @@
-package waa.miu.finalproject.entity;
+package waa.miu.finalproject.entity.dto.output;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import jakarta.persistence.*;
 import lombok.Data;
-
+import waa.miu.finalproject.enums.PropertyStatusEnum;
+import waa.miu.finalproject.enums.PropertyTypeEnum;
 
 @Data
-
 public class PropertyDto {
-
     private long id;
-    String name;
-    String description;
-    long ownerId;
-    long addressId;
-    double price;
-    int status;
-
+    private String name;
+    private String description;
+    private PropertyTypeEnum type;
+    private double price;
+    private int bed;
+    private int bath;
+    private double sqft;
+    private PropertyStatusEnum status;
+    private double view;
+    private double save;
+    private int yearBuilt;
 }
