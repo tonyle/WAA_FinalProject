@@ -11,7 +11,8 @@ public interface PropertyService {
     public PropertyDetailDto findById(long id);
     public List<PropertyDto> findPropertiesByOwnerIdWithFilters(
             Long ownerId,
-            Double price,
+            Double priceFrom,
+            Double priceTo,
             PropertyTypeEnum propertyType,
             Integer bed,
             Integer bath,

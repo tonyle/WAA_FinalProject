@@ -10,6 +10,8 @@ import waa.miu.finalproject.entity.Property;
 import waa.miu.finalproject.entity.User;
 import waa.miu.finalproject.entity.dto.UserDto;
 import waa.miu.finalproject.entity.dto.input.InputOfferDto;
+import waa.miu.finalproject.entity.dto.output.OfferDto;
+import waa.miu.finalproject.entity.dto.output.PropertyDto;
 import waa.miu.finalproject.enums.OfferStatusEnum;
 import waa.miu.finalproject.enums.OfferTypeEnum;
 import waa.miu.finalproject.enums.PropertyTypeEnum;
@@ -17,6 +19,7 @@ import waa.miu.finalproject.repository.OfferRepo;
 import waa.miu.finalproject.repository.PropertyRepo;
 import waa.miu.finalproject.service.OfferService;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -34,8 +37,9 @@ public class OfferServiceImpl implements OfferService {
     private PropertyRepo propertyRepo;
 
     @Override
-    public List<Offer> findAll() {
-        return offerRepo.findAll();
+    public List<OfferDto> findAll() {
+        List<Offer> offers =  offerRepo.findAll();
+        return offers.stream().map(p -> modelMapper.map(p, OfferDto.class)).collect(Collectors.toList());
     }
 
     @Override

@@ -37,16 +37,17 @@ public class PropertyServiceImpl implements PropertyService {
 
     public List<PropertyDto> findPropertiesByOwnerIdWithFilters(
             Long ownerId,
-            Double price,
+            Double priceFrom,
+            Double priceTo,
             PropertyTypeEnum propertyType,
             Integer bed,
             Integer bath,
             String location) {
         List<Property> properties = new ArrayList<>();
         if (ownerId == null) {
-            properties = propertyRepo.findPropertiesByFilters(price, propertyType, bed, bath, location);
+            properties = propertyRepo.findPropertiesByFilters(priceFrom, priceTo, propertyType, bed, bath, location);
         } else {
-            properties = propertyRepo.findPropertiesByOwnerIdWithFilters(ownerId, price, propertyType, bed, bath, location);
+            properties = propertyRepo.findPropertiesByOwnerIdWithFilters(ownerId, priceFrom, priceTo, propertyType, bed, bath, location);
         }
         return properties.stream().map(p -> modelMapper.map(p, PropertyDto.class)).collect(Collectors.toList());
     }

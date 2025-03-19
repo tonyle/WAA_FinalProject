@@ -15,10 +15,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import waa.miu.finalproject.entity.Role;
 import waa.miu.finalproject.entity.User;
+import waa.miu.finalproject.entity.dto.TokenDto;
 import waa.miu.finalproject.entity.dto.input.InputUserDto;
 import waa.miu.finalproject.entity.dto.output.PropertyDetailDto;
 import waa.miu.finalproject.entity.dto.output.PropertyDto;
 import waa.miu.finalproject.entity.dto.output.UserDetailDto;
+import waa.miu.finalproject.entity.dto.output.UserDto;
 import waa.miu.finalproject.entity.request.LoginRequest;
 import waa.miu.finalproject.entity.request.RefreshTokenRequest;
 import waa.miu.finalproject.entity.response.LoginResponse;
@@ -60,9 +62,10 @@ public class AuthServiceImpl implements AuthService {
 
         final UserDetails userDetails = userDetailsService.loadUserByUsername(result.getName());
         Long userId = ((CustomUserDetails) userDetails).getUserId();
+        User user = userRepo.findById(userId).orElse(null);
         final String accessToken = jwtUtil.generateToken(userDetails, userId);
         final String refreshToken = jwtUtil.generateRefreshToken(loginRequest.getEmail());
-        return new LoginResponse(accessToken, refreshToken);
+        return new LoginResponse(accessToken, refreshToken, user.getId(), user.getEmail(), user.getName(), user.getPhone(), user.getStatus(), user.getRoles().get(0).getRole());
     }
 
     @Override
@@ -72,10 +75,14 @@ public class AuthServiceImpl implements AuthService {
             if (jwtUtil.isTokenExpired(refreshTokenRequest.getAccessToken())) {
                 final String accessToken = jwtUtil
                         .doGenerateToken(jwtUtil.getSubject(refreshTokenRequest.getRefreshToken()));
-                return new LoginResponse(accessToken, refreshTokenRequest.getRefreshToken());
+                TokenDto tokenDto = jwtUtil.getUserDtoFromClaims(accessToken);
+                User user = userRepo.findById(tokenDto.getUserId()).orElse(null);
+                return new LoginResponse(accessToken, refreshTokenRequest.getRefreshToken(), user.getId(), user.getEmail(), user.getName(), user.getPhone(), user.getStatus(), user.getRoles().get(0).getRole());
             } else {
                 log.info("Refresh token expired");
-                return new LoginResponse(refreshTokenRequest.getAccessToken(), refreshTokenRequest.getRefreshToken());
+                TokenDto tokenDto = jwtUtil.getUserDtoFromClaims(refreshTokenRequest.getAccessToken());
+                User user = userRepo.findById(tokenDto.getUserId()).orElse(null);
+                return new LoginResponse(refreshTokenRequest.getAccessToken(), refreshTokenRequest.getRefreshToken(), user.getId(), user.getEmail(), user.getName(), user.getPhone(), user.getStatus(), user.getRoles().get(0).getRole());
             }
         } else {
             log.warn("Refresh token expired");
