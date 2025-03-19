@@ -18,12 +18,10 @@ public class UserController {
     private UserService userService;
 
     @GetMapping
-    public ResponseEntity<List<UserDto>> findAll(@RequestParam(required = false) String hasMoreThanOnePost, @RequestParam(defaultValue = "0") int hasMoreThanNPosts) {
+    public ResponseEntity<List<UserDto>> findAll(@RequestParam(required = false) String status) {
         List<UserDto> users;
-        if (hasMoreThanOnePost != null) {
-            users = userService.getUsersHaveMoreThanOnePost();
-        } else if (hasMoreThanNPosts != 0) {
-            users = userService.getUsersHaveMoreThanNPost(hasMoreThanNPosts);
+        if (status != null) {
+            users = userService.getUsersHaveStatus(status);
         } else {
             users = userService.findAll();
         }
@@ -39,6 +37,12 @@ public class UserController {
     @PostMapping
     public void save(@RequestBody UserDto userDto) {
         userService.save(userDto);
+    }
+
+    @PutMapping("/{id}")
+    public void setStatus(@RequestBody String status, @PathVariable("id") long id) {
+
+        userService.setStatus(id,status);
     }
 
     @GetMapping("/{id}/posts")

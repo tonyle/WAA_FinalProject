@@ -1,4 +1,4 @@
-package waa.miu.finalproject.entity;
+package waa.miu.finalproject.entity.dto.output;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
@@ -13,6 +13,4 @@ public class OfferDto {
     long customerId;
     double offerPrice;
     int status;
-
-
 }
