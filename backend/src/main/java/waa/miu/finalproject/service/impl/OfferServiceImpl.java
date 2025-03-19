@@ -10,6 +10,8 @@ import waa.miu.finalproject.entity.Property;
 import waa.miu.finalproject.entity.User;
 import waa.miu.finalproject.entity.dto.UserDto;
 import waa.miu.finalproject.entity.dto.input.InputOfferDto;
+import waa.miu.finalproject.entity.dto.output.OfferDto;
+import waa.miu.finalproject.entity.dto.output.PropertyDto;
 import waa.miu.finalproject.enums.OfferStatusEnum;
 import waa.miu.finalproject.enums.OfferTypeEnum;
 import waa.miu.finalproject.enums.PropertyTypeEnum;
@@ -17,6 +19,7 @@ import waa.miu.finalproject.repository.OfferRepo;
 import waa.miu.finalproject.repository.PropertyRepo;
 import waa.miu.finalproject.service.OfferService;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -34,8 +37,9 @@ public class OfferServiceImpl implements OfferService {
     private PropertyRepo propertyRepo;
 
     @Override
-    public List<Offer> findAll() {
-        return offerRepo.findAll();
+    public List<OfferDto> findAll() {
+        List<Offer> offers =  offerRepo.findAll();
+        return offers.stream().map(p -> modelMapper.map(p, OfferDto.class)).collect(Collectors.toList());
     }
 
     @Override
@@ -53,5 +57,27 @@ public class OfferServiceImpl implements OfferService {
         offer.setStatus(OfferStatusEnum.NEW);
         offer.setProperty(property);
         offerRepo.save(offer);
+    }
+
+    @Override
+    public List<Offer> findByOwnerId(long ownerId) {
+        return  offerRepo.getOffersByOwnerId(ownerId);
+    }
+
+    @Override
+    public void setOfferStatus(long offerId, String status) {
+        Offer offer = offerRepo.findById(offerId).orElseThrow(() -> new RuntimeException("Offer not found"));
+        offer.setStatus(OfferStatusEnum.valueOf(status));
+        offerRepo.save(offer);
+    }
+
+    @Override
+    public List<Offer> findByPropertyId(long id) {
+        return offerRepo.findByPropertyId(id);
+    }
+
+    @Override
+    public List<Offer> findByLocation(String location) {
+        return offerRepo.findByLocation(location);
     }
 }

@@ -1,18 +1,15 @@
-package waa.miu.finalproject.entity;
+package waa.miu.finalproject.entity.dto.output;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import jakarta.persistence.*;
 import lombok.Data;
+import waa.miu.finalproject.enums.OfferStatusEnum;
+import waa.miu.finalproject.enums.OfferTypeEnum;
 
 @Data
 public class OfferDto {
-
     private long id;
-
-    long propertyId;
-    long customerId;
-    double offerPrice;
-    int status;
-
-
+    private OfferTypeEnum type;
+    private double offerPrice;
+    private OfferStatusEnum status;
+    private PropertyDto property;
+    private UserDto user;
 }
