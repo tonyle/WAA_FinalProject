@@ -1,8 +1,6 @@
 package waa.miu.finalproject.entity.dto.input;
 
 import lombok.Data;
-import waa.miu.finalproject.entity.AddressDto;
-import waa.miu.finalproject.enums.PropertyStatusEnum;
 import waa.miu.finalproject.enums.PropertyTypeEnum;
 
 @Data

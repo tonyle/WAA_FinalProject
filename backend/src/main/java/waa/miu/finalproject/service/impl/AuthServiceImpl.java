@@ -21,6 +21,7 @@ import waa.miu.finalproject.entity.dto.output.PropertyDetailDto;
 import waa.miu.finalproject.entity.dto.output.PropertyDto;
 import waa.miu.finalproject.entity.dto.output.UserDetailDto;
 import waa.miu.finalproject.entity.dto.output.UserDto;
+import waa.miu.finalproject.entity.dto.output.UserLoginInfo;
 import waa.miu.finalproject.entity.request.LoginRequest;
 import waa.miu.finalproject.entity.request.RefreshTokenRequest;
 import waa.miu.finalproject.entity.response.LoginResponse;
@@ -62,10 +63,11 @@ public class AuthServiceImpl implements AuthService {
 
         final UserDetails userDetails = userDetailsService.loadUserByUsername(result.getName());
         Long userId = ((CustomUserDetails) userDetails).getUserId();
-        User user = userRepo.findById(userId).orElse(null);
+        User userData = userRepo.findById(userId).orElse(null);
         final String accessToken = jwtUtil.generateToken(userDetails, userId);
         final String refreshToken = jwtUtil.generateRefreshToken(loginRequest.getEmail());
-        return new LoginResponse(accessToken, refreshToken, user.getId(), user.getEmail(), user.getName(), user.getPhone(), user.getStatus(), user.getRoles().get(0).getRole());
+        UserLoginInfo user = modelMapper.map(userData, UserLoginInfo.class);
+        return new LoginResponse(accessToken, refreshToken, user);
     }
 
     @Override
@@ -76,13 +78,16 @@ public class AuthServiceImpl implements AuthService {
                 final String accessToken = jwtUtil
                         .doGenerateToken(jwtUtil.getSubject(refreshTokenRequest.getRefreshToken()));
                 TokenDto tokenDto = jwtUtil.getUserDtoFromClaims(accessToken);
-                User user = userRepo.findById(tokenDto.getUserId()).orElse(null);
-                return new LoginResponse(accessToken, refreshTokenRequest.getRefreshToken(), user.getId(), user.getEmail(), user.getName(), user.getPhone(), user.getStatus(), user.getRoles().get(0).getRole());
+                User userdata = userRepo.findById(tokenDto.getUserId()).orElse(null);
+                UserLoginInfo user = modelMapper.map(userdata, UserLoginInfo.class);
+                return new LoginResponse(accessToken, refreshTokenRequest.getRefreshToken(), user);
             } else {
                 log.info("Refresh token expired");
                 TokenDto tokenDto = jwtUtil.getUserDtoFromClaims(refreshTokenRequest.getAccessToken());
-                User user = userRepo.findById(tokenDto.getUserId()).orElse(null);
-                return new LoginResponse(refreshTokenRequest.getAccessToken(), refreshTokenRequest.getRefreshToken(), user.getId(), user.getEmail(), user.getName(), user.getPhone(), user.getStatus(), user.getRoles().get(0).getRole());
+                User userData = userRepo.findById(tokenDto.getUserId()).orElse(null);
+                UserLoginInfo user = modelMapper.map(userData, UserLoginInfo.class);
+                return new LoginResponse(refreshTokenRequest.getAccessToken(), refreshTokenRequest.getRefreshToken(),
+                        user);
             }
         } else {
             log.warn("Refresh token expired");
