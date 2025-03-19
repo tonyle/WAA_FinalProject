@@ -9,7 +9,7 @@ const UserDropdown = () => {
     const {user, isAuthenticated, role} = useSelector((state) => state.auth);
     const [dropdownOpen, setDropdownOpen] = useState(false);
 
-    const username = isAuthenticated ? generateUsername(user, role) : '';
+    const username = isAuthenticated && user ? generateUsername(user, role) : '';
 
     const specificItems = () => {
         switch (role) {

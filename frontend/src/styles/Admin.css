@@ -32,6 +32,10 @@ table {
     width: 100%;
 }
 
+table tbody tr:nth-child(odd) {
+    @apply bg-slate-50;
+}
+
 th,
 td {
     padding: 8px;
