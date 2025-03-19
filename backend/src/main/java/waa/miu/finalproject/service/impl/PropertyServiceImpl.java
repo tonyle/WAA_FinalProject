@@ -7,14 +7,20 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import waa.miu.finalproject.entity.*;
+
+import waa.miu.finalproject.entity.dto.input.InputPropertyDto;
 import waa.miu.finalproject.entity.dto.output.PropertyDetailDto;
 import waa.miu.finalproject.entity.dto.output.PropertyDto;
 import waa.miu.finalproject.enums.PropertyTypeEnum;
+import waa.miu.finalproject.enums.PropertyStatusEnum;
+import waa.miu.finalproject.repository.AddressRepo;
 import waa.miu.finalproject.repository.PropertyRepo;
+import waa.miu.finalproject.repository.UserRepo;
 import waa.miu.finalproject.service.PropertyService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,6 +34,11 @@ public class PropertyServiceImpl implements PropertyService {
 
     @Autowired
     private PropertyRepo propertyRepo;
+
+    @Autowired
+    private UserRepo userRepo;
+    @Autowired
+    private AddressRepo addressRepo;
 
     @Override
     public List<PropertyDto> findAll() {
@@ -58,4 +69,67 @@ public class PropertyServiceImpl implements PropertyService {
         propertyRepo.save(p);
         return modelMapper.map(p, PropertyDetailDto.class);
     }
+
+    @Override
+    public void createProperty(InputPropertyDto propertyDto) {
+        Optional<User> userOptional = userRepo.findById(propertyDto.getOwnerId());
+        if (userOptional.isEmpty()) {
+            throw new RuntimeException("Owner not found");
+        }
+        Address address = new Address();
+        address.setCity(propertyDto.getCity());
+        address.setStreet(propertyDto.getStreet());
+        address.setState(propertyDto.getState());
+        address.setPostalCode(propertyDto.getPostalCode());
+        addressRepo.save(address);
+
+
+        Property property = new Property();
+        property.setName(propertyDto.getName());
+        property.setDescription(propertyDto.getDescription());
+        property.setType(propertyDto.getType());
+        property.setPrice(propertyDto.getPrice());
+        property.setBed(propertyDto.getBed());
+        property.setBath(propertyDto.getBath());
+        property.setSqft(propertyDto.getSqft());
+        property.setYearBuilt(propertyDto.getYearBuilt());
+        property.setHouseType(propertyDto.getHouseType());
+        property.setStyle(propertyDto.getStyle());
+
+        property.setStatus(PropertyStatusEnum.NEW);
+
+        property.setUser(userOptional.get());
+        property.setAddress(address);
+
+        // Save property
+        propertyRepo.save(property);
+    }
+
+    @Override
+    public Property updateProperty(Long id, InputPropertyDto propertyDto) {
+
+        Property property = propertyRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Property not found"));
+        System.out.println(property.getId());
+        property.setName(propertyDto.getName());
+        property.setDescription(propertyDto.getDescription());
+        property.setType(propertyDto.getType());
+        property.setPrice(propertyDto.getPrice());
+        property.setBed(propertyDto.getBed());
+        property.setBath(propertyDto.getBath());
+        property.setSqft(propertyDto.getSqft());
+        property.setStatus(PropertyStatusEnum.NEW);
+        property.setYearBuilt(propertyDto.getYearBuilt());
+        property.setHouseType(propertyDto.getHouseType());
+        property.setStyle(propertyDto.getStyle());
+
+        return propertyRepo.save(property);
+    }
+
+    @Override
+    public void delete(long id) {
+        propertyRepo.deleteById(id);
+    }
+
+
 }

@@ -3,6 +3,8 @@ package waa.miu.finalproject.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.data.jpa.repository.Query;
+import waa.miu.finalproject.entity.Offer;
 import waa.miu.finalproject.entity.Property;
 import waa.miu.finalproject.entity.User;
 import waa.miu.finalproject.enums.PropertyTypeEnum;
@@ -41,4 +43,5 @@ public interface PropertyRepo extends JpaRepository<Property, Long> {
             @Param("bed") Integer bed,
             @Param("bath") Integer bath,
             @Param("location") String location);
+    List<Offer> findOffersById(long id);
 }

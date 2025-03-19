@@ -30,4 +30,21 @@ public class OfferController {
     public void createOffer(@RequestBody InputOfferDto inputOffer) {
         offerService.save(inputOffer);
     }
+
+    @GetMapping("/users/{id}")
+    public ResponseEntity<List<Offer>> getOfferByOwnerId(@PathVariable("id") long ownerId) {
+        return ResponseEntity.ok(offerService.findByOwnerId(ownerId));
+    }
+
+    @PutMapping("/{id}")
+    public void setOfferStatus(@RequestBody String status, @PathVariable("id") long offerId) {
+        offerService.setOfferStatus(offerId,status);
+
+    }
+
+    @GetMapping("/property/{id}")
+    public ResponseEntity<List<Offer>> findOffersById(@PathVariable("id") long id) {
+        List<Offer> offers = offerService.findByPropertyId(id);
+        return ResponseEntity.ok(offers);
+    }
 }

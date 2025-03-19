@@ -16,4 +16,8 @@ public interface UserService {
     public List<UserDto> getUsersHaveMoreThanOnePost();
     public List<UserDto> getUsersHaveMoreThanNPost(int n);
     public void delete(long id);
+
+    List<UserDto> getUsersHaveStatus(String status);
+
+    void setStatus(long id, String status);
 }
