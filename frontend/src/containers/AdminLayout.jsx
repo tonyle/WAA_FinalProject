@@ -24,6 +24,7 @@ const AdminLayout = () => {
                         <NavLink to="/admin/properties" className={({ isActive }) => isActive ? "active-link" : ""}><span>Properties</span></NavLink>
                         <NavLink to="/admin/owners" className={({ isActive }) => isActive ? "active-link" : ""}><span>Onwers</span></NavLink>
                         <NavLink to="/admin/customers" className={({ isActive }) => isActive ? "active-link" : ""}><span>Customers</span></NavLink>
+                        <NavLink to="/admin/offers" className={({ isActive }) => isActive ? "active-link" : ""}><span>Offers</span></NavLink>
                     </nav>
                 </div>
                 <div className="col-span-4 w-full">
