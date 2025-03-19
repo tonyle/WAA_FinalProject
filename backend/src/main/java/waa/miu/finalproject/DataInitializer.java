@@ -186,6 +186,7 @@ public class DataInitializer implements CommandLineRunner {
 
             FavouriteList favouriteList = new FavouriteList();
             favouriteList.setName("My Saved Properties");
+            favouriteList.setUser(customer);
             favouriteList.setProperties(List.of(property1, property2));
 
             favouriteListRepository.save(favouriteList);

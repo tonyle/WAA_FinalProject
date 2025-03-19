@@ -37,8 +37,8 @@ public class OfferServiceImpl implements OfferService {
     private PropertyRepo propertyRepo;
 
     @Override
-    public List<OfferDto> findAll() {
-        List<Offer> offers =  offerRepo.findAll();
+    public List<OfferDto> findAll(long userId) {
+        List<Offer> offers =  offerRepo.findAllOfferByUserId(userId);
         return offers.stream().map(p -> modelMapper.map(p, OfferDto.class)).collect(Collectors.toList());
     }
 
