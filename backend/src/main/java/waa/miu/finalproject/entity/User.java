@@ -1,5 +1,6 @@
 package waa.miu.finalproject.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import waa.miu.finalproject.enums.*;
 import jakarta.persistence.*;
@@ -10,6 +11,7 @@ import java.util.List;
 @Entity
 @Table(name = "users")
 @Data
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,7 +25,12 @@ public class User {
     OwnerStatusEnum status;
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable
+    @JoinTable(
+            name = "user_role",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    @JsonIgnore
     private List<Role> roles;
 
     @OneToMany(fetch = FetchType.LAZY)

@@ -2,74 +2,73 @@ endpoint http://localhost:8080/api/v1/auth
 
 **User
     Sign up
-
     Login
-
     ResetPassword
-    **Customer
 
-        1. Get list of all offers:
-            Get http://localhost:8080/api/v1/offers?search=..
+**Customer
 
-        2. Get property detail
-            Get: http://localhost:8080/api/v1/properties/:propertyId
+    1. Get list of all offers: <- Done (missing search parameters)
+        Get http://localhost:8080/api/v1/offers?search=..
 
-        3. Add a Property in favourites:
-            Put: http://localhost:8080/api/v1/favourites/:favouriteId/properties/:propertyId
+    2. Get property detail   <- Done
+        Get: http://localhost:8080/api/v1/properties/:propertyId
 
-        4. Remove property from favouriteList:
-            Delete: http://localhost:8080/api/v1/favourites/:favouriteId/properties/:propertyId
+    3. Add a Property in favourite list: <- Done
+        Put: http://localhost:8080/api/v1/favourites/:favouriteId/properties/:propertyId
 
-        5. Make an offer:
-            Post http://localhost:8080/api/v1/offers
-            {
-                propertyId,
-                offeredPrice
-            }
+    4. Remove property from favourite List: <- Done
+        Delete: http://localhost:8080/api/v1/favourites/:favouriteId/properties/:propertyId
 
-        6. Get list of saved Property:
-            Get http://localhost:8080/api/v1/favourites?search=..
+    5. Make an offer:   <- Done (missing get user id by token)
+        Post http://localhost:8080/api/v1/offers
+        {
+            propertyId,
+            offeredPrice
+        }
 
-        7. Create new favouriteList:
-            Post http://localhost:8080/api/v1/favourites
-            {
-                name:
-            }
+    6. Get list of saved Property: <- Done
+        Get http://localhost:8080/api/v1/favourites?search=..
+
+    7. Create new favourite list: <- Done
+        Post http://localhost:8080/api/v1/favourites
+        {
+            name:
+        }
 
 
-    **Owner
-        1. Post a property:
-            Post http://localhost:8080/api/v1/properties
-            {
+**Owner
+    1. Post a property:
+        Post http://localhost:8080/api/v1/properties
+        {
 
-            }
-        Modify, Delete property
+        }
+    Modify, Delete property
 
-        2. Get list of all offers: (available in customer API)
-            Get http://localhost:8080/api/v1/users/:ownerId/offers?search=..
-        3. Respond offer
-            Put http://localhost:8080/api/v1/offers/:offerId
-            {
-                status: ACCEPTED or REJECTED
-            }
+    2. Get list of all offers: (available in customer API)
+        Get http://localhost:8080/api/v1/users/:ownerId/offers?search=..
+    3. Respond offer
+        Put http://localhost:8080/api/v1/offers/:offerId
+        {
+            status: ACCEPTED or REJECTED
+        }
 
-    **Admin
-        1. Get list of Properties:
-            Get http://localhost:8080/api/v1/properties?search=..
-        2. Get list of customers:
-            Get http://localhost:8080/api/v1/users?search=..
-        3. Get list of all offers:
-            Get http://localhost:8080/api/v1/offers?search=..
-        4. Activate/Deactivate an owner account:
-            Put http://localhost:8080/api/v1/users/:userId
-            {
-                status: Activate/Deactivate
-            }
-        5. Activate/Deactivate a property:
-            Put http://localhost:8080/api/v1/properties/:propertyId/
-            {
-                status: Activate/Deactivate
-            }
+**Admin
+    1. Get list of Properties:
+        Get http://localhost:8080/api/v1/properties?search=..
+    2. Get list of customers:
+        Get http://localhost:8080/api/v1/users?search=..
+    3. Get list of all offers:
+        Get http://localhost:8080/api/v1/offers?search=..
+    4. Activate/Deactivate an owner account:
+        Put http://localhost:8080/api/v1/users/:userId
+        {
+            status: Activate/Deactivate
+        }
+    5. Activate/Deactivate a property:
+        Put http://localhost:8080/api/v1/properties/:propertyId/
+        {
+            status: Activate/Deactivate
+        }
 
 ** Email
     Send email

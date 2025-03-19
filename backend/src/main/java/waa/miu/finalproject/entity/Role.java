@@ -1,4 +1,6 @@
 package waa.miu.finalproject.entity;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import waa.miu.finalproject.enums.*;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -15,5 +17,6 @@ public class Role {
     private RoleEnum role;
 
     @ManyToMany(mappedBy = "roles")
+    @JsonIgnore
     private List<User> users;
 }
