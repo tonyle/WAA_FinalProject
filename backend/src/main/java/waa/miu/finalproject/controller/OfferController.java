@@ -1,11 +1,14 @@
 package waa.miu.finalproject.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import waa.miu.finalproject.entity.Offer;
+import waa.miu.finalproject.entity.dto.TokenDto;
 import waa.miu.finalproject.entity.dto.input.InputOfferDto;
 import waa.miu.finalproject.entity.dto.output.OfferDto;
+import waa.miu.finalproject.helper.JwtUtil;
 import waa.miu.finalproject.service.OfferService;
 
 import java.util.List;
@@ -16,10 +19,19 @@ import java.util.List;
 public class OfferController {
     @Autowired
     private OfferService offerService;
+    @Autowired
+    private JwtUtil jwtUtil;
 
     @GetMapping()
-    public ResponseEntity<List<OfferDto>> getAllOffers() {
-        return ResponseEntity.ok(offerService.findAll());
+    public ResponseEntity<List<OfferDto>> getAllOffers(HttpServletRequest request) {
+        String token = jwtUtil.extractTokenRequest(request);
+        if (token != null) {
+            TokenDto tokenDto = jwtUtil.getUserDtoFromClaims(token);
+            long userId = tokenDto.getUserId();
+            return ResponseEntity.ok(offerService.findAll(userId));
+        } else {
+            throw new RuntimeException("Cannot get offers");
+        }
     }
 
     @GetMapping("/{id}")

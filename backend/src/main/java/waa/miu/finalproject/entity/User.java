@@ -41,4 +41,9 @@ public class User {
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn
     private List<Offer> offers;
+
+    public void addFavouriteList(FavouriteList favouriteList) {
+        favouriteList.setUser(this);
+        this.favouriteLists.add(favouriteList);
+    }
 }
