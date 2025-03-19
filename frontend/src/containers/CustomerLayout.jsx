@@ -11,10 +11,10 @@ const CustomerLayout = () => {
 
                     <div className="flex flex-row gap-4 justify-end items-center">
                         <nav>
-                            <Link to="/customer">Customer Dashboard</Link>
+                            {/* <Link to="/customer">Customer Dashboard</Link>
                             <Link to="/customer/current-offers">Current Offers</Link>
                             <Link to="/customer/offer-history">Offer History</Link>
-                            <Link to="/customer/saved-properties">Saved Properties</Link>
+                            <Link to="/customer/saved-properties">Saved Properties</Link> */}
 
                             {/* Login / Signup / User Info */}
                             <UserDropdown />

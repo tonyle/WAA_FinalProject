@@ -2,13 +2,13 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   user: null,
-  isAuthenticated: false,
+  isAuthenticated: true,
   accessToken: null,
   refreshToken: null,
   error: null,
   role: null,
   allUsers: [],
-  success: false
+  success: false,
 };
 
 export const authSlice = createSlice({
@@ -29,7 +29,8 @@ export const authSlice = createSlice({
       }
     },
     logout: (state) => {
-      Object.assign(state, initialState);
+      const users = state.allUsers;
+      Object.assign(state, { ...initialState, allUsers: users });
       localStorage.removeItem("token");
     },
     signupUser: (state, actions) => {
