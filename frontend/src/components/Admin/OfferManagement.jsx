@@ -67,8 +67,8 @@ const OfferManagement = () => {
       </div>
 
       {/* table */}
-      <div className='flex flex-row gap-2 w-full'>
-        <table className="border-collapse table-fixed w-full">
+      <div className='flex flex-row gap-2 w-full overflow-x-auto'>
+        <table className="border-collapse table-auto w-full">
           <thead>
             <tr>
               {/* <th><input type="checkbox" name="check_all" /></th> */}
