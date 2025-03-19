@@ -18,12 +18,13 @@ const AdminLayout = () => {
                     </div>
                 </nav>
             </header>
-            <main id="main" className="grid grid-cols-5 gap-10 justify-between items-center px-10">
-                <div className="col-span-1">
+            <main id="main" className="main-admin">
+                <div className="col-span-1 border-r border-slate-100">
                     <nav className="admin-nav">
                         <NavLink to="/admin/properties" className={({ isActive }) => isActive ? "active-link" : ""}><span>Properties</span></NavLink>
                         <NavLink to="/admin/owners" className={({ isActive }) => isActive ? "active-link" : ""}><span>Onwers</span></NavLink>
-                        <NavLink to="/admin/owners" className={({ isActive }) => isActive ? "active-link" : ""}><span>Customers</span></NavLink>
+                        <NavLink to="/admin/customers" className={({ isActive }) => isActive ? "active-link" : ""}><span>Customers</span></NavLink>
+                        <NavLink to="/admin/offers" className={({ isActive }) => isActive ? "active-link" : ""}><span>Offers</span></NavLink>
                     </nav>
                 </div>
                 <div className="col-span-4 w-full">

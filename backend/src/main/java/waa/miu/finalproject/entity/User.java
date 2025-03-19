@@ -1,17 +1,17 @@
 package waa.miu.finalproject.entity;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import waa.miu.finalproject.enums.*;
 import jakarta.persistence.*;
 import lombok.Data;
-import org.hibernate.annotations.BatchSize;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
 import java.util.List;
 
 @Entity
 @Table(name = "users")
 @Data
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,17 +20,20 @@ public class User {
     String email;
     String password;
     String phone;
-    String status;
+
+    @Enumerated(EnumType.STRING)
+    OwnerStatusEnum status;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable
     private List<Role> roles;
 
     @OneToMany(fetch = FetchType.LAZY)
+    @JsonManagedReference
     private List<Property> ownedProperties;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    private List<Property> favouriteProperties;
+    @OneToMany(fetch = FetchType.LAZY)
+    private List<FavouriteList> favouriteLists;
 
     @ManyToMany(fetch = FetchType.LAZY)
     private List<Property> viewedProperties;

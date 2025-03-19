@@ -6,13 +6,13 @@ import waa.miu.finalproject.entity.User;
 
 import java.util.List;
 
-public interface UserRepo extends JpaRepository<User, Integer> {
+public interface UserRepo extends JpaRepository<User, Long> {
     List<User> findAll();
 
-//    User findById(int id);
+//    User findById(long id);
 
     User findByEmail(String email);
 
-    void deleteById(int id);
+    void deleteById(long id);
 
 }

@@ -9,5 +9,5 @@ import java.util.List;
 
 public interface CommentRepo extends JpaRepository<Comment, Long> {
     @Query("select c from Comment c join c.post p where p.id = :id")
-    public List<Comment> getCommentsByPostId(@Param("id") int id);
+    public List<Comment> getCommentsByPostId(@Param("id") long id);
 }

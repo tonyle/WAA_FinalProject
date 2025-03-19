@@ -9,7 +9,7 @@ const UserDropdown = () => {
     const {user, isAuthenticated, role} = useSelector((state) => state.auth);
     const [dropdownOpen, setDropdownOpen] = useState(false);
 
-    const username = isAuthenticated ? generateUsername(user, role) : '';
+    const username = isAuthenticated && user ? generateUsername(user, role) : '';
 
     const specificItems = () => {
         switch (role) {
@@ -58,6 +58,10 @@ const UserDropdown = () => {
                 {dropdownOpen && (
                     <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 shadow-md rounded-md">
                         {specificItems()}
+
+                        <Link to="/profile/account"><span className="block px-4 py-2 text-sky-600 hover:bg-gray-100">
+                            Account</span>
+                        </Link>
                         <Link to="/logout"><span className="block px-4 py-2 text-sky-600 hover:bg-gray-100">
                             Logout</span>
                         </Link>

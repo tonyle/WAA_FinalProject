@@ -30,10 +30,10 @@ const Login = () => {
   }, [accessToken, navigate]);
 
   return (
-    <div className="flex flex-col gap-8 justify-center border border-gray-300 p-8 rounded-2xl">
+    <div className="flex flex-col gap-8 justify-center p-8 bg-white shadow-lg rounded-lg">
         <h2 className="text-2xl font-bold">Login</h2>
 
-        <form ref={refForm} onSubmit={handleSubmit} className="flex flex-col gap-4 justify-center w-[400px]">
+        <form ref={refForm} onSubmit={handleSubmit} className="flex flex-col gap-4 justify-center">
             <div className="flex flex-col gap-2 items-start w-full">
                 <label htmlFor="email" className="font-bold text-base">Email</label>
                 <input type="email" name="email" className="border border-gray-300 p-2 rounded w-full" placeholder="Username" />
@@ -42,7 +42,7 @@ const Login = () => {
                 <label htmlFor="username" className="font-bold text-base">Password</label>
                 <input type="password" name="password" className="border border-gray-300 p-2 rounded w-full" placeholder="Password" />
             </div>
-            <button type="submit" className="w-30 m-auto bg-sky-600 text-white font-bold">Login</button>
+            <button type="submit" className="flex m-auto bg-sky-600 text-white font-bold">Login</button>
 
             {error && <p style={{ color: "red" }}>{error}</p>}
         </form>

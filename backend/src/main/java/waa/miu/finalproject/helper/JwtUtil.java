@@ -1,17 +1,19 @@
 package waa.miu.finalproject.helper;
 
 import io.jsonwebtoken.*;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
+import waa.miu.finalproject.entity.dto.TokenDto;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Component
 public class JwtUtil {
@@ -77,9 +79,15 @@ public class JwtUtil {
         }
     }
 
-    public String generateToken(UserDetails userDetails) {
+    public String generateToken(UserDetails userDetails, long userId) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("type", "access"); // Add a "type" claim
+        // Get roles and add them as a claim
+        String roles = userDetails.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.joining(","));
+        claims.put("roles", roles);  // Add roles as a comma-separated string
+        claims.put("userId", userId);
         return doGenerateToken(claims, userDetails.getUsername());
     }
 
@@ -151,5 +159,28 @@ public class JwtUtil {
             System.out.println(e.getMessage());
         }
         return result;
+    }
+
+    public String extractTokenRequest(HttpServletRequest request) {
+        final String authHeader = request.getHeader("Authorization");
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            var token = authHeader.substring(7);
+            return token;
+        }
+
+        return null;
+    }
+
+    public TokenDto getUserDtoFromClaims(String token) {
+        Claims claims = this.getAllClaimsFromToken(token);
+        String username = claims.getSubject();
+        long userId = Long.parseLong(claims.get("userId").toString());
+        String rolesStr = (String) claims.get("roles");
+        List<String> roles = Arrays.asList(rolesStr.split(","));
+        TokenDto tokenDto = new TokenDto();
+        tokenDto.setUsername(username);
+        tokenDto.setRoles(roles);
+        tokenDto.setUserId(userId);
+        return tokenDto;
     }
 }

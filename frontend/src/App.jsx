@@ -26,6 +26,9 @@ import { UserRole } from './constants/role.js';
 import CustomerManagement from './components/Admin/CustomerManagement.jsx';
 import PropertiesManagement from './components/Admin/PropertiesManagement.jsx';
 import OwnerManagement from './components/Admin/OwnerManagement.jsx';
+import OfferManagement from './components/Admin/OfferManagement.jsx';
+import Account from './components/Account.jsx';
+import ResetPassword from './components/Auth/ResetPassword.jsx';
 
 function App() {
   return (
@@ -43,12 +46,20 @@ function App() {
         <Route index element={<Homepage />}/>
       </Route>
 
+      <Route path='/profile' element={<ProtectedRoute allowedRoles={[UserRole.ADMIN, UserRole.OWNER, UserRole.CUSTOMER]} />}>
+        <Route element={<MainLayout />}>
+          <Route path='account' element={<Account />}/>
+          <Route path='reset-password' element={<ResetPassword />}/>
+        </Route>
+      </Route>
+
       <Route path="/admin" element={<ProtectedRoute allowedRoles={[UserRole.ADMIN]}/>}>
           <Route element={<AdminLayout />}>
             <Route index element={<Navigate to="/admin/properties" replace />} />
             <Route path="properties" element={<PropertiesManagement />} />
             <Route path="owners" element={<OwnerManagement />} />
             <Route path="customers" element={<CustomerManagement />} />
+            <Route path="offers" element={<OfferManagement />} />
           </Route>
       </Route>
 
