@@ -25,6 +25,7 @@ import { UserRole } from './constants/role.js';
 import CustomerManagement from './components/Admin/CustomerManagement.jsx';
 import PropertiesManagement from './components/Admin/PropertiesManagement.jsx';
 import OwnerManagement from './components/Admin/OwnerManagement.jsx';
+import OfferManagement from './components/Admin/OfferManagement.jsx';
 
 function App() {
   return (
@@ -48,6 +49,7 @@ function App() {
             <Route path="properties" element={<PropertiesManagement />} />
             <Route path="owners" element={<OwnerManagement />} />
             <Route path="customers" element={<CustomerManagement />} />
+            <Route path="offers" element={<OfferManagement />} />
           </Route>
       </Route>
 

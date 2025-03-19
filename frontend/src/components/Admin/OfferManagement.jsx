@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchCustomersSuccess } from '../../store/admin/adminSlice';
+import { fetchOffersSuccess } from '../../store/admin/adminSlice';
 
 const listOwners = [
   {
@@ -23,10 +23,10 @@ const listOwners = [
   }
 ]
 
-const CustomerManagement = () => {
+const OfferManagement = () => {
     const [tab, setTab] = useState(0);
     const dispatch = useDispatch();
-    const {customers} = useSelector((state) => state.admin);
+    const {offers} = useSelector((state) => state.admin);
     const [searchText, setSearchText] = useState("");
     const renderBadgeClass = (status) => {
         return status === 'Active' ? "badge-active" : "badge-deactive";
@@ -34,15 +34,15 @@ const CustomerManagement = () => {
 
   useEffect(() => {
     // fetch data
-    dispatch(fetchCustomersSuccess({data: listOwners}));
+    dispatch(fetchOffersSuccess({data: listOwners}));
   }, [tab]);
 
   const onHandleActiveAndDeactive = (id) => {
-    const updatedOwners = customers.map((owner) => 
+    const updatedOwners = offers.map((owner) => 
         owner.id === id ? { ...owner, status: owner.status === "Active" ? "Inactive" : "Active" } : owner
     );
 
-    dispatch(fetchCustomersSuccess({ data: updatedOwners }));
+    dispatch(fetchOffersSuccess({ data: updatedOwners }));
 };
 
   const handleSearchOwners = () => {
@@ -81,10 +81,10 @@ const CustomerManagement = () => {
           </thead>
 
             <tbody>
-                {customers && customers.length > 0 ? (
+                {offers && offers.length > 0 ? (
                     <>
                     {
-                        customers.map((item, key) => (
+                        offers.map((item, key) => (
                             <tr key={key}>
                                 {/* <td><input type='checkbox' name={item.id}/></td> */}
                                 <td>{item.id}</td>
@@ -94,7 +94,7 @@ const CustomerManagement = () => {
                                 <td>
                                     <button 
                                         onClick={() => onHandleActiveAndDeactive(item.id)} 
-                                        className={`${item.status === 'Active' ? 'bg-slate-100' : 'text-green-500 bg-green-50'} text-xs px-5 cursor-pointer`}
+                                        className={`${item.status === 'Active' ? 'bg-slate-200' : 'text-green-500 bg-green-50'} text-xs px-5 cursor-pointer`}
                                     >
                                         {item.status === 'Active' ? 'Deactivate' : 'Activate'}
                                     </button>
@@ -115,4 +115,4 @@ const CustomerManagement = () => {
   );
 }
 
-export default CustomerManagement;
+export default OfferManagement;

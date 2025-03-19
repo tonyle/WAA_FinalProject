@@ -1,17 +1,14 @@
-package waa.miu.finalproject.entity.dto;
+package waa.miu.finalproject.entity.dto.output;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 import waa.miu.finalproject.entity.Role;
 import waa.miu.finalproject.enums.OwnerStatusEnum;
 
 import java.util.List;
 
+
 @Data
-@Getter
-@Setter
-public class UserDto {
+public class UserDetailDto {
     long id;
     String name;
     String email;

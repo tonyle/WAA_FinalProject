@@ -2,6 +2,9 @@ package waa.miu.finalproject;
 
 import jakarta.transaction.Transactional;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import waa.miu.finalproject.entity.*;
 import waa.miu.finalproject.repository.*;
@@ -18,6 +21,7 @@ public class DataInitializer implements CommandLineRunner {
     private final AddressRepo addressRepository;
     private final OfferRepo offerRepository;
     private final FavouriteListRepo favouriteListRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public DataInitializer(UserRepo userRepository, RoleRepo roleRepository,
                            PropertyRepo propertyRepository, AddressRepo addressRepository,
@@ -28,6 +32,7 @@ public class DataInitializer implements CommandLineRunner {
         this.addressRepository = addressRepository;
         this.offerRepository = offerRepository;
         this.favouriteListRepository = favouriteListRepository;
+        this.passwordEncoder = new BCryptPasswordEncoder();
     }
 
 
@@ -66,7 +71,7 @@ public class DataInitializer implements CommandLineRunner {
             User adminUser = new User();
             adminUser.setName("Admin User");
             adminUser.setEmail("admin@example.com");
-            adminUser.setPassword("password123");
+            adminUser.setPassword(passwordEncoder.encode("password123"));
             adminUser.setPhone("123-456-7890");
             adminUser.setStatus(OwnerStatusEnum.ACTIVE);
             adminUser.setRoles(List.of(adminRole));
@@ -74,7 +79,7 @@ public class DataInitializer implements CommandLineRunner {
             User customerUser = new User();
             customerUser.setName("John Doe");
             customerUser.setEmail("john@example.com");
-            customerUser.setPassword("password123");
+            customerUser.setPassword(passwordEncoder.encode("password123"));
             customerUser.setPhone("987-654-3210");
             customerUser.setStatus(OwnerStatusEnum.ACTIVE);
             customerUser.setRoles(List.of(customerRole));
@@ -82,7 +87,7 @@ public class DataInitializer implements CommandLineRunner {
             User ownerUser = new User();
             ownerUser.setName("Jane Smith");
             ownerUser.setEmail("jane@example.com");
-            ownerUser.setPassword("password123");
+            ownerUser.setPassword(passwordEncoder.encode("password123"));
             ownerUser.setPhone("555-555-5555");
             ownerUser.setStatus(OwnerStatusEnum.ACTIVE);
             ownerUser.setRoles(List.of(ownerRole));

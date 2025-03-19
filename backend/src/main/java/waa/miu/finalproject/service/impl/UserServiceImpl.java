@@ -40,6 +40,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User getById(long id) {
+        return userRepo.findById(id).orElseThrow(() -> new RuntimeException("User with id " + id + " not found"));
+    }
+
+    @Override
     public List<UserDto> findAll() {
         List<User> users = userRepo.findAll();
 

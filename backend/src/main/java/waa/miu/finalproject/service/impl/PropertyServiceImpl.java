@@ -11,12 +11,14 @@ import waa.miu.finalproject.entity.*;
 import waa.miu.finalproject.entity.dto.input.InputPropertyDto;
 import waa.miu.finalproject.entity.dto.output.PropertyDetailDto;
 import waa.miu.finalproject.entity.dto.output.PropertyDto;
+import waa.miu.finalproject.enums.PropertyTypeEnum;
 import waa.miu.finalproject.enums.PropertyStatusEnum;
 import waa.miu.finalproject.repository.AddressRepo;
 import waa.miu.finalproject.repository.PropertyRepo;
 import waa.miu.finalproject.repository.UserRepo;
 import waa.miu.finalproject.service.PropertyService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -44,9 +46,27 @@ public class PropertyServiceImpl implements PropertyService {
         return properties.stream().map(p -> modelMapper.map(p, PropertyDto.class)).collect(Collectors.toList());
     }
 
+    public List<PropertyDto> findPropertiesByOwnerIdWithFilters(
+            Long ownerId,
+            Double price,
+            PropertyTypeEnum propertyType,
+            Integer bed,
+            Integer bath,
+            String location) {
+        List<Property> properties = new ArrayList<>();
+        if (ownerId == null) {
+            properties = propertyRepo.findPropertiesByFilters(price, propertyType, bed, bath, location);
+        } else {
+            properties = propertyRepo.findPropertiesByOwnerIdWithFilters(ownerId, price, propertyType, bed, bath, location);
+        }
+        return properties.stream().map(p -> modelMapper.map(p, PropertyDto.class)).collect(Collectors.toList());
+    }
+
     @Override
     public PropertyDetailDto findById(long id) {
         Property p = propertyRepo.findById(id).orElseThrow(() -> new RuntimeException("Property not found"));
+        p.setView(p.getView() + 1);
+        propertyRepo.save(p);
         return modelMapper.map(p, PropertyDetailDto.class);
     }
 

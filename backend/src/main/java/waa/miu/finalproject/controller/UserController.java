@@ -3,19 +3,25 @@ package waa.miu.finalproject.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import waa.miu.finalproject.entity.User;
 import waa.miu.finalproject.entity.dto.PostDto;
 import waa.miu.finalproject.entity.dto.UserDto;
+import waa.miu.finalproject.entity.dto.input.InputUpdateUserDto;
 import waa.miu.finalproject.entity.dto.output.PostNoAuthorDto;
+import waa.miu.finalproject.entity.dto.output.PropertyDto;
+import waa.miu.finalproject.repository.UserRepo;
 import waa.miu.finalproject.service.UserService;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1/auth/users")
+@RequestMapping("api/v1/users")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class UserController {
     @Autowired
     private UserService userService;
+    @Autowired
+    private UserRepo userRepo;
 
     @GetMapping
     public ResponseEntity<List<UserDto>> findAll(@RequestParam(required = false) String status) {
@@ -34,22 +40,14 @@ public class UserController {
         return ResponseEntity.ok(userDto);
     }
 
-    @PostMapping
-    public void save(@RequestBody UserDto userDto) {
-        userService.save(userDto);
-    }
-
     @PutMapping("/{id}")
-    public void setStatus(@RequestBody String status, @PathVariable("id") long id) {
-
-        userService.setStatus(id,status);
+    public ResponseEntity<User> updateById(@PathVariable("id") long id, @RequestBody InputUpdateUserDto inputUpdateUserDto) {
+        User user = userService.getById(id);
+        user.setStatus(inputUpdateUserDto.getStatus());
+        userRepo.save(user);
+        return ResponseEntity.ok(user);
     }
 
-    @GetMapping("/{id}/posts")
-    public ResponseEntity<List<PostNoAuthorDto>> getPosts(@PathVariable("id") long id) {
-        List<PostNoAuthorDto> posts = userService.getPosts(id);
-        return ResponseEntity.ok(posts);
-    }
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable("id") long id) {
