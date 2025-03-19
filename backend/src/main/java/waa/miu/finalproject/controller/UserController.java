@@ -29,12 +29,10 @@ public class UserController {
     private ModelMapper modelMapper;
 
     @GetMapping
-    public ResponseEntity<List<UserDto>> findAll(@RequestParam(required = false) String hasMoreThanOnePost, @RequestParam(defaultValue = "0") int hasMoreThanNPosts) {
+    public ResponseEntity<List<UserDto>> findAll(@RequestParam(required = false) String status) {
         List<UserDto> users;
-        if (hasMoreThanOnePost != null) {
-            users = userService.getUsersHaveMoreThanOnePost();
-        } else if (hasMoreThanNPosts != 0) {
-            users = userService.getUsersHaveMoreThanNPost(hasMoreThanNPosts);
+        if (status != null) {
+            users = userService.getUsersHaveStatus(status);
         } else {
             users = userService.findAll();
         }

@@ -1,13 +1,12 @@
-package waa.miu.finalproject.entity.dto.output;
+package waa.miu.finalproject.entity.dto.input;
 
 import lombok.Data;
-import waa.miu.finalproject.entity.Address;
+import waa.miu.finalproject.entity.AddressDto;
 import waa.miu.finalproject.enums.PropertyStatusEnum;
 import waa.miu.finalproject.enums.PropertyTypeEnum;
 
 @Data
-public class PropertyDto {
-    private long id;
+public class InputPropertyDto {
     private String name;
     private String description;
     private PropertyTypeEnum type;
@@ -15,12 +14,13 @@ public class PropertyDto {
     private int bed;
     private int bath;
     private double sqft;
-    private PropertyStatusEnum status;
-    private double view;
-    private double save;
     private int yearBuilt;
-    private String style;
+    private long ownerId;
     private String houseType;
-    private Address address;
-    private UserDto user;
+    private String style;
+
+    private String state;
+    private String city;
+    private String street;
+    private String postalCode;
 }

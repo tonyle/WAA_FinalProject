@@ -7,6 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import waa.miu.finalproject.entity.dto.TokenDto;
+import waa.miu.finalproject.entity.Offer;
+import waa.miu.finalproject.entity.Property;
+import waa.miu.finalproject.entity.dto.input.InputPropertyDto;
 import waa.miu.finalproject.entity.dto.output.PropertyDetailDto;
 import waa.miu.finalproject.entity.dto.output.PropertyDto;
 import waa.miu.finalproject.enums.PropertyTypeEnum;
@@ -58,4 +61,28 @@ public class PropertyController {
         PropertyDetailDto property = propertyService.findById(id);
         return ResponseEntity.ok(property);
     }
+
+    @PostMapping
+    public void save(@RequestBody InputPropertyDto inputPropertyDto) {
+        propertyService.createProperty(inputPropertyDto);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Property> updateProperty(@PathVariable("id") Long id, @RequestBody InputPropertyDto propertyDto) {
+        Property updatedProperty = propertyService.updateProperty(id, propertyDto);
+        return ResponseEntity.ok(updatedProperty);
+    }
+//
+//    @GetMapping("/{id}/posts")
+//    public ResponseEntity<List<PostNoAuthorDto>> getPosts(@PathVariable("id") long id) {
+//        List<PostNoAuthorDto> posts = userService.getPosts(id);
+//        return ResponseEntity.ok(posts);
+//    }
+//
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable("id") long id) {
+        propertyService.delete(id);
+    }
+
+
 }
