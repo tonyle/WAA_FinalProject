@@ -28,6 +28,8 @@ body {
   margin: 0;
   display: flex;
   place-items: center;
+  background-color: #ffffff !important;
+  color: #213547;
   min-width: 320px;
   min-height: 100vh;
 }
@@ -69,16 +71,18 @@ button:focus-visible {
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
 #root {
-  @apply w-full px-16;
+  margin: auto;
+  padding: 2rem;
+  text-align: center;
 }
 
 #main {
-  margin: 4rem auto;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 2rem;
   text-align: center;
 }
-#main.auth-layout {
-  @apply w-1/3;
-}
+
 .header {
   @apply fixed top-0 left-0 w-full flex flex-row px-16 shadow shadow-gray-300;
 }
