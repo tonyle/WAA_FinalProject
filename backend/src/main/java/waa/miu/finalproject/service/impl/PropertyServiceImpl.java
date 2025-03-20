@@ -134,7 +134,9 @@ public class PropertyServiceImpl implements PropertyService {
 
     @Override
     public void delete(long id) {
-        propertyRepo.deleteById(id);
+        Property p = propertyRepo.findById(id).orElseThrow(() -> new RuntimeException("Property not found"));
+        if (p.getStatus().equals(PropertyStatusEnum.PENDING) || p.getStatus().equals(PropertyStatusEnum.CONTINGENCY)){
+            propertyRepo.deleteById(id);}
     }
 
     @Override

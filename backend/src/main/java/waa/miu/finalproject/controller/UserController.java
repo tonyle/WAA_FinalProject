@@ -12,6 +12,8 @@ import waa.miu.finalproject.entity.dto.output.PostNoAuthorDto;
 import waa.miu.finalproject.entity.dto.output.PropertyDetailDto;
 import waa.miu.finalproject.entity.dto.output.PropertyDto;
 import waa.miu.finalproject.entity.dto.output.UserDetailDto;
+import waa.miu.finalproject.enums.OwnerStatusEnum;
+import waa.miu.finalproject.enums.RoleEnum;
 import waa.miu.finalproject.repository.UserRepo;
 import waa.miu.finalproject.service.UserService;
 
@@ -29,8 +31,8 @@ public class UserController {
     private ModelMapper modelMapper;
 
     @GetMapping
-    public ResponseEntity<List<UserDto>> findAll(@RequestParam(value = "status",required = false) String status,
-                                                 @RequestParam(value = "role",required = false) String role) {
+    public ResponseEntity<List<UserDto>> findAll(@RequestParam(value = "status",required = false) OwnerStatusEnum status,
+                                                 @RequestParam(value = "role",required = false) RoleEnum role) {
         List<UserDto> users = userService.findAllFilterByStatusAndRoles(status,role);
 
         return ResponseEntity.ok(users);

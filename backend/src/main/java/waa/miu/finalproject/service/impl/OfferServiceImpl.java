@@ -111,6 +111,10 @@ public class OfferServiceImpl implements OfferService {
 
     @Override
     public void delete(long id) {
-        offerRepo.deleteById(id);
+        Offer offer = offerRepo.findById(id).orElse(null);
+        if (offer.getProperty().getStatus() != PropertyStatusEnum.CONTINGENCY) {
+            offerRepo.deleteById(id);
+        }
+
     }
 }
