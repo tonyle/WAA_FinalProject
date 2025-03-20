@@ -1,6 +1,7 @@
 package waa.miu.finalproject.service.impl;
 
 import jakarta.transaction.Transactional;
+import org.springframework.context.annotation.Primary;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -9,6 +10,7 @@ import waa.miu.finalproject.repository.UserRepo;
 
 @Service("userDetailsService")
 @Transactional
+@Primary
 public class CustomUserDetailsService implements UserDetailsService {
     private final UserRepo userRepo;
 

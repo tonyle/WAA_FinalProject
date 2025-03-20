@@ -115,7 +115,7 @@ const PropertiesManagement = () => {
                       <td>{item.description}</td>
                       <td>{item.type}</td>
                       <td>{item.price}</td>
-                      <td><span className={`badge ${renderBadgeClass(item.status.toLowerCase())}`}>{item.status.toLowerCase()}</span></td>
+                      <td><span className={`badge ${renderBadgeClass(item.status)}`}>{item.status.toLowerCase()}</span></td>
                       <td>
                         <button
                           onClick={() => onHandleActiveAndDeactive(item.id)}
