@@ -5,7 +5,6 @@ import MainMenu from "../components/Common/MainMenu";
 
 const OwnerLayout = () => {
     return (
-<<<<<<< HEAD
         <div className="flex min-h-screen">
             {/* Sidebar */}
             <aside className="w-64 bg-gray-800 text-white p-6">
@@ -20,30 +19,24 @@ const OwnerLayout = () => {
                     <Link to="/owner/current-offers" className="hover:bg-gray-700 p-2 rounded">Current Offers</Link>
                     <Link to="/owner/offer-history" className="hover:bg-gray-700 p-2 rounded">Offer History</Link>
                     <Link to="/owner/messages" className="hover:bg-gray-700 p-2 rounded">Messages</Link>
-=======
-        <>
-            <header className="header">
-                <nav className="flex flex-row gap-4 justify-between items-center w-full">
-                    <Link to={"/"}><img alt="logo" className="logo react" src={reactLogo} /></Link>
-
-                    <div className="flex flex-row gap-4 justify-end items-center">
-                        <nav className="inline-flex gap-4">
-                            <MainMenu />
-                            {/* Login / Signup / User Info */}
-                            <UserDropdown />
-                            
-                        </nav>
-                    </div>
->>>>>>> origin/frontend-dev
                 </nav>
             </aside>
 
             {/* Main Content */}
             <div className="flex-1 flex flex-col">
-                {/* Header */}
+                {/* Header Navigation */}
                 <header className="bg-white shadow p-4 flex justify-between items-center">
-                    <h1 className="text-lg font-semibold text-gray-800">Owner Portal</h1>
-                    <UserDropdown />
+                    <div className="flex flex-row gap-4 justify-between items-center w-full">
+                        <Link to={"/"}><img alt="logo" className="logo react" src={reactLogo} /></Link>
+
+                        <div className="flex flex-row gap-4 justify-end items-center">
+                            <nav className="inline-flex gap-4">
+                                <MainMenu />
+                                {/* Login / Signup / User Info */}
+                                <UserDropdown />
+                            </nav>
+                        </div>
+                    </div>
                 </header>
 
                 {/* Page Content */}
