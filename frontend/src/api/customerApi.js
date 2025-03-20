@@ -21,6 +21,7 @@ export const getOffers = async (params) => {
   }
 };
 
+
 export const activeOrDeactiveOwnerAccount = async (id, data) => {
   try {
     const response = await api.put("/users/" + id, data);
@@ -29,7 +30,14 @@ export const activeOrDeactiveOwnerAccount = async (id, data) => {
     throw err;
   }
 };
-
+export const addFav = async (params) => {
+    try {
+      const response = await api.post("/favourites", { name: "My Saved Properties" });
+      return response;
+    } catch (err) {
+      throw err;
+    }
+  };
 export const offerProperty = async (body) => {
   try {
     console.log(body)

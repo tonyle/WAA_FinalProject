@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import {store} from '../../store'
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchPropertiesSuccess, fetchPropertiesFail,fetchFavSuccess,fetchFavFail } from '../../store/customer/customerSlice';
 import { Link } from 'react-router-dom';
 import { FaHeart } from 'react-icons/fa'; // Importing heart icon from FontAwesome
-import { getProperties,favs,addProp,cancelProp } from '../../api/customerApi';
+import { getProperties,favs,addProp,cancelProp,addFav } from '../../api/customerApi';
 const CustomerDashboard = () => {
   const dispatch = useDispatch();
   const { properties, error,favorities } = useSelector((state) => state.customer);
@@ -54,19 +55,29 @@ const CustomerDashboard = () => {
     setFilters({ ...filters, [e.target.name]: e.target.value });
   };
 
-  const toggleFavorite = async(id,propertyId) => {
-    const isFavorited = favorities[0].properties.some(p => p.id === propertyId);
-    if(isFavorited){
-      const res = await cancelProp(id,propertyId)
-      
-     
-      
+  const toggleFavorite = async(propertyId) => {
+    if(favorities.length>0){
+      const isFavorited = favorities[0].properties.some(p => p.id === propertyId);
+      if(isFavorited){
+        const res = await cancelProp(favorities[0].id,propertyId)  
+      }else{
+
+          const res = await addProp(favorities[0].id,propertyId)
+        
+          
+        
+      }
+      setRefresh(!refresh)
     }else{
-      const res = await addProp(id,propertyId)
       
+        await addFav();
+        await fetchData()
+        const updatedFavorities = store.getState().customer.favorities; // Get the latest Redux state
+        if (updatedFavorities.length > 0) {
+          await addProp(updatedFavorities[0].id, propertyId);
+        }
+        setRefresh(!refresh)
     }
-    setRefresh(!refresh)
-   
   };
 
   return (
@@ -135,7 +146,7 @@ const CustomerDashboard = () => {
                 <button
                   className={`absolute top-4 right-4 p-2 rounded-full 
                    `}
-                  onClick={() => toggleFavorite(favorities[0].id,property.id )}
+                  onClick={() => toggleFavorite(property.id)}
                 >
                   <FaHeart className={`w-6 h-6 ${favorities.length > 0 && favorities[0].properties.some(p => p.id === property.id) ? 'text-white' : 'text-gray-600'}`} />
                 </button>
