@@ -1,34 +1,29 @@
 import React, { useEffect } from 'react';
-import axios from 'axios';
+
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchOfferFail, fetchOfferSuccess } from '../../store/customer/customerSlice'; // Adjust path as needed
-
+import { getOffers } from '../../api/customerApi';
 const OfferHistory = () => {
   const dispatch = useDispatch();
   const { offers, error } = useSelector((state) => state.customer);
-  const { accessToken } = useSelector((state) => state.auth);
+  
+  const params = {
+    statuses: 'ACCEPTED,REJECTED', // multiple values
+  };
+  const fetchData = async () => {
+    try {
+      const res = await getOffers(params);
+   
+      dispatch(fetchOfferSuccess({ data: res.data }));
+    } catch (err) {
+      fetchOfferFail({err})
+      console.log(err);
+    }
+  }
 
   useEffect(() => {
-    const fetchOffers = async () => {
-      try {
-        const response = await axios.get(
-          'https://finalprojectbackend-cyhghxg2hvemcfg2.canadacentral-01.azurewebsites.net/api/v1/offers?status=ACCEPTED&status=REJECTED',
-          {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          }
-        );
-        dispatch(fetchOfferSuccess({ data: response.data }));
-      } catch (err) {
-        dispatch(fetchOfferFail(err.message));
-      }
-    };
-
-    if (accessToken) {
-      fetchOffers();
-    }
-  }, [accessToken, dispatch]);
+    fetchData()
+  }, [ dispatch]);
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-gray-100">
@@ -65,10 +60,10 @@ const OfferHistory = () => {
                     {offer.status}
                   </span>
                 </p>
-                <p><span className="font-semibold">Address:</span> {offer.address?.street}, {offer.address?.city}, {offer.address?.state}</p>
-                <p><span className="font-semibold">Bed/Bath:</span> {offer.bed} Beds, {offer.bath} Baths</p>
-                <p><span className="font-semibold">Sqft:</span> {offer.sqft} sqft</p>
-                <p><span className="font-semibold">Type:</span> {offer.type}</p>
+                <p><span className="font-semibold">Address:</span> {offer.property?.address?.street}, {offer.proferty?.address?.city}, {offer.proferty?.address?.state}</p>
+                <p><span className="font-semibold">Bed/Bath:</span> {offer.property?.bed} Beds, {offer.proferty?.bath} Baths</p>
+                <p><span className="font-semibold">Sqft:</span> {offer.property?.sqft} sqft</p>
+                <p><span className="font-semibold">Type:</span> {offer.property?.type}</p>
               </div>
             </div>
           ))}
