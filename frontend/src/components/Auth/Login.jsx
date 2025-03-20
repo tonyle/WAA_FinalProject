@@ -25,7 +25,7 @@ const Login = () => {
       const res = await loginUser({email, password});
       dispatch(login(res.data));
     } catch (err) {
-      console.log(err);
+      alert("The account is not existed")
     }
   };
 

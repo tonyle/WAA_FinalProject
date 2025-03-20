@@ -4,6 +4,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.*;
+
+import waa.miu.finalproject.entity.dto.input.InputUserDto;
 import waa.miu.finalproject.entity.request.LoginRequest;
 import waa.miu.finalproject.entity.request.RefreshTokenRequest;
 import waa.miu.finalproject.entity.response.LoginResponse;
@@ -29,6 +31,17 @@ public class AuthController {
         } catch (BadCredentialsException e) {
             Map<String, String> errorResponse = Map.of("error", "Invalid email or password");
             return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    @PostMapping("/signup")
+    public ResponseEntity<?> signup(@RequestBody InputUserDto inputUserDto) {
+        try {
+            var loginResponse = authService.signup(inputUserDto);
+            return new ResponseEntity<>(loginResponse, HttpStatus.CREATED);
+        } catch (Exception e) {
+            Map<String, String> errorResponse = Map.of("error", e.getMessage());
+            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
         }
     }
 

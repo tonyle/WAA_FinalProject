@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   users: [],
   properties: [],
+  propertyDetails: null,
   offers: [],
   error: null,
 };
@@ -27,6 +28,9 @@ export const homepageSlice = createSlice({
       state.offers = [];
       state.error = actions.payload.error;
     },
+    fetchPropertyDetailsSuccess: (state, actions) => {
+        state.propertyDetails = actions.payload.data;
+    }
   },
 });
 
@@ -35,6 +39,7 @@ export const {
   fetchPropertiesFail,
   fetchOffersSuccess,
   fetchOffersFail,
+  fetchPropertyDetailsSuccess
 } = homepageSlice.actions;
 
 export default homepageSlice.reducer;

@@ -106,7 +106,7 @@ const UserManagement = () => {
                       <td>{item.name}</td>
                       <td>{item.email}</td>
                       <td>{item.roles[0].role}</td>
-                      <td><span className={`badge ${renderBadgeClass(item.status.toLowerCase())}`}>{item.status.toLowerCase()}</span></td>
+                      <td><span className={`badge ${renderBadgeClass(item.status)}`}>{item.status.toLowerCase()}</span></td>
                       <td>
                         <button
                           onClick={() => onHandleActiveAndDeactive(item.id)}

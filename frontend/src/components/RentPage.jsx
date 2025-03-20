@@ -42,7 +42,7 @@ const RentPage = () => {
             {/* list properties */}
             <h2 className="text-center text-3xl font-sans font-semibold mt-10">Rent Properties</h2>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-8">
                 {!isLoading && properties.length > 0 && properties.map((item, key) => {
                     return (
                         <PropertyCard {...item} key={key} />

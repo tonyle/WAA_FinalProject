@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { signupUser } from "../../store/auth/authSlice";
 import { UserRole } from "../../constants/role";
 import { signup } from "../../api/authApi";
@@ -76,6 +76,8 @@ const Signup = () => {
                 <button type="submit" className="flex m-auto bg-sky-600 text-white font-bold">Sign Up</button>
 
                 {error && <p style={{ color: "red" }}>{error}</p>}
+
+                <Link to="/auth/login"><span className="text-sky-600 underline">Login?</span></Link>
             </form>
         </div>
     );

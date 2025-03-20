@@ -30,6 +30,7 @@ import ResetPassword from './components/Auth/ResetPassword.jsx';
 import UserManagement from './components/Admin/UserManagement.jsx';
 import RentPage from './components/RentPage.jsx';
 import SellPage from './components/SellPage.jsx';
+import PropertyDetailsPage from './components/PropertyDetailsPage.jsx';
 
 function App() {
   return (
@@ -47,6 +48,7 @@ function App() {
         <Route index element={<Homepage />} />
         <Route path='rent' element={<RentPage />} />
         <Route path='sell' element={<SellPage />} />
+        <Route path='property/:id' element={<PropertyDetailsPage />} />
       </Route>
 
       <Route path='/profile' element={<ProtectedRoute allowedRoles={[UserRole.ADMIN, UserRole.OWNER, UserRole.CUSTOMER]} />}>
