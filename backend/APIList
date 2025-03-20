@@ -19,6 +19,7 @@ endpoint http://localhost:8080/api/v1/auth
     4. Remove property from favourite List: <- Done
         Delete: http://localhost:8080/api/v1/favourites/:favouriteId/properties/:propertyId
 
+
     5. Make an offer:   <- Done
         Post http://localhost:8080/api/v1/offers
         {
