@@ -6,6 +6,7 @@ import { fetchPropertiesSuccess } from "../store/hompage/homeSlice";
 import PropertyCard from "./Common/PropertyCard";
 import { PropertyStatuses, PropertyTypes } from "../constants/types";
 import Banner from "./Common/Banner";
+import { getPropertiesWithoutAuth } from "../api/commonApi";
 
 export const disabledStatuses = [PropertyStatuses.NEW, PropertyStatuses.DEACTIVATED];
 
@@ -20,7 +21,7 @@ const RentPage = () => {
 
     const fetchData = async () => {
         try {
-            const res = await getProperties({ propertyType: PropertyTypes.RENT });
+            const res = await getPropertiesWithoutAuth({ propertyType: PropertyTypes.RENT });
             dispatch(fetchPropertiesSuccess({ data: res.data.filter((item) => !disabledStatuses.includes(item.status)) }));
             setIsLoading(false);
         } catch (err) {
