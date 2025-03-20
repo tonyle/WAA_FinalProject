@@ -25,7 +25,7 @@ api.interceptors.response.use(
     if (error.response.status === 401) {
       try {
         const response = await refreshAccessToken();
-        store.dispatch(refreshToken(response));
+        store.dispatch(refreshToken(response.data));
         const { accessToken } = response.data;
         error.config.headers.Authorization = `Bearer ${accessToken}`;
         return api(error.config);

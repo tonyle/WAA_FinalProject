@@ -21,7 +21,7 @@ export const authSlice = createSlice({
       state.refreshToken = actions.payload.refreshToken;
       state.role = actions.payload.user.role;
 
-      localStorage.setItem("token", JSON.stringify(actions.payload));
+      localStorage.setItem("token", JSON.stringify({ ...actions.payload }));
     },
     logout: (state) => {
       Object.assign(state, initialState);
@@ -31,7 +31,9 @@ export const authSlice = createSlice({
       state.success = true;
     },
     refreshToken: (state, actions) => {
-
+      state.accessToken = actions.payload.accessToken;
+      state.refreshToken = actions.payload.refreshToken;
+      state.user = actions.payload.user;
     }
   },
 });

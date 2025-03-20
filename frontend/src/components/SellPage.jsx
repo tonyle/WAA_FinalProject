@@ -4,8 +4,9 @@ import { getProperties } from "../api/adminApi";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchPropertiesSuccess } from "../store/hompage/homeSlice";
 import PropertyCard from "./Common/PropertyCard";
+import { PropertyTypes } from "../constants/types";
 
-const Homepage = () => {
+const SellPage = () => {
     const { properties } = useSelector((state) => state.home);
     const dispatch = useDispatch();
     const [isLoading, setIsLoading] = useState(true);
@@ -16,7 +17,7 @@ const Homepage = () => {
 
     const fetchData = async () => {
         try {
-            const res = await getProperties({});
+            const res = await getProperties({ propertyType: PropertyTypes.SELL });
             dispatch(fetchPropertiesSuccess({ data: res.data }));
             setIsLoading(false);
         } catch (err) {
@@ -39,9 +40,9 @@ const Homepage = () => {
             </div>
 
             {/* list properties */}
-            <h2 className="text-center text-3xl font-sans font-semibold mt-10">All Properties</h2>
+            <h2 className="text-center text-3xl font-sans font-semibold mt-10">Sell Properties</h2>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
                 {!isLoading && properties.length > 0 && properties.map((item, key) => {
                     return (
                         <PropertyCard {...item} key={key} />
@@ -52,4 +53,4 @@ const Homepage = () => {
     );
 }
 
-export default Homepage;
+export default SellPage;

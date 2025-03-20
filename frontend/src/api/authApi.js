@@ -21,7 +21,7 @@ export const signup = async (data) => {
 export const refreshAccessToken = async () => {
   try {
     const { refreshToken, accessToken } = JSON.parse(localStorage.getItem("token"));
-    const response = await api.post("/refreshToken", { refreshToken, accessToken });
+    const response = await api.post("/auth/refreshToken", { refreshToken, accessToken });
     return response;
   } catch (err) {
     throw err;

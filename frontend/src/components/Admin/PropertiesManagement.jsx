@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchPropertiesSuccess, fetchPropertiesFail } from '../../store/admin/adminSlice';
 import { getProperties } from '../../api/adminApi';
 import { PropertyTypes } from '../../constants/types';
-import { data } from 'react-router';
 
 const PropertiesManagement = () => {
   const [tab, setTab] = useState(0);

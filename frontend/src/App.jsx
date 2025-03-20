@@ -27,6 +27,8 @@ import OfferManagement from './components/Admin/OfferManagement.jsx';
 import Account from './components/Account.jsx';
 import ResetPassword from './components/Auth/ResetPassword.jsx';
 import UserManagement from './components/Admin/UserManagement.jsx';
+import RentPage from './components/RentPage.jsx';
+import SellPage from './components/SellPage.jsx';
 
 function App() {
   return (
@@ -42,6 +44,8 @@ function App() {
 
       <Route path="/" element={<MainLayout />}>
         <Route index element={<Homepage />} />
+        <Route path='rent' element={<RentPage />} />
+        <Route path='sell' element={<SellPage />} />
       </Route>
 
       <Route path='/profile' element={<ProtectedRoute allowedRoles={[UserRole.ADMIN, UserRole.OWNER, UserRole.CUSTOMER]} />}>
