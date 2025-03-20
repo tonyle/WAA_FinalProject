@@ -86,13 +86,35 @@ public class OfferController {
     }
 
     @PutMapping("/{id}")
-    public void setOfferStatus(@RequestBody InputUpdateOfferStatusDto status, @PathVariable("id") long offerId) {
-        offerService.setOfferStatus(offerId, status.getStatus());
+    public ResponseEntity<Map<String, String>> setOfferStatus(HttpServletRequest request, @RequestBody InputUpdateOfferStatusDto status, @PathVariable("id") long offerId) {
+        String token = jwtUtil.extractTokenRequest(request);
+
+        if (token != null) {
+            TokenDto tokenDto = jwtUtil.getUserDtoFromClaims(token);
+            long customerId = tokenDto.getUserId();
+
+            offerService.setOfferStatus(offerId, status.getStatus(), customerId);
+        } else {
+            Map<String, String> errorResponse = Map.of("error", "You don't have permission to access this resource");
+            return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
+        }
+        return null;
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable("id") long id) {
-        offerService.delete(id);
+    public ResponseEntity<Map<String, String>> delete(HttpServletRequest request, @PathVariable("id") long id) {
+        String token = jwtUtil.extractTokenRequest(request);
+
+        if (token != null) {
+            TokenDto tokenDto = jwtUtil.getUserDtoFromClaims(token);
+            long customerId = tokenDto.getUserId();
+
+            offerService.delete(id, customerId);
+        } else {
+            Map<String, String> errorResponse = Map.of("error", "You don't have permission to access this resource");
+            return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
+        }
+        return null;
     }
 
     @GetMapping("/property/{id}")
