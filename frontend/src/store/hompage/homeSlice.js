@@ -7,18 +7,10 @@ const initialState = {
   error: null,
 };
 
-export const adminSlice = createSlice({
-  name: "admin",
+export const homepageSlice = createSlice({
+  name: "home",
   initialState: initialState,
   reducers: {
-    fetchUsersSuccess: (state, actions) => {
-      state.users = actions.payload.data;
-      state.error = null;
-    },
-    fetchUsersFail: (state, actions) => {
-      state.users = [];
-      state.error = actions.payload.error;
-    },
     fetchPropertiesSuccess: (state, actions) => {
       state.properties = actions.payload.data;
       state.error = null;
@@ -39,12 +31,10 @@ export const adminSlice = createSlice({
 });
 
 export const {
-  fetchUsersSuccess,
-  fetchUsersFail,
   fetchPropertiesSuccess,
   fetchPropertiesFail,
   fetchOffersSuccess,
   fetchOffersFail,
-} = adminSlice.actions;
+} = homepageSlice.actions;
 
-export default adminSlice.reducer;
+export default homepageSlice.reducer;
