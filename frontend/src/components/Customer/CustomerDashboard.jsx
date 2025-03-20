@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from 'react';
+import {store} from '../../store'
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchPropertiesSuccess, fetchPropertiesFail } from '../../store/customer/customerSlice';
+import { fetchPropertiesSuccess, fetchPropertiesFail,fetchFavSuccess,fetchFavFail } from '../../store/customer/customerSlice';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
 import { FaHeart } from 'react-icons/fa'; // Importing heart icon from FontAwesome
-
+import { getProperties,favs,addProp,cancelProp,addFav } from '../../api/customerApi';
 const CustomerDashboard = () => {
   const dispatch = useDispatch();
-  const { properties, error } = useSelector((state) => state.customer);
-  const { favorities } = useSelector((state) => state.customer);
-  const [favorites, setFavorites] = useState([]);
+  const { properties, error,favorities } = useSelector((state) => state.customer);
+  const [refresh, setRefresh] = useState(false);
   const [filters, setFilters] = useState({
     priceFrom: '',
     priceTo: '',
@@ -18,38 +17,67 @@ const CustomerDashboard = () => {
     bath: '',
     location: '',
   });
-  
-  const fetchFilteredProperties = async () => {
-    const queryParams = new URLSearchParams();
-    if (filters.propertyType) queryParams.append('propertyType', filters.propertyType);
-    if (filters.bed) queryParams.append('bed', filters.bed);
-    if (filters.bath) queryParams.append('bath', filters.bath);
-    if (filters.location) queryParams.append('location', filters.location);
-    if (filters.priceFrom) queryParams.append('priceFrom', filters.priceFrom);
-    if (filters.priceTo) queryParams.append('priceTo', filters.priceTo);
-
+  const fetchData = async () => {
     try {
-      const response = await axios.get(`https://finalprojectbackend-cyhghxg2hvemcfg2.canadacentral-01.azurewebsites.net/api/v1/properties?${queryParams.toString()}`);
-      dispatch(fetchPropertiesSuccess(response.data));
+      const res = await favs();
+      dispatch(fetchFavSuccess({ data: res.data }));
+      console.log(favorities)
+    } catch (err) {
+      dispatch(fetchFavFail({ err }));
+      console.log(err);
+    }
+  };
+  const fetchFilteredProperties = async () => {
+    const queryParams = {};
+    if (filters.propertyType) queryParams.propertyType = filters.propertyType;
+    if (filters.bed) queryParams.bed = filters.bed;
+    if (filters.bath) queryParams.bath = filters.bath;
+    if (filters.location) queryParams.location = filters.location;
+    if (filters.priceFrom) queryParams.priceFrom = filters.priceFrom;
+    if (filters.priceTo) queryParams.priceTo = filters.priceTo;
+    
+    // console.log(queryParams)
+    try {
+      const res = await getProperties(queryParams)
+      dispatch(fetchPropertiesSuccess({data:res.data}));
     } catch (error) {
       dispatch(fetchPropertiesFail(error.message));
     }
   };
 
   useEffect(() => {
+    fetchData()
     fetchFilteredProperties();
-  }, [filters]);
+    
+  }, [filters,refresh]);
 
   const handleFilterChange = (e) => {
     setFilters({ ...filters, [e.target.name]: e.target.value });
   };
 
-  const toggleFavorite = (propertyId) => {
-    setFavorites((prevFavorites) =>
-      prevFavorites.includes(propertyId)
-        ? prevFavorites.filter((id) => id !== propertyId)
-        : [...prevFavorites, propertyId]
-    );
+  const toggleFavorite = async(propertyId) => {
+    if(favorities.length>0){
+      const isFavorited = favorities[0].properties.some(p => p.id === propertyId);
+      if(isFavorited){
+        const res = await cancelProp(favorities[0].id,propertyId)  
+      }else{
+
+          const res = await addProp(favorities[0].id,propertyId)
+        
+          
+        
+      }
+      setRefresh(!refresh)
+    }else{
+      
+        await addFav();
+        await fetchData()
+        const updatedFavorities = store.getState().customer.favorities; // Get the latest Redux state
+        if (updatedFavorities.length > 0) {
+          await addProp(updatedFavorities[0].id, propertyId);
+        }
+        setRefresh(!refresh)
+    }
   };
 
   return (
@@ -58,18 +86,53 @@ const CustomerDashboard = () => {
         <h1 className="text-3xl font-semibold mb-8 text-center">Search for Properties</h1>
 
         {/* Search Filters */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-          <input type="number" name="priceFrom" placeholder="Price From" className="p-3 border rounded-lg" onChange={handleFilterChange} />
-          <input type="number" name="priceTo" placeholder="Price To" className="p-3 border rounded-lg" onChange={handleFilterChange} />
-          <select name="propertyType" className="p-3 border rounded-lg" onChange={handleFilterChange}>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-6 bg-white p-6 rounded-lg shadow-md">
+          <input
+            type="number"
+            name="priceFrom"
+            placeholder="Price From"
+            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+            onChange={handleFilterChange}
+          />
+          <input
+            type="number"
+            name="priceTo"
+            placeholder="Price To"
+            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+            onChange={handleFilterChange}
+          />
+          <select
+            name="propertyType"
+            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white"
+            onChange={handleFilterChange}
+          >
             <option value="">Property Type</option>
             <option value="SELL">For Sale</option>
             <option value="RENT">For Rent</option>
           </select>
-          <input type="number" name="bed" placeholder="Beds" className="p-3 border rounded-lg" onChange={handleFilterChange} />
-          <input type="number" name="bath" placeholder="Baths" className="p-3 border rounded-lg" onChange={handleFilterChange} />
-          <input type="text" name="location" placeholder="Location" className="p-3 border rounded-lg" onChange={handleFilterChange} />
-        </div>
+          <input
+            type="number"
+            name="bed"
+            placeholder="Beds"
+            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+            onChange={handleFilterChange}
+          />
+          <input
+            type="number"
+            name="bath"
+            placeholder="Baths"
+            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+            onChange={handleFilterChange}
+          />
+          <input
+            type="text"
+            name="location"
+            placeholder="Location"
+            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+            onChange={handleFilterChange}
+          />
+      </div>
+
 
         {/* Error State */}
         {error && <p className="text-red-500">{error}</p>}
@@ -82,13 +145,11 @@ const CustomerDashboard = () => {
                 {/* Heart Button */}
                 <button
                   className={`absolute top-4 right-4 p-2 rounded-full 
-                    
                    `}
                   onClick={() => toggleFavorite(property.id)}
                 >
-                  <FaHeart className={`w-6 h-6 ${favorites.includes(property.id) ? 'text-white' : 'text-gray-600'}`} />
+                  <FaHeart className={`w-6 h-6 ${favorities.length > 0 && favorities[0].properties.some(p => p.id === property.id) ? 'text-white' : 'text-gray-600'}`} />
                 </button>
-
                 {/* Property Image */}
                 <img
                   src={property.imageUrl || 'https://photos.zillowstatic.com/fp/3fb81689a900415f47ce917ed592a22c-cc_ft_768.webp'}
