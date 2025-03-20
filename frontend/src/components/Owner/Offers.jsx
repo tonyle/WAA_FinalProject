@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch} from "react-redux";
+import { fetchOffersSuccess } from "../../store/owner/ownerSlice";
+import { getOffers } from "../../api/adminApi";
 
 const mockOffers = [
   { id: 1, property: "Luxury Apartment", amount: "$500,000", status: "Pending" },
@@ -6,11 +9,21 @@ const mockOffers = [
 ];
 
 const Offers = () => {
-  const [offers, setOffers] = useState([]);
+// const [offers, setOffers] = useState([]);
+const {offers} = useSelector((state) => state.owner);
+const dispatch = useDispatch();
 
-  useEffect(() => {
-    setOffers(mockOffers);
-  }, []);
+useEffect(() => {fetchData();}, [])
+
+const fetchData = async () => {
+    try {
+      const res = await getOffers({});
+      console.log(res);
+      dispatch(fetchOffersSuccess({ data: res.data }));
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
   const handleAccept = (id) => {
     setOffers(offers.map((offer) => (offer.id === id ? { ...offer, status: "Accepted" } : offer)));

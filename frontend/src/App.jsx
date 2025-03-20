@@ -1,7 +1,7 @@
 // owner 
 import OwnerDashboard from './components/Owner/OwnerDashboard.jsx';
 import PropertyManagement from './components/Owner/PropertyManagement.tsx';
-import Offers from './components/Owner/Offers.tsx';
+import Offers from './components/Owner/Offers.jsx';
 import Messages from './components/Owner/Messages.tsx';
 import { Navigate, Route, Routes } from 'react-router'
 import AuthLayout from './containers/AuthLayout'
@@ -72,7 +72,6 @@ function App() {
       <Route path="/owner" element={<ProtectedRoute allowedRoles={[UserRole.OWNER]} />}>
         <Route element={<OwnerLayout />}>
           <Route index element={<OwnerDashboard />} />
-
           <Route path="property-management" element={<PropertyManagement />} />
           <Route path="offers" element={<Offers />} />
           <Route path="messages" element={<Messages />} />

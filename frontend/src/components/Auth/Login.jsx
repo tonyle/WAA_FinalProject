@@ -3,10 +3,11 @@ import { useEffect, useRef } from "react";
 import { login } from "../../store/auth/authSlice";
 import { Link, useNavigate } from "react-router-dom";
 import { loginUser } from "../../api/authApi";
+import { UserRole } from "../../constants/role";
 
 const Login = () => {
   const navigate = useNavigate();
-  const { accessToken, error } = useSelector((state) => state.auth);
+  const { accessToken, error , role} = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const refForm = useRef();
 
@@ -31,7 +32,12 @@ const Login = () => {
 
   useEffect(() => {
     if (accessToken) {
-      navigate("/");
+      if(role == UserRole.OWNER){
+        navigate("/owner")
+      } else{
+        navigate("/");
+      }
+
     }
   }, [accessToken, navigate]);
 
