@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchUsersFail, fetchUsersSuccess } from '../../store/admin/adminSlice';
 import { UserStatus } from '../../constants/types';
-import { getUsers } from '../../api/adminApi';
+import { activeOrDeactiveOwnerAccount, getUsers } from '../../api/adminApi';
 
 const UserManagement = () => {
   const [tab, setTab] = useState(0);
@@ -12,15 +12,29 @@ const UserManagement = () => {
   const renderBadgeClass = (status) => {
     return status === UserStatus.ACTIVE ? "badge-active" : "badge-deactive";
   };
+  const [params, setParams] = useState({});
 
   useEffect(() => {
     // fetch data
     fetchData();
+  }, [params]);
+
+  useEffect(() => {
+    // fetch data
+    switch (tab) {
+      case 1:
+        setParams({ status: UserStatus.ACTIVE });
+        break;
+      case 0:
+      default:
+        setParams({});
+        break;
+    }
   }, [tab]);
 
   const fetchData = async () => {
     try {
-      const res = await getUsers({});
+      const res = await getUsers(params);
       dispatch(fetchUsersSuccess({ data: res.data }));
     } catch (err) {
       console.log(err);
@@ -28,12 +42,21 @@ const UserManagement = () => {
     }
   };
 
-  const onHandleActiveAndDeactive = (id) => {
-    const updatedOwners = users.map((owner) =>
-      owner.id === id ? { ...owner, status: owner.status === "Active" ? "Inactive" : "Active" } : owner
-    );
+  const onHandleActiveAndDeactive = async (id) => {
 
-    dispatch(fetchUsersSuccess({ data: updatedOwners }));
+    const curUser = users.find((owner) => owner.id === id);
+    try {
+      const res = await activeOrDeactiveOwnerAccount(id, { status: curUser.status === UserStatus.ACTIVE ? UserStatus.DEACTIVATED : UserStatus.ACTIVE });
+      console.log(res.data);
+
+      const updatedOwners = users.map((owner) =>
+        owner.id === id ? { ...owner, status: owner.status === UserStatus.ACTIVE ? UserStatus.DEACTIVATED : UserStatus.ACTIVE } : owner
+      );
+
+      dispatch(fetchUsersSuccess({ data: updatedOwners }));
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const handleSearchOwners = () => {
@@ -66,6 +89,7 @@ const UserManagement = () => {
               <th>Id</th>
               <th>Name</th>
               <th>Email</th>
+              <th>Role</th>
               <th>Status</th>
               <th>Actions</th>
             </tr>
@@ -81,13 +105,14 @@ const UserManagement = () => {
                       <td>{item.id}</td>
                       <td>{item.name}</td>
                       <td>{item.email}</td>
-                      <td><span className={`badge ${renderBadgeClass(item.status)}`}>{item.status}</span></td>
+                      <td>{item.roles[0].role}</td>
+                      <td><span className={`badge ${renderBadgeClass(item.status.toLowerCase())}`}>{item.status.toLowerCase()}</span></td>
                       <td>
                         <button
                           onClick={() => onHandleActiveAndDeactive(item.id)}
-                          className={`${item.status === 'Active' ? 'bg-slate-100' : 'text-green-500 bg-green-50'} text-xs px-5 cursor-pointer`}
+                          className={`${item.status === UserStatus.ACTIVE ? 'bg-slate-100' : 'text-sky-600 bg-slate-100'} font-bold text-xs px-5 cursor-pointer`}
                         >
-                          {item.status === 'Active' ? 'Deactivate' : 'Activate'}
+                          {item.status === UserStatus.ACTIVE ? 'Deactivate' : 'Activate'}
                         </button>
                       </td>
                     </tr>

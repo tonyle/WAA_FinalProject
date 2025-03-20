@@ -43,7 +43,7 @@ const Signup = () => {
     }, [success, navigate]);
 
     return (
-        <div className="flex flex-col gap-8 justify-center p-8 bg-white shadow-lg rounded-lg">
+        <div className="flex flex-col gap-8 justify-center p-8 bg-white shadow-lg rounded-lg mt-15">
             <h2 className="text-2xl font-bold">Sign Up</h2>
 
             <form ref={refForm} onSubmit={handleSubmit} className="flex flex-col gap-4 justify-center">
