@@ -1,5 +1,7 @@
 package waa.miu.finalproject.service.impl;
 
+import com.azure.storage.blob.BlobClient;
+import com.azure.storage.blob.BlobContainerClient;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
@@ -49,11 +51,11 @@ public class PropertyServiceImpl implements PropertyService {
     private UserRepo userRepo;
     @Autowired
     private AddressRepo addressRepo;
-
-    @Value("${file.upload-dir}")
-    private String uploadDir;
+    
     @Autowired
     private PhotoRepo photoRepo;
+    @Autowired
+    private BlobContainerClient blobContainerClient;
 
     @Override
     public List<PropertyDto> findAll() {
@@ -176,31 +178,27 @@ public class PropertyServiceImpl implements PropertyService {
         Property property = propertyRepo.findById(propertyId)
                 .orElseThrow(() -> new RuntimeException("Property not found"));
 
-        List<String> filePaths = new ArrayList<>();
-        String propertyUploadDir = uploadDir + "/properties/" + propertyId;
-        File dir = new File(propertyUploadDir);
-        if (!dir.exists()) dir.mkdirs();
-
+        List<String> fileUrls = new ArrayList<>();
         for (MultipartFile file : files) {
             try {
-                String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
-                Path filePath = Paths.get(propertyUploadDir, fileName);
-                Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+                String fileName = "properties-" + propertyId + "/" + file.getOriginalFilename();
+                BlobClient blobClient = blobContainerClient.getBlobClient(fileName);
+                blobClient.upload(file.getInputStream(), file.getSize(), true);
 
                 // Save to DB
                 Photo photo = new Photo();
-                photo.setPath("/uploads/properties/" + propertyId + "/" + fileName);
+                photo.setPath(blobClient.getBlobUrl());
                 photoRepo.save(photo);
-
                 property.getPhotos().add(photo);
-                filePaths.add(photo.getPath());
+
+                fileUrls.add(blobClient.getBlobUrl());
             } catch (IOException e) {
-                throw new RuntimeException("File upload failed: " + e.getMessage());
+                throw new RuntimeException("Failed to upload file: " + file.getOriginalFilename(), e);
             }
         }
 
         propertyRepo.save(property);
-        return filePaths;
+        return fileUrls;
     }
 
 }
