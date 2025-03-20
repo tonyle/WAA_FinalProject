@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
+import { getProfDetail ,offerProperty} from '../../api/customerApi';
 import { fetchPropSuccess, fetchPropFail } from '../../store/customer/customerSlice';
-
 const PropertyDetails = () => {
     const { property } = useSelector((state) => state.customer);
-    const { accessToken } = useSelector((state) => state.auth);
     const { id } = useParams();
     const dispatch = useDispatch();
 
@@ -14,28 +12,23 @@ const PropertyDetails = () => {
     const [offerPrice, setOfferPrice] = useState('');
     const photos =[
       'https://photos.zillowstatic.com/fp/3fb81689a900415f47ce917ed592a22c-cc_ft_768.webp',
-      'https://photos.zillowstatic.com/fp/3fb81689a900415f47ce917ed592a22c-cc_ft_768.webp',
+      'https://photos.zillowstatic.com/fp/855d877938d29206f82572a37985919e-cc_ft_1536.webp',
       'https://photos.zillowstatic.com/fp/3fb81689a900415f47ce917ed592a22c-cc_ft_768.webp',
       'https://photos.zillowstatic.com/fp/3fb81689a900415f47ce917ed592a22c-cc_ft_768.webp',
       'https://photos.zillowstatic.com/fp/3fb81689a900415f47ce917ed592a22c-cc_ft_768.webp'
   ] ;
+  const fetchData = async () => {
+    try {
+      const res = await getProfDetail(id);
+      dispatch(fetchPropSuccess({ data: res.data }));
+    } catch (err) {
+      dispatch(fetchPropFail({ err }));
+      console.log(err);
+    }
+  };
     useEffect(() => {
-        axios.get(
-            `https://finalprojectbackend-cyhghxg2hvemcfg2.canadacentral-01.azurewebsites.net/api/v1/properties/${id}`,
-            {
-                headers: {
-                    Authorization: `Bearer ${accessToken}`,
-                },
-            }
-        )
-            .then(response => {
-                dispatch(fetchPropSuccess({ data: response.data }));
-            })
-            .catch(err => {
-                dispatch(fetchPropFail(err.message));
-            });
-
-    }, [id, accessToken, dispatch]);
+      fetchData(id)
+    }, []);
 
     if (!property) return <div className="text-center mt-10 text-xl">Property not found</div>;
 
@@ -45,26 +38,32 @@ const PropertyDetails = () => {
             alert('Please enter a valid price.');
             return;
         }
+      
         try {
-          const response = await axios.post(
-              'https://finalprojectbackend-cyhghxg2hvemcfg2.canadacentral-01.azurewebsites.net/api/v1/offers',
-              {
-                  propertyId: id,
-                  price: offerPrice,
-              },
-              {
-                  headers: {
-                      Authorization: `Bearer ${accessToken}`,
-                      'Content-Type': 'application/json',
-                  },
-              }
-          );
-          console.log(response.data)
+          const response = await offerProperty({
+            propertyId: id,
+            price: offerPrice,
+        })
+         
+          // await axios.post(
+          //     'https://finalprojectbackend-cyhghxg2hvemcfg2.canadacentral-01.azurewebsites.net/api/v1/offers',
+          //     {
+          //         propertyId: id,
+          //         price: offerPrice,
+          //     },
+          //     {
+          //         headers: {
+          //             Authorization: `Bearer ${accessToken}`,
+          //             'Content-Type': 'application/json',
+          //         },
+          //     }
+          // );
+          // console.log(response.data)
           // alert("Offer submitted successfully!");
           setIsModalOpen(false);
           setOfferPrice('');
       } catch (error) {
-          alert("Failed to submit offer. Please try again.");
+          // alert("Failed to submit offer. Please try again.");
           console.error(error);
       }
     };
@@ -74,13 +73,20 @@ const PropertyDetails = () => {
             <div className="max-w-7xl w-full bg-white rounded-lg shadow-lg p-6 space-y-6">
                 <h1 className="text-4xl font-semibold mb-6">{property.name}</h1>
                 <div className="flex space-x-4 overflow-x-auto pb-6">
-                  {photos.map((photo, index) => (
+                  {property.photos&&property.photos.length>0 ? property.photos.map((photo, index) => (
+                      <img 
+                          key={index} 
+                          src={photo.path&&photo.path.length>20 ? photo.path:'https://photos.zillowstatic.com/fp/3fb81689a900415f47ce917ed592a22c-cc_ft_768.webp'}   
+                          className="w-60 h-60 object-cover rounded-lg shadow-md"
+                      />
+                  )):photos.map((photo, index) => (
                       <img 
                           key={index} 
                           src={photo}   
                           className="w-60 h-60 object-cover rounded-lg shadow-md"
                       />
-                  ))}
+                  ))
+                }
               </div>
                 {/* Property Details */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-2">
@@ -89,6 +95,7 @@ const PropertyDetails = () => {
                     <p className="text-sm text-gray-600">Description: {property.description}</p>
                     <p className="text-sm text-gray-600">Style: {property.style}</p>
                     <p className="text-sm text-gray-600">House Type: {property.houseType}</p>
+                    <p className="text-sm text-gray-600">Status: {property.status}</p>
                     <p className="text-sm text-gray-600">Bed: {property.bed}</p>
                     <p className="text-sm text-gray-600">Bath: {property.bath}</p>
                     <p className="text-sm text-gray-600">Sqft: {property.sqft}</p>
@@ -107,12 +114,14 @@ const PropertyDetails = () => {
                         </button>
                     </Link>
 
-                    <button
-                        className="py-2 px-6 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
-                        onClick={() => setIsModalOpen(true)}
-                    >
-                        Make Offer
-                    </button>
+                      {!(property.status === "CONTINGENCY" || property.status === "DEACTIVATED") && (
+                          <button
+                              className="py-2 px-6 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+                              onClick={() => setIsModalOpen(true)}
+                          >
+                              Make Offer
+                          </button>
+                      )}
                 </div>
             </div>
 
@@ -121,7 +130,7 @@ const PropertyDetails = () => {
             <div className="fixed inset-0  bg-opacity-90 backdrop-blur-sm flex justify-center items-center">
                   <div className="bg-white bg-opacity-90 p-6 rounded-lg shadow-lg w-96 backdrop-blur-sm">
                       <h2 className="text-2xl font-semibold mb-4">Make an Offer</h2>
-                      <label className="block mb-2 text-sm text-gray-700">Offer Price ($)</label>
+                      <label className="block mb-2 text-sm text-gray-700">Offer Price {property.price.toLocaleString()}($)</label>
                       <input
                           type="number"
                           value={offerPrice}
