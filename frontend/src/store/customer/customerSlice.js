@@ -21,8 +21,8 @@ export const customerSlice = createSlice({
       state.error = actions.payload.error;
     },
     fetchPropertiesSuccess: (state, actions) => {
-      console.log(actions.payload)
-      state.properties = actions.payload;
+      console.log(actions.payload.data)
+      state.properties = actions.payload.data;
 
       state.error = null;
     },

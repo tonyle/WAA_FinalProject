@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import UserDropdown from "../components/Common/UserDropdown";
 import { login } from "../store/auth/authSlice";
 import MainMenu from "../components/Common/MainMenu";
+import { FaCopyright } from "react-icons/fa";
 
 const MainLayout = () => {
     const {user} = useSelector((state) => state.auth);
@@ -32,7 +33,7 @@ const MainLayout = () => {
                     </div>
                 </nav>
             </header>
-            <main id="main" className="h-lvh">
+            <main id="main">
                 <Outlet/>
             </main>
         </>
