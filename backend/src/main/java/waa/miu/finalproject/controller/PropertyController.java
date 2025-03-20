@@ -49,9 +49,9 @@ public class PropertyController {
         String token = jwtUtil.extractTokenRequest(request);
         if (token != null) {
             TokenDto tokenDto = jwtUtil.getUserDtoFromClaims(token);
-            if (tokenDto == null || tokenDto.getRoles().contains(RoleEnum.ADMIN) || tokenDto.getRoles().contains(RoleEnum.CUSTOMER)) {
+            if (tokenDto == null || tokenDto.getRoles().contains(RoleEnum.ADMIN.toString()) || tokenDto.getRoles().contains(RoleEnum.CUSTOMER.toString())) {
                 properties = propertyService.findPropertiesByOwnerIdWithFilters(ownerId, priceFrom, priceTo, propertyType, bed, bath, location);
-            } else if (tokenDto.getRoles().contains(RoleEnum.OWNER)) {
+            } else if (tokenDto.getRoles().contains(RoleEnum.OWNER.toString())) {
                 ownerId = tokenDto.getUserId();
                 properties = propertyService.findPropertiesByOwnerIdWithFilters(ownerId, priceFrom, priceTo, propertyType, bed, bath, location);
             }
