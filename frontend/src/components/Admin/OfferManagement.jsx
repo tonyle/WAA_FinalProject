@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchOffersSuccess } from '../../store/admin/adminSlice';
 import { getOffers } from '../../api/adminApi';
+import { OfferStatuses } from '../../constants/types';
 
 const OfferManagement = () => {
   const [tab, setTab] = useState(0);
@@ -9,7 +10,7 @@ const OfferManagement = () => {
   const { offers } = useSelector((state) => state.admin);
   const [searchText, setSearchText] = useState("");
   const renderBadgeClass = (status) => {
-    return status === 'Active' ? "badge-active" : "badge-deactive";
+    return status === OfferStatuses.ACCEPTED ? "badge-active" : "badge-deactive";
   };
   const [params, setParams] = useState({});
 
@@ -84,7 +85,7 @@ const OfferManagement = () => {
                       <td>{item.user.name}</td>
                       <td>{item.type}</td>
                       <td>{item.offerPrice}</td>
-                      <td><span className={`badge ${renderBadgeClass(item.status.toLowerCase())}`}>{item.status.toLowerCase()}</span></td>
+                      <td><span className={`badge ${renderBadgeClass(item.status)}`}>{item.status.toLowerCase()}</span></td>
                       {/* <td>
                         <button
                           onClick={() => onHandleActiveAndDeactive(item.id)}

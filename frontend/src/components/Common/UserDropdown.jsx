@@ -56,11 +56,11 @@ const UserDropdown = () => {
     return (
         <>
             {isAuthenticated && user ? (
-                <div className="relative">
+                <div className="relative flex justify-end">
                     <p onClick={() => setDropdownOpen(!dropdownOpen)} className="text-sky-600 capitalize inline-flex items-center gap-1">{username} <span><FaAngleDown className="size-4" /></span></p>
 
                     {dropdownOpen && (
-                        <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 shadow-md rounded-md">
+                        <div className="absolute right-0 mt-8 w-48 bg-white border border-gray-200 shadow-md rounded-md">
                             {specificItems()}
 
                             <Link to="/profile/account"><span className="block px-4 py-2 text-sky-600 hover:bg-gray-100">

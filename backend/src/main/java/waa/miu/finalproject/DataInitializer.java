@@ -271,105 +271,105 @@ public class DataInitializer {
     CommandLineRunner initData(UserRepo userRepo, RoleRepo roleRepo,
                                PropertyRepo propertyRepo, AddressRepo addressRepo,
                                OfferRepo offerRepo, FavouriteListRepo favouriteListRepo,
-                               PhotoRepo photoRepo,PasswordEncoder passwordEncoder) {
+                               PhotoRepo photoRepo) {
         return args -> {
 
             // Create roles
-            Role adminRole = new Role();
-            adminRole.setRole(RoleEnum.ADMIN);
-
-            Role customerRole = new Role();
-            customerRole.setRole(RoleEnum.CUSTOMER);
-
-            Role ownerRole = new Role();
-            ownerRole.setRole(RoleEnum.OWNER);
-
-            roleRepo.saveAll(List.of(adminRole, customerRole, ownerRole));
-
-            // Create users
-            List<User> users = IntStream.range(1, 11).mapToObj(i -> {
-                User user = new User();
-                user.setName("User " + i);
-                user.setEmail("user" + i + "@example.com");
-                user.setPassword(passwordEncoder.encode("password" + i));
-                user.setPhone("123-456-789" + i);
-                user.setStatus(i % 2 == 0 ? OwnerStatusEnum.ACTIVE : OwnerStatusEnum.DEACTIVATED);
-                user.setRoles(i % 2 == 0 ? List.of(ownerRole) : List.of(customerRole));
-                return user;
-            }).toList();
-            userRepo.saveAll(users);
-
-            // Create addresses
-            List<Address> addresses = IntStream.range(1, 11).mapToObj(i -> {
-                Address address = new Address();
-                address.setCity("City " + i);
-                address.setState("State " + i);
-                address.setStreet("Street " + i);
-                address.setPostalCode("1000" + i);
-                return address;
-            }).toList();
-            addressRepo.saveAll(addresses);
-
-            // Create properties
-            List<Property> properties = IntStream.range(1, 11).mapToObj(i -> {
-                Property property = new Property();
-                property.setName("Property " + i);
-                property.setDescription("Description for property " + i);
-                property.setType(i % 2 == 0 ? PropertyTypeEnum.RENT : PropertyTypeEnum.SELL);
-                property.setPrice(100000 + (i * 10000));
-                property.setBed(2 + (i % 3));
-                property.setBath(1 + (i % 2));
-                property.setSqft(1200 + (i * 100));
-                property.setStatus(PropertyStatusEnum.values()[i % PropertyStatusEnum.values().length]);
-                property.setView(i * 10);
-                property.setSave(i * 2);
-                property.setYearBuilt(2000 + i);
-                property.setMaterial("Brick"+(i % 3));
-                property.setStyle("Modern"+(i % 3));
-                property.setHouseType("Apartment"+(i % 3));
-                property.setAddress(addresses.get(i - 1));
-                property.setUser(users.get(i - 1));
-
-                return property;
-            }).toList();
-            propertyRepo.saveAll(properties);
-
-            // Create photos for each property
-            List<Photo> photos = IntStream.range(1, 21).mapToObj(i -> {
-                Photo photo = new Photo();
-                photo.setPath("photo" + i + ".jpg");
-                return photo;
-            }).toList();
-            photoRepo.saveAll(photos);
-
-            // Assign photos to properties
-            for (int i = 0; i < properties.size(); i++) {
-                properties.get(i).setPhotos(photos.subList(i % photos.size(), (i % photos.size()) + 2));
-            }
-            propertyRepo.saveAll(properties);
-
-            // Create offers
-            List<Offer> offers = IntStream.range(1, 11).mapToObj(i -> {
-                Offer offer = new Offer();
-                offer.setSubmissionDate(LocalDate.now());
-                offer.setType(i % 2 == 0 ? OfferTypeEnum.RENT : OfferTypeEnum.BUY);
-                offer.setOfferPrice(90000 + (i * 5000));
-                offer.setStatus(OfferStatusEnum.values()[i % OfferStatusEnum.values().length]);
-                offer.setProperty(properties.get(i - 1));
-                offer.setUser(users.get(i - 1));
-                return offer;
-            }).toList();
-            offerRepo.saveAll(offers);
-
-            // Create favorite lists
-            List<FavouriteList> favouriteLists = IntStream.range(1, 11).mapToObj(i -> {
-                FavouriteList favouriteList = new FavouriteList();
-                favouriteList.setName("FavList " + i);
-                favouriteList.setUser(users.get(i - 1));
-                favouriteList.setProperties(properties.subList(0, 5));
-                return favouriteList;
-            }).toList();
-            favouriteListRepo.saveAll(favouriteLists);
+//            Role adminRole = new Role();
+//            adminRole.setRole(RoleEnum.ADMIN);
+//
+//            Role customerRole = new Role();
+//            customerRole.setRole(RoleEnum.CUSTOMER);
+//
+//            Role ownerRole = new Role();
+//            ownerRole.setRole(RoleEnum.OWNER);
+//
+//            roleRepo.saveAll(List.of(adminRole, customerRole, ownerRole));
+//
+//            // Create users
+//            List<User> users = IntStream.range(1, 11).mapToObj(i -> {
+//                User user = new User();
+//                user.setName("User " + i);
+//                user.setEmail("user" + i + "@example.com");
+//                user.setPassword("password" + i);
+//                user.setPhone("123-456-789" + i);
+//                user.setStatus(i % 2 == 0 ? OwnerStatusEnum.ACTIVE : OwnerStatusEnum.DEACTIVATED);
+//                user.setRoles(i % 2 == 0 ? List.of(ownerRole) : List.of(customerRole));
+//                return user;
+//            }).toList();
+//            userRepo.saveAll(users);
+//
+//            // Create addresses
+//            List<Address> addresses = IntStream.range(1, 11).mapToObj(i -> {
+//                Address address = new Address();
+//                address.setCity("City " + i);
+//                address.setState("State " + i);
+//                address.setStreet("Street " + i);
+//                address.setPostalCode("1000" + i);
+//                return address;
+//            }).toList();
+//            addressRepo.saveAll(addresses);
+//
+//            // Create properties
+//            List<Property> properties = IntStream.range(1, 11).mapToObj(i -> {
+//                Property property = new Property();
+//                property.setName("Property " + i);
+//                property.setDescription("Description for property " + i);
+//                property.setType(i % 2 == 0 ? PropertyTypeEnum.RENT : PropertyTypeEnum.SELL);
+//                property.setPrice(100000 + (i * 10000));
+//                property.setBed(2 + (i % 3));
+//                property.setBath(1 + (i % 2));
+//                property.setSqft(1200 + (i * 100));
+//                property.setStatus(PropertyStatusEnum.values()[i % PropertyStatusEnum.values().length]);
+//                property.setView(i * 10);
+//                property.setSave(i * 2);
+//                property.setYearBuilt(2000 + i);
+//                property.setMaterial("Brick"+(i % 3));
+//                property.setStyle("Modern"+(i % 3));
+//                property.setHouseType("Apartment"+(i % 3));
+//                property.setAddress(addresses.get(i - 1));
+//                property.setUser(users.get(i - 1));
+//
+//                return property;
+//            }).toList();
+//            propertyRepo.saveAll(properties);
+//
+//            // Create photos for each property
+//            List<Photo> photos = IntStream.range(1, 21).mapToObj(i -> {
+//                Photo photo = new Photo();
+//                photo.setPath("photo" + i + ".jpg");
+//                return photo;
+//            }).toList();
+//            photoRepo.saveAll(photos);
+//
+//            // Assign photos to properties
+//            for (int i = 0; i < properties.size(); i++) {
+//                properties.get(i).setPhotos(photos.subList(i % photos.size(), (i % photos.size()) + 2));
+//            }
+//            propertyRepo.saveAll(properties);
+//
+//            // Create offers
+//            List<Offer> offers = IntStream.range(1, 11).mapToObj(i -> {
+//                Offer offer = new Offer();
+//                offer.setSubmissionDate(LocalDate.now());
+//                offer.setType(i % 2 == 0 ? OfferTypeEnum.RENT : OfferTypeEnum.BUY);
+//                offer.setOfferPrice(90000 + (i * 5000));
+//                offer.setStatus(OfferStatusEnum.values()[i % OfferStatusEnum.values().length]);
+//                offer.setProperty(properties.get(i - 1));
+//                offer.setUser(users.get(i - 1));
+//                return offer;
+//            }).toList();
+//            offerRepo.saveAll(offers);
+//
+//            // Create favorite lists
+//            List<FavouriteList> favouriteLists = IntStream.range(1, 11).mapToObj(i -> {
+//                FavouriteList favouriteList = new FavouriteList();
+//                favouriteList.setName("FavList " + i);
+//                favouriteList.setUser(users.get(i - 1));
+//                favouriteList.setProperties(properties.subList(0, 5));
+//                return favouriteList;
+//            }).toList();
+//            favouriteListRepo.saveAll(favouriteLists);
 
             System.out.println("Data initialized successfully!");
         };

@@ -5,7 +5,6 @@ import waa.miu.finalproject.entity.Address;
 import waa.miu.finalproject.entity.Photo;
 import waa.miu.finalproject.enums.PropertyStatusEnum;
 import waa.miu.finalproject.enums.PropertyTypeEnum;
-
 import java.util.List;
 
 @Data

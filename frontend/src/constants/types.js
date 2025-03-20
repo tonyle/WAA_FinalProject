@@ -11,9 +11,14 @@ export const UserStatus = {
 
 export const PropertyStatuses = {
   NEW: "NEW",
-  ACTIVE: "ACTIVE",
   DEACTIVATED: "DEACTIVATED",
   AVAILABLE: "AVAILABLE",
   PENDING: "PENDING",
   CONTINGENCY: "CONTINGENCY",
+};
+
+export const OfferStatuses = {
+  NEW: "NEW",
+  ACCEPTED: "ACCEPTED",
+  REJECTED: "REJECTED",
 };
