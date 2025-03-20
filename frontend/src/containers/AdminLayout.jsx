@@ -19,7 +19,7 @@ const AdminLayout = () => {
                 </nav>
             </header>
             <main id="main" className="main-admin">
-                <div className="col-span-1 border-r border-slate-100">
+                <div className="col-span-1 border-r border-slate-100 h-screen">
                     <nav className="admin-nav">
                         <NavLink to="/admin/properties" className={({ isActive }) => isActive ? "active-link" : ""}><span>Properties</span></NavLink>
                         <NavLink to="/admin/users" className={({ isActive }) => isActive ? "active-link" : ""}><span>Users</span></NavLink>

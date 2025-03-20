@@ -15,23 +15,16 @@ export const authSlice = createSlice({
   initialState: initialState,
   reducers: {
     login: (state, actions) => {
-      state.user = {
-        id: actions.payload.id,
-        name: actions.payload.name,
-        email: actions.payload.email,
-        phone: actions.payload.phone,
-        status: actions.payload.status,
-        role: actions.payload.role
-      };
+      state.user = actions.payload.user;
       state.isAuthenticated = true;
       state.accessToken = actions.payload.accessToken;
       state.refreshToken = actions.payload.refreshToken;
-      state.role = actions.payload.role;
+      state.role = actions.payload.user.role;
 
       localStorage.setItem("token", JSON.stringify(actions.payload));
     },
     logout: (state) => {
-      Object.assign(state, { ...initialState, allUsers: users });
+      Object.assign(state, initialState);
       localStorage.removeItem("token");
     },
     signupUser: (state) => {
