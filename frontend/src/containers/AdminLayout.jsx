@@ -2,6 +2,7 @@ import { Link, NavLink, Outlet } from "react-router";
 import reactLogo from "../assets/react.svg"
 import UserDropdown from "../components/Common/UserDropdown";
 import "../styles/Admin.css";
+import MainMenu from "../components/Common/MainMenu";
 
 const AdminLayout = () => {
     return (
@@ -11,7 +12,8 @@ const AdminLayout = () => {
                     <Link to={"/"}><img alt="logo" className="logo react" src={reactLogo} /></Link>
 
                     <div className="flex flex-row gap-4 justify-end items-center">
-                        <nav>
+                        <nav className="inline-flex gap-4">
+                            <MainMenu />
                             {/* Login / Signup / User Info */}
                             <UserDropdown />
                         </nav>

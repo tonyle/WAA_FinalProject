@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import "../styles/Homepage.css";
-import { getProperties } from "../api/adminApi";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchPropertiesSuccess } from "../store/hompage/homeSlice";
 import PropertyCard from "./Common/PropertyCard";
+import { getPropertiesWithoutAuth } from "../api/commonApi";
 
 const Homepage = () => {
     const { properties } = useSelector((state) => state.home);
@@ -16,7 +16,7 @@ const Homepage = () => {
 
     const fetchData = async () => {
         try {
-            const res = await getProperties({});
+            const res = await getPropertiesWithoutAuth({});
             dispatch(fetchPropertiesSuccess({ data: res.data }));
             setIsLoading(false);
         } catch (err) {

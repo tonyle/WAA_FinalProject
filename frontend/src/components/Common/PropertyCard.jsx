@@ -2,7 +2,7 @@ import { FaBath, FaBed, FaHouse, FaLocationDot } from "react-icons/fa6";
 import { Link } from "react-router";
 
 const PropertyCard = (props) => {
-    const { name, description, price, bath, bed, houseType, address } = props;
+    const { id, name, description, price, bath, bed, houseType, address } = props;
     const location = `${address.street} ${address.city} ${address.state} ${address.postalCode}`;
     return (
         <div className="bg-white rounded-lg shadow-lg overflow-hidden">
@@ -17,7 +17,7 @@ const PropertyCard = (props) => {
                     <li className="inline-flex items-center"><FaHouse /> : {houseType}</li>
                 </ul>
                 <p className="text-xl font-semibold text-gray-800">{price}</p>
-                <Link to="">
+                <Link to={`/property/${id}`}>
                     <span className="py-2 px-6 bg-sky-500 font-medium text-white text-sm rounded-lg hover:bg-sky-600">
                         View Details
                     </span>
