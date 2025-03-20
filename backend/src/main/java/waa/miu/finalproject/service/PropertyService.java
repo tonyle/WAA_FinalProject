@@ -27,9 +27,9 @@ public interface PropertyService {
 
     void createProperty(InputPropertyDto propertyDto);
 
-    Property updateProperty(Long id, InputPropertyDto propertyDto);
+    String updateProperty(Long id, InputPropertyDto propertyDto, Long userId);
 
-    void delete(long id);
+    String delete(long id, long userId);
 
 
     void updateStatus(long id, PropertyStatusEnum status);

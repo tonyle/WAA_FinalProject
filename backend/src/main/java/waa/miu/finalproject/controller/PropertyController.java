@@ -2,6 +2,7 @@ package waa.miu.finalproject.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -68,13 +69,20 @@ public class PropertyController {
 
     @PostMapping
     public void save(@RequestBody InputPropertyDto inputPropertyDto) {
+
         propertyService.createProperty(inputPropertyDto);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Property> updateProperty(@PathVariable("id") Long id, @RequestBody InputPropertyDto propertyDto) {
-        Property updatedProperty = propertyService.updateProperty(id, propertyDto);
-        return ResponseEntity.ok(updatedProperty);
+    public ResponseEntity<String> updateProperty(HttpServletRequest request,@PathVariable("id") Long id, @RequestBody InputPropertyDto propertyDto) {
+        String token = jwtUtil.extractTokenRequest(request);
+        if (token != null){
+            TokenDto tokenDto = jwtUtil.getUserDtoFromClaims(token);
+            String s = propertyService.updateProperty(id, propertyDto,tokenDto.getUserId());
+            return ResponseEntity.ok(s);
+        }
+        return ResponseEntity.ok("You don't have permission to access this resource");
+
     }
     @PutMapping("/{id}/status")
     public void updateStatus(@PathVariable("id") long id, @RequestBody InputUpdatePropertyStatusDto inputUpdatePropertyStatusDto) {
@@ -82,8 +90,14 @@ public class PropertyController {
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable("id") long id) {
-        propertyService.delete(id);
+    public ResponseEntity<String> delete(HttpServletRequest request,@PathVariable("id") long id) {
+        String token = jwtUtil.extractTokenRequest(request);
+        if (token != null){
+            TokenDto tokenDto = jwtUtil.getUserDtoFromClaims(token);
+            String s = propertyService.delete(id,tokenDto.getUserId());
+            return ResponseEntity.ok(s);
+        }
+        return ResponseEntity.ok("You don't have permission to access this resource");
     }
 
     @PostMapping("/{propertyId}/upload-photos")
