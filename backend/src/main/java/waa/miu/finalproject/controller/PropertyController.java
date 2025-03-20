@@ -6,15 +6,19 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import waa.miu.finalproject.entity.User;
 import waa.miu.finalproject.entity.dto.TokenDto;
 import waa.miu.finalproject.entity.Offer;
 import waa.miu.finalproject.entity.Property;
 import waa.miu.finalproject.entity.dto.input.InputPropertyDto;
+import waa.miu.finalproject.entity.dto.input.InputUpdatePropertyStatusDto;
+import waa.miu.finalproject.entity.dto.input.InputUpdateUserDto;
 import waa.miu.finalproject.entity.dto.output.PropertyDetailDto;
 import waa.miu.finalproject.entity.dto.output.PropertyDto;
 import waa.miu.finalproject.enums.PropertyTypeEnum;
 import waa.miu.finalproject.enums.RoleEnum;
 import waa.miu.finalproject.helper.JwtUtil;
+import waa.miu.finalproject.repository.PropertyRepo;
 import waa.miu.finalproject.service.PropertyService;
 
 import java.util.ArrayList;
@@ -30,6 +34,8 @@ public class PropertyController {
 
     @Autowired
     private JwtUtil jwtUtil;
+    @Autowired
+    private PropertyRepo propertyRepo;
 
     @GetMapping
     public ResponseEntity<List<PropertyDto>> findAll(HttpServletRequest request, @RequestParam(value = "priceFrom", required = false) Double priceFrom,
@@ -72,13 +78,11 @@ public class PropertyController {
         Property updatedProperty = propertyService.updateProperty(id, propertyDto);
         return ResponseEntity.ok(updatedProperty);
     }
-//
-//    @GetMapping("/{id}/posts")
-//    public ResponseEntity<List<PostNoAuthorDto>> getPosts(@PathVariable("id") long id) {
-//        List<PostNoAuthorDto> posts = userService.getPosts(id);
-//        return ResponseEntity.ok(posts);
-//    }
-//
+    @PutMapping("/{id}/status")
+    public void updateStatus(@PathVariable("id") long id, @RequestBody InputUpdatePropertyStatusDto inputUpdatePropertyStatusDto) {
+        propertyService.updateStatus(id,inputUpdatePropertyStatusDto.getStatus());
+    }
+
     @DeleteMapping("/{id}")
     public void delete(@PathVariable("id") long id) {
         propertyService.delete(id);

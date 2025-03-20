@@ -13,6 +13,7 @@ import waa.miu.finalproject.entity.dto.PostDto;
 import waa.miu.finalproject.entity.dto.UserDto;
 import waa.miu.finalproject.entity.dto.output.PostNoAuthorDto;
 import waa.miu.finalproject.enums.OwnerStatusEnum;
+import waa.miu.finalproject.enums.RoleEnum;
 import waa.miu.finalproject.repository.UserRepo;
 import waa.miu.finalproject.service.UserService;
 
@@ -96,6 +97,19 @@ public class UserServiceImpl implements UserService {
     @Override
     public void setStatus(long id, String status) {
         userRepo.findById(id).ifPresent(user -> user.setStatus(OwnerStatusEnum.valueOf(status.toUpperCase())));
+    }
+
+    @Override
+    public List<UserDto> findAllFilterByStatusAndRoles(String status, String role) {
+
+        if (status != null && !status.isEmpty()) {
+            OwnerStatusEnum s = OwnerStatusEnum.valueOf(status.toUpperCase());
+        }
+        if (role != null && !role.isEmpty()) {
+            RoleEnum r = RoleEnum.valueOf(role.toUpperCase());
+        }
+        List<User> users = userRepo.findAllFilterByStatusAndRoles(status,role);
+        return users.stream().map(user -> modelMapper.map(user, UserDto.class)).collect(Collectors.toList());
     }
 
 }
