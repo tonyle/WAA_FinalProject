@@ -68,9 +68,16 @@ public class PropertyController {
     }
 
     @PostMapping
-    public void save(@RequestBody InputPropertyDto inputPropertyDto) {
+    public ResponseEntity<PropertyDetailDto> save(HttpServletRequest request,@RequestBody InputPropertyDto inputPropertyDto) {
 
-        propertyService.createProperty(inputPropertyDto);
+        String token = jwtUtil.extractTokenRequest(request);
+        if (token != null){
+            TokenDto tokenDto = jwtUtil.getUserDtoFromClaims(token);
+            PropertyDetailDto propertyDetailDto = propertyService.createProperty(tokenDto.getUserId(),inputPropertyDto);
+            return ResponseEntity.ok(propertyDetailDto);
+        }
+
+        return ResponseEntity.ok(null);
     }
 
     @PutMapping("/{id}")
