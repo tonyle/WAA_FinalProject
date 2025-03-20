@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="FinalProjectApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
-    <module name="lap1" />
+    <module name="finalproject" />
     <option name="SPRING_BOOT_MAIN_CLASS" value="waa.miu.finalproject.FinalProjectApplication" />
     <method v="2">
       <option name="Make" enabled="true" />

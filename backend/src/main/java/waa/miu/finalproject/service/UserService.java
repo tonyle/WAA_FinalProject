@@ -4,6 +4,8 @@ import waa.miu.finalproject.entity.User;
 import waa.miu.finalproject.entity.dto.PostDto;
 import waa.miu.finalproject.entity.dto.UserDto;
 import waa.miu.finalproject.entity.dto.output.PostNoAuthorDto;
+import waa.miu.finalproject.enums.OwnerStatusEnum;
+import waa.miu.finalproject.enums.RoleEnum;
 
 import java.util.List;
 
@@ -21,5 +23,5 @@ public interface UserService {
 
     void setStatus(long id, String status);
 
-    List<UserDto> findAllFilterByStatusAndRoles(String status, String role);
+    List<UserDto> findAllFilterByStatusAndRoles(OwnerStatusEnum status, RoleEnum role);
 }
