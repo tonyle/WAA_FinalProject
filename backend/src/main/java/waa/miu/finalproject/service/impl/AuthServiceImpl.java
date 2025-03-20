@@ -24,6 +24,7 @@ import waa.miu.finalproject.entity.dto.output.UserDto;
 import waa.miu.finalproject.entity.dto.output.UserLoginInfo;
 import waa.miu.finalproject.entity.request.LoginRequest;
 import waa.miu.finalproject.entity.request.RefreshTokenRequest;
+import waa.miu.finalproject.entity.request.ResetPasswordRequest;
 import waa.miu.finalproject.entity.response.LoginResponse;
 import waa.miu.finalproject.enums.OwnerStatusEnum;
 import waa.miu.finalproject.enums.RoleEnum;
@@ -51,6 +52,8 @@ public class AuthServiceImpl implements AuthService {
     @Autowired
     private RoleRepo roleRepo;
 
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
     @Override
     public LoginResponse authenticate(LoginRequest loginRequest) {
         Authentication result = null;
@@ -116,5 +119,24 @@ public class AuthServiceImpl implements AuthService {
         }
         user = userRepo.save(user);
         return modelMapper.map(user, UserDetailDto.class);
+    }
+
+    @Override
+    public String resetPassword(ResetPasswordRequest resetPasswordRequest) {
+        try {
+            Authentication result = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(resetPasswordRequest.getEmail(), resetPasswordRequest.getOldPassword())
+            );
+            UserDetails userDetails = userDetailsService.loadUserByUsername(result.getName());
+            Long userId = ((CustomUserDetails) userDetails).getUserId();
+            User userData = userRepo.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+
+            userData.setPassword(passwordEncoder.encode(resetPasswordRequest.getNewPassword()));
+            userRepo.save(userData); // Save updated user
+
+            return "Password successfully updated!";
+        } catch (BadCredentialsException e) {
+            throw new BadCredentialsException("Invalid old password!");
+        }
     }
 }
