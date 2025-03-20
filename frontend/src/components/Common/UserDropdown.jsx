@@ -45,8 +45,6 @@ const UserDropdown = () => {
                     Saved Properties</span>
                 </Link>
                 </>
-                    
-
                 );
             default: 
                 return null;
