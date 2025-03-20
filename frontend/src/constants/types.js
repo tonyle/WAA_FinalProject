@@ -17,3 +17,9 @@ export const PropertyStatuses = {
   PENDING: "PENDING",
   CONTINGENCY: "CONTINGENCY",
 };
+
+export const OfferStatuses = {
+  NEW: "NEW",
+  ACCEPTED: "ACCEPTED",
+  REJECTED: "REJECTED",
+};
