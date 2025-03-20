@@ -41,7 +41,7 @@ public class OfferServiceImpl implements OfferService {
 
     @Override
     public List<OfferDto> findAll(long userId) {
-        List<Offer> offers =  offerRepo.findAllOfferByUserId(userId);
+        List<Offer> offers = offerRepo.findAllOfferByUserId(userId);
         return offers.stream().map(p -> modelMapper.map(p, OfferDto.class)).collect(Collectors.toList());
     }
 
@@ -52,7 +52,11 @@ public class OfferServiceImpl implements OfferService {
 
     @Override
     public void save(InputOfferDto inputOffer) {
-        Property property = propertyRepo.findById(inputOffer.getPropertyId()).orElseThrow(() -> new RuntimeException("Property not found"));
+        Property property = propertyRepo.findById(inputOffer.getPropertyId())
+                .orElseThrow(() -> new RuntimeException("Property not found"));
+        if (!property.getStatus().equals(PropertyStatusEnum.AVAILABLE) && !property.getStatus().equals(PropertyStatusEnum.PENDING)) {
+            throw new RuntimeException("Cannot place an offer on this property.");
+        }
         Offer offer = new Offer();
         offer.setOfferPrice(inputOffer.getOfferPrice());
         OfferTypeEnum offerType = property.getType() == PropertyTypeEnum.SELL ? OfferTypeEnum.BUY : OfferTypeEnum.RENT;
@@ -64,7 +68,7 @@ public class OfferServiceImpl implements OfferService {
 
     @Override
     public List<Offer> findByOwnerId(long ownerId) {
-        return  offerRepo.getOffersByOwnerId(ownerId);
+        return offerRepo.getOffersByOwnerId(ownerId);
     }
 
     @Override
@@ -97,5 +101,16 @@ public class OfferServiceImpl implements OfferService {
             offers = offerRepo.findOffersByOwnerIdWithFilters(ownerId, propertyId, location, submissionDate);
         }
         return offers;
+    }
+
+    @Override
+    public List<Offer> findAllByCustomerIdWithFilter(Long ownerId, Long propertyId, String location, String submissionDate) {
+        List<Offer> offers = offerRepo.findAllByCustomerIdWithFilter(ownerId, propertyId, location, submissionDate);
+        return offers;
+    }
+
+    @Override
+    public void delete(long id) {
+        offerRepo.deleteById(id);
     }
 }

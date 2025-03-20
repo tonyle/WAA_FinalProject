@@ -20,4 +20,6 @@ public interface UserService {
     List<UserDto> getUsersHaveStatus(String status);
 
     void setStatus(long id, String status);
+
+    List<UserDto> findAllFilterByStatusAndRoles(String status, String role);
 }
