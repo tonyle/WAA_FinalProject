@@ -22,4 +22,8 @@ public interface OfferService {
     List<Offer> findByLocation(String searchValue);
 
     List<Offer> findAllByOwnerIdWithFilter(Long ownerId,Long propertyId, String location, String submissionDate);
+
+    List<Offer> findAllByCustomerIdWithFilter(Long ownerId, Long propertyId, String location, String submissionDate);
+
+    void delete(long id);
 }

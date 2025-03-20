@@ -47,9 +47,12 @@ public class OfferController {
                 offers = offerService.findAllByOwnerIdWithFilter(ownerId,propertyId, location, submissionDate);
             } else if (tokenDto.getRoles().contains(RoleEnum.OWNER.toString())) {
                 ownerId = tokenDto.getUserId();
-                System.out.println(ownerId);
                 offers = offerService.findAllByOwnerIdWithFilter(ownerId,propertyId, location, submissionDate);
+            }else{
+                ownerId = tokenDto.getUserId();
+                offers = offerService.findAllByCustomerIdWithFilter(ownerId,propertyId, location, submissionDate);
             }
+
         }
 
         return ResponseEntity.ok(offers);
@@ -78,9 +81,17 @@ public class OfferController {
 
     }
 
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable("id") long id) {
+        offerService.delete(id);
+    }
+
+
     @GetMapping("/property/{id}")
     public ResponseEntity<List<Offer>> findOffersById(@PathVariable("id") long id) {
         List<Offer> offers = offerService.findByPropertyId(id);
         return ResponseEntity.ok(offers);
     }
+
+
 }
