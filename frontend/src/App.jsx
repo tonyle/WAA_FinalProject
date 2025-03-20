@@ -31,6 +31,7 @@ import UserManagement from './components/Admin/UserManagement.jsx';
 import RentPage from './components/RentPage.jsx';
 import SellPage from './components/SellPage.jsx';
 import PropertyDetailsPage from './components/PropertyDetailsPage.jsx';
+import FilterPropertiesPage from './components/FilterPropertiesPage.jsx';
 
 function App() {
   return (
@@ -48,6 +49,7 @@ function App() {
         <Route index element={<Homepage />} />
         <Route path='rent' element={<RentPage />} />
         <Route path='sell' element={<SellPage />} />
+        <Route path='filter' element={<FilterPropertiesPage />} />
         <Route path='property/:id' element={<PropertyDetailsPage />} />
       </Route>
 

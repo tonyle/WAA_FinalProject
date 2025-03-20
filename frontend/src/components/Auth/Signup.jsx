@@ -11,7 +11,7 @@ const Signup = () => {
     const dispatch = useDispatch();
     const refForm = useRef();
     const roles = [
-        UserRole.ADMIN, UserRole.OWNER, UserRole.CUSTOMER
+        UserRole.OWNER, UserRole.CUSTOMER
     ]
 
     const handleSubmit = async (e) => {

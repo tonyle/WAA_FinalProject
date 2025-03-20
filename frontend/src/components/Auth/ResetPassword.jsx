@@ -26,7 +26,6 @@ const ResetPassword = () => {
         // Submit password reset logic here
         try {
             const res = await resetPassword({ email: user.email, oldPassword , newPassword});
-            console.log(res);
             dispatch(logout());
             navigate("/auth/login");
         } catch (err) {
