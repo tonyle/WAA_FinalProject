@@ -23,4 +23,5 @@ public class PropertyDto {
     private String houseType;
     private Address address;
     private UserDto user;
+    private List<Photo> photos;
 }
