@@ -3,6 +3,7 @@ package waa.miu.finalproject.config;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -23,7 +24,11 @@ public class SecurityConfig {
     private final UserDetailsService userDetailsService;
     private final JwtFilter jwtFilter;
 
-    String[] roles =  {"USER", "ADMIN"};
+    String[] roles1 =  {"CUSTOMER"};
+    String[] roles2 =  {"ADMIN"};
+    String[] roles3 =  {"OWNER"};
+    String[] roles4 =  {"CUSTOMER", "ADMIN"};
+    String[] roles5 =  {"ADMIN", "OWNER"};
 
     @Bean
     public UserDetailsService userDetailsSvc() {
@@ -39,10 +44,16 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.disable())
-                .authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll()
-//                        .requestMatchers("/api/v1/auth/**").permitAll()
-//                        .requestMatchers("/api/v1/admin/**").hasAnyAuthority(roles)
-//                        .anyRequest().authenticated()
+                .authorizeHttpRequests(authorize -> authorize
+                                .anyRequest().permitAll()
+//                                .requestMatchers("/api/v1/auth/**").permitAll()
+//                                .requestMatchers(HttpMethod.POST,"/api/v1/properties/**").hasAnyRole(roles1)
+//                                .requestMatchers(HttpMethod.PUT,"/api/v1/properties/**").hasAnyRole(roles4)
+//                                .requestMatchers(HttpMethod.POST,"/api/v1/offers/**").hasAnyRole(roles1)
+//                                .requestMatchers(HttpMethod.PUT,"/api/v1/offers/**").hasAnyRole(roles5)
+//                                .requestMatchers("/api/v1/properties/**").permitAll()
+//                                .requestMatchers("/api/v1/favourites").hasAnyAuthority(roles1)
+//                                .anyRequest().authenticated()
                 ).sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
