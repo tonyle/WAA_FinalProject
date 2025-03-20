@@ -127,33 +127,43 @@ public class PropertyServiceImpl implements PropertyService {
     }
 
     @Override
-    public Property updateProperty(Long id, InputPropertyDto propertyDto) {
+    public String updateProperty(Long id, InputPropertyDto propertyDto,Long userId) {
 
         Property property = propertyRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Property not found"));
-        System.out.println(property.getId());
-        property.setName(propertyDto.getName());
-        property.setDescription(propertyDto.getDescription());
-        property.setType(propertyDto.getType());
-        property.setPrice(propertyDto.getPrice());
-        property.setBed(propertyDto.getBed());
-        property.setBath(propertyDto.getBath());
-        property.setSqft(propertyDto.getSqft());
-        property.setStatus(PropertyStatusEnum.NEW);
-        property.setYearBuilt(propertyDto.getYearBuilt());
-        property.setHouseType(propertyDto.getHouseType());
-        property.setStyle(propertyDto.getStyle());
-
-        return propertyRepo.save(property);
+        if (property.getUser().getId()==userId) {
+            property.setName(propertyDto.getName());
+            property.setDescription(propertyDto.getDescription());
+            property.setType(propertyDto.getType());
+            property.setPrice(propertyDto.getPrice());
+            property.setBed(propertyDto.getBed());
+            property.setBath(propertyDto.getBath());
+            property.setSqft(propertyDto.getSqft());
+            property.setStatus(PropertyStatusEnum.NEW);
+            property.setYearBuilt(propertyDto.getYearBuilt());
+            property.setHouseType(propertyDto.getHouseType());
+            property.setStyle(propertyDto.getStyle());
+            propertyRepo.save(property);
+            return "Done";
+        }
+        return "You are not owner of this property";
     }
 
     @Override
-    public void delete(long id) {
+    public String delete(long id,long userId) {
         Property p = propertyRepo.findById(id).orElseThrow(() -> new RuntimeException("Property not found"));
-        if (p.getStatus().equals(PropertyStatusEnum.PENDING) || p.getStatus().equals(PropertyStatusEnum.CONTINGENCY)){
-            propertyRepo.deleteById(id);}
-    }
+        if (p.getUser().getId()==userId) {
+            if (p.getStatus().equals(PropertyStatusEnum.PENDING) || p.getStatus().equals(PropertyStatusEnum.CONTINGENCY)) {
+                return "You can't delete this property";
+            }else{
+                propertyRepo.deleteById(id);
+                return "Done";
+            }
+        }else{
+            return "You are not owner of this property";
+        }
 
+    }
     @Override
     public void updateStatus(long id, PropertyStatusEnum status) {
         Property property = propertyRepo.findById(id).orElseThrow(() -> new RuntimeException("Property not found"));
