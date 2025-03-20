@@ -39,6 +39,9 @@ public class OfferServiceImpl implements OfferService {
     @Autowired
     private PropertyRepo propertyRepo;
 
+    @Autowired
+    private EmailService emailService;
+
     @Override
     public List<OfferDto> findAll(long userId) {
         List<Offer> offers = offerRepo.findAllOfferByUserId(userId);
@@ -64,6 +67,8 @@ public class OfferServiceImpl implements OfferService {
         offer.setStatus(OfferStatusEnum.NEW);
         offer.setProperty(property);
         offerRepo.save(offer);
+        String email = offer.getProperty().getUser().getEmail();
+        emailService.sendSimpleEmail(email,"New offer","new offer");
     }
 
     @Override
