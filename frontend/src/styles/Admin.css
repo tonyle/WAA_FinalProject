@@ -54,5 +54,5 @@ td {
 }
 
 .main-admin {
-    @apply grid grid-cols-5 gap-10 justify-between px-10;
+    @apply grid grid-cols-5 gap-10 justify-between px-10 pt-15;
 }

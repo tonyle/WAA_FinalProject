@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useRef } from "react";
 import { login } from "../../store/auth/authSlice";
 import { Link, useNavigate } from "react-router-dom";
+import { loginUser } from "../../api/authApi";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -9,7 +10,7 @@ const Login = () => {
   const dispatch = useDispatch();
   const refForm = useRef();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
     const email = refForm.current.elements.email.value;
@@ -20,7 +21,12 @@ const Login = () => {
         return;
     }
 
-    dispatch(login({user: {email, password}, accessToken: "#dsfsfbsdbfsljdfblsjfbds"}));
+    try {
+      const res = await loginUser({email, password});
+      dispatch(login(res.data));
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   useEffect(() => {
