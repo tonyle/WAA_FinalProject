@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import waa.miu.finalproject.entity.dto.input.InputUserDto;
 import waa.miu.finalproject.entity.request.LoginRequest;
 import waa.miu.finalproject.entity.request.RefreshTokenRequest;
+import waa.miu.finalproject.entity.request.ResetPasswordRequest;
 import waa.miu.finalproject.entity.response.LoginResponse;
 import waa.miu.finalproject.service.AuthService;
 
@@ -33,7 +34,17 @@ public class AuthController {
             return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
         }
     }
+    @PostMapping("/resetpassword")
+    public ResponseEntity<?> resetPassword(@RequestBody ResetPasswordRequest resetPasswordRequest) {
+        try {
 
+            var resetRespone = authService.resetPassword(resetPasswordRequest);
+            return new ResponseEntity<>(resetRespone, HttpStatus.OK);
+        } catch (BadCredentialsException e) {
+            Map<String, String> errorResponse = Map.of("error", "Invalid email or password");
+            return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
+        }
+    }
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@RequestBody InputUserDto inputUserDto) {
         try {
