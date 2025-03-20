@@ -1,7 +1,6 @@
 package waa.miu.finalproject.service;
 
 import waa.miu.finalproject.entity.User;
-import waa.miu.finalproject.entity.dto.PostDto;
 import waa.miu.finalproject.entity.dto.UserDto;
 import waa.miu.finalproject.entity.dto.output.PostNoAuthorDto;
 import waa.miu.finalproject.enums.OwnerStatusEnum;
