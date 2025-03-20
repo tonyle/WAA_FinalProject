@@ -100,14 +100,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDto> findAllFilterByStatusAndRoles(String status, String role) {
+    public List<UserDto> findAllFilterByStatusAndRoles(OwnerStatusEnum status, RoleEnum role) {
 
-        if (status != null && !status.isEmpty()) {
-            OwnerStatusEnum s = OwnerStatusEnum.valueOf(status.toUpperCase());
-        }
-        if (role != null && !role.isEmpty()) {
-            RoleEnum r = RoleEnum.valueOf(role.toUpperCase());
-        }
+//
         List<User> users = userRepo.findAllFilterByStatusAndRoles(status,role);
         return users.stream().map(user -> modelMapper.map(user, UserDto.class)).collect(Collectors.toList());
     }

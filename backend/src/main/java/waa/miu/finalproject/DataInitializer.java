@@ -98,7 +98,15 @@ public class DataInitializer implements CommandLineRunner {
             ownerUser.setStatus(OwnerStatusEnum.ACTIVE);
             ownerUser.setRoles(List.of(ownerRole));
 
-            userRepository.saveAll(List.of(adminUser, customerUser, ownerUser));
+            User ownerUser1 = new User();
+            ownerUser1.setName("NhienLQ");
+            ownerUser1.setEmail("nhien@example.com");
+            ownerUser1.setPassword(passwordEncoder.encode("password123"));
+            ownerUser1.setPhone("555-555-5555");
+            ownerUser1.setStatus(OwnerStatusEnum.ACTIVE);
+            ownerUser1.setRoles(List.of(ownerRole));
+
+            userRepository.saveAll(List.of(adminUser, customerUser, ownerUser,ownerUser1));
         }
     }
     private void seedAddress() {
@@ -146,9 +154,11 @@ public class DataInitializer implements CommandLineRunner {
     private void seedProperties() {
         if (propertyRepository.count() == 0) {
             Optional<User> owner = userRepository.findById(Long.valueOf(3));
+            Optional<User> owner1 = userRepository.findById(Long.valueOf(4));
 
             Address address1 = addressRepository.findByCity("Keosauqua");
             Address address2 = addressRepository.findByCity("FairField");
+            Address address3 = addressRepository.findByCity("Iowa");
 
             Photo photo1 = photoRepository.findById(1L).get();
             Photo photo2 = photoRepository.findById(2L).get();
@@ -185,7 +195,22 @@ public class DataInitializer implements CommandLineRunner {
             property2.setAddress(address2);
             property2.setHouseType("House");
 
-            propertyRepository.saveAll(List.of(property1, property2));
+            Property property3 = new Property();
+            property3.setName("abc");
+            property3.setDescription("askdjoasjlkdlkfjngfg.");
+            property3.setType(PropertyTypeEnum.SELL);
+            property3.setPrice(200000);
+            property3.setBed(3);
+            property3.setBath(2);
+            property3.setSqft(2900);
+            property3.setStatus(PropertyStatusEnum.NEW);
+            property3.setMaterial("Wood");
+            property3.setStyle("Rustic");
+            property3.setUser(owner1.get());
+            property3.setAddress(address3);
+            property3.setHouseType("House");
+
+            propertyRepository.saveAll(List.of(property1, property2, property3));
         }
     }
 
