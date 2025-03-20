@@ -1,13 +1,13 @@
 endpoint http://localhost:8080/api/v1/auth
 
 **User
-    Sign up
-    Login
-    ResetPassword
+    Sign up <- done
+    Login <- done
+    refrestToken <- done
 
 **Customer
 
-    1. Get list of all offers: <- Done (missing search parameters)
+    1. Get list of all offers: <- Done
         Get http://localhost:8080/api/v1/offers?search=..
 
     2. Get property detail   <- Done
@@ -19,7 +19,7 @@ endpoint http://localhost:8080/api/v1/auth
     4. Remove property from favourite List: <- Done
         Delete: http://localhost:8080/api/v1/favourites/:favouriteId/properties/:propertyId
 
-    5. Make an offer:   <- Done (missing get user id by token)
+    5. Make an offer:   <- Done
         Post http://localhost:8080/api/v1/offers
         {
             propertyId,
@@ -35,18 +35,24 @@ endpoint http://localhost:8080/api/v1/auth
             name:
         }
 
-
 **Owner
-    1. Post a property:
+    1. Post a property: (Done)
         Post http://localhost:8080/api/v1/properties
         {
 
         }
-    Modify, Delete property
+    Modify:
+        Put http://localhost:8080/api/v1/properties/:propertyId
+        {
 
-    2. Get list of all offers: (available in customer API)
+        }
+    Delete property
+        Delete http://localhost:8080/api/v1/properties/:propertyId
+
+
+    2. Get list of all offers: (available in customer API) (** -> offers/users/:ownerId?)
         Get http://localhost:8080/api/v1/users/:ownerId/offers?search=..
-    3. Respond offer
+    3. Respond offer (done)
         Put http://localhost:8080/api/v1/offers/:offerId
         {
             status: ACCEPTED or REJECTED
@@ -54,10 +60,10 @@ endpoint http://localhost:8080/api/v1/auth
 
 **Admin
     1. Get list of Properties:
-        Get http://localhost:8080/api/v1/properties?search=..
-    2. Get list of customers:
+        Get http://localhost:8080/api/v1/properties?search=.. (available in customer API)
+    2. Get list of customers: (done)
         Get http://localhost:8080/api/v1/users?search=..
-    3. Get list of all offers:
+    3. Get list of all offers: (done, miss searching by location)
         Get http://localhost:8080/api/v1/offers?search=..
     4. Activate/Deactivate an owner account:
         Put http://localhost:8080/api/v1/users/:userId

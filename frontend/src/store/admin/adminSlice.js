@@ -1,9 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  owners: [],
+  users: [],
   properties: [],
-  customers: [],
   offers: [],
   error: null,
 };
@@ -12,12 +11,12 @@ export const adminSlice = createSlice({
   name: "admin",
   initialState: initialState,
   reducers: {
-    fetchOwnersSuccess: (state, actions) => {
-      state.owners = actions.payload.data;
+    fetchUsersSuccess: (state, actions) => {
+      state.users = actions.payload.data;
       state.error = null;
     },
-    fetchOwnersFail: (state, actions) => {
-      state.owners = [];
+    fetchUsersFail: (state, actions) => {
+      state.users = [];
       state.error = actions.payload.error;
     },
     fetchPropertiesSuccess: (state, actions) => {
@@ -26,14 +25,6 @@ export const adminSlice = createSlice({
     },
     fetchPropertiesFail: (state, actions) => {
       state.properties = [];
-      state.error = actions.payload.error;
-    },
-    fetchCustomersSuccess: (state, actions) => {
-      state.customers = actions.payload.data;
-      state.error = null;
-    },
-    fetchCustomersFail: (state, actions) => {
-      state.customers = [];
       state.error = actions.payload.error;
     },
     fetchOffersSuccess: (state, actions) => {
@@ -48,14 +39,12 @@ export const adminSlice = createSlice({
 });
 
 export const {
-  fetchOwnersSuccess,
-  fetchOwnersFail,
+  fetchUsersSuccess,
+  fetchUsersFail,
   fetchPropertiesSuccess,
   fetchPropertiesFail,
-  fetchCustomersSuccess,
-  fetchCustomersFail,
   fetchOffersSuccess,
-  fetchOffersFail
+  fetchOffersFail,
 } = adminSlice.actions;
 
 export default adminSlice.reducer;

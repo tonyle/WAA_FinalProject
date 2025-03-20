@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useRef } from "react";
 import { login } from "../../store/auth/authSlice";
 import { Link, useNavigate } from "react-router-dom";
+import { loginUser } from "../../api/authApi";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -9,7 +10,7 @@ const Login = () => {
   const dispatch = useDispatch();
   const refForm = useRef();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
     const email = refForm.current.elements.email.value;
@@ -20,7 +21,12 @@ const Login = () => {
         return;
     }
 
-    dispatch(login({user: {email, password}, accessToken: "#dsfsfbsdbfsljdfblsjfbds"}));
+    try {
+      const res = await loginUser({email, password});
+      dispatch(login(res.data));
+    } catch (err) {
+      alert("The account is not existed")
+    }
   };
 
   useEffect(() => {
@@ -30,7 +36,7 @@ const Login = () => {
   }, [accessToken, navigate]);
 
   return (
-    <div className="flex flex-col gap-8 justify-center p-8 bg-white shadow-lg rounded-lg">
+    <div className="flex flex-col gap-8 justify-center p-8 bg-white shadow-lg rounded-lg mt-15">
         <h2 className="text-2xl font-bold">Login</h2>
 
         <form ref={refForm} onSubmit={handleSubmit} className="flex flex-col gap-4 justify-center">

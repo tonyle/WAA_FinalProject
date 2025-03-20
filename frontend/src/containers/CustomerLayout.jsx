@@ -1,6 +1,7 @@
 import { Link, Outlet } from "react-router";
 import reactLogo from "../assets/react.svg"
 import UserDropdown from "../components/Common/UserDropdown";
+import MainMenu from "../components/Common/MainMenu";
 
 const CustomerLayout = () => {
     return (
@@ -10,11 +11,8 @@ const CustomerLayout = () => {
                     <Link to={"/"}><img alt="logo" className="logo react" src={reactLogo} /></Link>
 
                     <div className="flex flex-row gap-4 justify-end items-center">
-                        <nav>
-                            {/* <Link to="/customer">Customer Dashboard</Link>
-                            <Link to="/customer/current-offers">Current Offers</Link>
-                            <Link to="/customer/offer-history">Offer History</Link>
-                            <Link to="/customer/saved-properties">Saved Properties</Link> */}
+                        <nav className="inline-flex gap-4">
+                            <MainMenu />
 
                             {/* Login / Signup / User Info */}
                             <UserDropdown />

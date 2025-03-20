@@ -1,51 +1,74 @@
-import React,{useState,useEffect} from 'react';
+import React, { useEffect } from 'react';
+import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchOfferFail, fetchOfferSuccess } from '../../store/customer/customerSlice'; // Adjust path as needed
 
 const OfferHistory = () => {
-  const [offerHistory, setOfferHistory] = useState([]);
+  const dispatch = useDispatch();
+  const { offers, error } = useSelector((state) => state.customer);
+  const { accessToken } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    // Replace with actual API call to fetch offer history
-    setOfferHistory([
-      { 
-        id: 1, 
-        propertyName: 'Property 1', 
-        offerPrice: '$350,000', 
-        offerDate: '2025-03-01', 
-        status: 'Pending',
-        imageUrl: 'https://photos.zillowstatic.com/fp/3fb81689a900415f47ce917ed592a22c-cc_ft_768.webp',
-      },
-      { 
-        id: 2, 
-        propertyName: 'Property 2', 
-        offerPrice: '$450,000', 
-        offerDate: '2025-02-20', 
-        status: 'Accepted',
-        imageUrl: 'https://photos.zillowstatic.com/fp/3fb81689a900415f47ce917ed592a22c-cc_ft_768.webp',
-      },
-      { 
-        id: 3, 
-        propertyName: 'Property 3', 
-        offerPrice: '$500,000', 
-        offerDate: '2025-01-10', 
-        status: 'Canceled',
-        imageUrl: 'https://photos.zillowstatic.com/fp/3fb81689a900415f47ce917ed592a22c-cc_ft_768.webp',
-      },
-    ]);
-  }, []);
+    const fetchOffers = async () => {
+      try {
+        const response = await axios.get(
+          'https://finalprojectbackend-cyhghxg2hvemcfg2.canadacentral-01.azurewebsites.net/api/v1/offers?status=ACCEPTED&status=REJECTED',
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+        dispatch(fetchOfferSuccess({ data: response.data }));
+      } catch (err) {
+        dispatch(fetchOfferFail(err.message));
+      }
+    };
+
+    if (accessToken) {
+      fetchOffers();
+    }
+  }, [accessToken, dispatch]);
 
   return (
-    <div className="bg-gray-50 min-h-screen py-6 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
-        <h1 className="text-3xl font-semibold text-gray-800 mb-8">Offer History</h1>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {offerHistory.map(offer => (
-            <div key={offer.id} className="bg-white rounded-lg shadow-lg overflow-hidden">
-              <img src={offer.imageUrl} alt={offer.propertyName} className="w-full h-48 object-cover" />
-              <div className="p-6">
-                <h2 className="text-xl font-semibold text-gray-800">{offer.propertyName}</h2>
-                <p className="text-sm text-gray-600 mt-2">Offer Price: {offer.offerPrice}</p>
-                <p className="text-sm text-gray-500 mt-1">Offer Date: {offer.offerDate}</p>
-                <p className={`text-sm mt-2 ${offer.status === 'Accepted' ? 'text-green-500' : offer.status === 'Pending' ? 'text-yellow-500' : 'text-red-500'}`}>Status: {offer.status}</p>
+    <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-gray-100">
+      <div className="max-w-7xl w-full bg-white rounded-xl shadow-lg p-8">
+        <h1 className="text-4xl font-bold text-gray-800 mb-8 text-center">Offer History</h1>
+
+        {error && <p className="text-red-500 text-center mb-4">{error}</p>}
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {offers.map((offer) => (
+            <div key={offer.id} className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition-all duration-300">
+              {/* Image & Property Info */}
+              <div className="flex items-center space-x-4">
+                <img
+                  src={offer.photos?.[0]?.path || 'https://photos.zillowstatic.com/fp/3fb81689a900415f47ce917ed592a22c-cc_ft_768.webp'}
+                  alt={offer.property?.name}
+                  className="w-28 h-28 object-cover rounded-lg"
+                />
+                <div>
+                  <h2 className="text-xl font-semibold text-gray-900">{offer.property?.name}</h2>
+                  <p className="text-sm text-gray-600">{offer.property?.description}</p>
+                </div>
+              </div>
+
+              {/* Offer Details */}
+              <div className="mt-4 grid grid-cols-2 gap-4 text-gray-700">
+                <p><span className="font-semibold">Offer Price:</span> ${offer.offerPrice.toLocaleString()}</p>
+                <p>
+                  <span className="font-semibold">Status:</span>
+                  <span className={`ml-1 px-2 py-1 rounded-full text-sm font-medium 
+                    ${offer.status === 'Accepted' ? 'bg-green-100 text-green-600' : 
+                      offer.status === 'Pending' ? 'bg-yellow-100 text-yellow-600' : 
+                      'bg-red-100 text-red-600'}`}>
+                    {offer.status}
+                  </span>
+                </p>
+                <p><span className="font-semibold">Address:</span> {offer.address?.street}, {offer.address?.city}, {offer.address?.state}</p>
+                <p><span className="font-semibold">Bed/Bath:</span> {offer.bed} Beds, {offer.bath} Baths</p>
+                <p><span className="font-semibold">Sqft:</span> {offer.sqft} sqft</p>
+                <p><span className="font-semibold">Type:</span> {offer.type}</p>
               </div>
             </div>
           ))}

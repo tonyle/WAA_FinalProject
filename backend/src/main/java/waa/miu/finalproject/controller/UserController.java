@@ -1,11 +1,20 @@
 package waa.miu.finalproject.controller;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import waa.miu.finalproject.entity.User;
 import waa.miu.finalproject.entity.dto.PostDto;
 import waa.miu.finalproject.entity.dto.UserDto;
+import waa.miu.finalproject.entity.dto.input.InputUpdateUserDto;
 import waa.miu.finalproject.entity.dto.output.PostNoAuthorDto;
+import waa.miu.finalproject.entity.dto.output.PropertyDetailDto;
+import waa.miu.finalproject.entity.dto.output.PropertyDto;
+import waa.miu.finalproject.entity.dto.output.UserDetailDto;
+import waa.miu.finalproject.enums.OwnerStatusEnum;
+import waa.miu.finalproject.enums.RoleEnum;
+import waa.miu.finalproject.repository.UserRepo;
 import waa.miu.finalproject.service.UserService;
 
 import java.util.List;
@@ -16,17 +25,16 @@ import java.util.List;
 public class UserController {
     @Autowired
     private UserService userService;
+    @Autowired
+    private UserRepo userRepo;
+    @Autowired
+    private ModelMapper modelMapper;
 
     @GetMapping
-    public ResponseEntity<List<UserDto>> findAll(@RequestParam(required = false) String hasMoreThanOnePost, @RequestParam(defaultValue = "0") int hasMoreThanNPosts) {
-        List<UserDto> users;
-        if (hasMoreThanOnePost != null) {
-            users = userService.getUsersHaveMoreThanOnePost();
-        } else if (hasMoreThanNPosts != 0) {
-            users = userService.getUsersHaveMoreThanNPost(hasMoreThanNPosts);
-        } else {
-            users = userService.findAll();
-        }
+    public ResponseEntity<List<UserDto>> findAll(@RequestParam(value = "status",required = false) OwnerStatusEnum status,
+                                                 @RequestParam(value = "role",required = false) RoleEnum role) {
+        List<UserDto> users = userService.findAllFilterByStatusAndRoles(status,role);
+
         return ResponseEntity.ok(users);
     }
 
@@ -36,16 +44,14 @@ public class UserController {
         return ResponseEntity.ok(userDto);
     }
 
-    @PostMapping
-    public void save(@RequestBody UserDto userDto) {
-        userService.save(userDto);
+    @PutMapping("/{id}")
+    public ResponseEntity<UserDetailDto> updateById(@PathVariable("id") long id, @RequestBody InputUpdateUserDto inputUpdateUserDto) {
+        User user = userService.getById(id);
+        user.setStatus(inputUpdateUserDto.getStatus());
+        userRepo.save(user);
+        return ResponseEntity.ok(modelMapper.map(user, UserDetailDto.class));
     }
 
-    @GetMapping("/{id}/posts")
-    public ResponseEntity<List<PostNoAuthorDto>> getPosts(@PathVariable("id") long id) {
-        List<PostNoAuthorDto> posts = userService.getPosts(id);
-        return ResponseEntity.ok(posts);
-    }
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable("id") long id) {
