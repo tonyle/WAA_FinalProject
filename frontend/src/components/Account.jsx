@@ -5,7 +5,7 @@ const Account = () => {
     const { user } = useSelector((state) => state.auth);
 
     return (
-        <div className="max-w-3xl mx-auto p-6 bg-white shadow-md rounded-lg">
+        <div className="max-w-3xl mx-auto p-6 bg-white shadow-md rounded-lg mt-44 pt-10">
             <h2 className="text-3xl font-semibold text-gray-800 pb-2">Account</h2>
 
             {user && (
