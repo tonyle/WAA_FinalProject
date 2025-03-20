@@ -2,8 +2,11 @@ package waa.miu.finalproject.entity.dto.output;
 
 import lombok.Data;
 import waa.miu.finalproject.entity.Address;
+import waa.miu.finalproject.entity.Photo;
 import waa.miu.finalproject.enums.PropertyStatusEnum;
 import waa.miu.finalproject.enums.PropertyTypeEnum;
+
+import java.util.List;
 
 @Data
 public class PropertyDto {
@@ -23,4 +26,5 @@ public class PropertyDto {
     private String houseType;
     private Address address;
     private UserDto user;
+    private List<Photo> photos;
 }

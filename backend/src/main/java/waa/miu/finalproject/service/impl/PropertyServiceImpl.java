@@ -92,8 +92,8 @@ public class PropertyServiceImpl implements PropertyService {
     }
 
     @Override
-    public void createProperty(InputPropertyDto propertyDto) {
-        Optional<User> userOptional = userRepo.findById(propertyDto.getOwnerId());
+    public PropertyDetailDto createProperty(Long id,InputPropertyDto propertyDto) {
+        Optional<User> userOptional = userRepo.findById(id);
         if (userOptional.isEmpty()) {
             throw new RuntimeException("Owner not found");
         }
@@ -123,7 +123,8 @@ public class PropertyServiceImpl implements PropertyService {
         property.setAddress(address);
 
         // Save property
-        propertyRepo.save(property);
+        property = propertyRepo.save(property);
+        return modelMapper.map(property, PropertyDetailDto.class);
     }
 
     @Override

@@ -25,7 +25,7 @@ public interface PropertyService {
             Integer bath,
             String location);
 
-    void createProperty(InputPropertyDto propertyDto);
+    PropertyDetailDto createProperty(Long id,InputPropertyDto propertyDto);
 
     String updateProperty(Long id, InputPropertyDto propertyDto, Long userId);
 

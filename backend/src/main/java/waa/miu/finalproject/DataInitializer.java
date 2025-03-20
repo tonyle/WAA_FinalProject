@@ -271,7 +271,7 @@ public class DataInitializer {
     CommandLineRunner initData(UserRepo userRepo, RoleRepo roleRepo,
                                PropertyRepo propertyRepo, AddressRepo addressRepo,
                                OfferRepo offerRepo, FavouriteListRepo favouriteListRepo,
-                               PhotoRepo photoRepo) {
+                               PhotoRepo photoRepo,PasswordEncoder passwordEncoder) {
         return args -> {
 
             // Create roles
@@ -291,7 +291,7 @@ public class DataInitializer {
                 User user = new User();
                 user.setName("User " + i);
                 user.setEmail("user" + i + "@example.com");
-                user.setPassword("password" + i);
+                user.setPassword(passwordEncoder.encode("password" + i));
                 user.setPhone("123-456-789" + i);
                 user.setStatus(i % 2 == 0 ? OwnerStatusEnum.ACTIVE : OwnerStatusEnum.DEACTIVATED);
                 user.setRoles(i % 2 == 0 ? List.of(ownerRole) : List.of(customerRole));
