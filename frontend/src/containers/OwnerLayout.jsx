@@ -1,6 +1,7 @@
 import { Link, Outlet } from "react-router";
 import reactLogo from "../assets/react.svg"
 import UserDropdown from "../components/Common/UserDropdown";
+import MainMenu from "../components/Common/MainMenu";
 
 const OwnerLayout = () => {
     return (
@@ -10,12 +11,8 @@ const OwnerLayout = () => {
                     <Link to={"/"}><img alt="logo" className="logo react" src={reactLogo} /></Link>
 
                     <div className="flex flex-row gap-4 justify-end items-center">
-                        <nav>
-                            <Link to="/owner">Owner Dashboard</Link>
-                            <Link to="/owner/property-management">Manage Properties</Link>
-                            <Link to="/owner/offers">View Offers</Link>
-                            <Link to="/owner/messages">Messages</Link>
-
+                        <nav className="inline-flex gap-4">
+                            <MainMenu />
                             {/* Login / Signup / User Info */}
                             <UserDropdown />
                             

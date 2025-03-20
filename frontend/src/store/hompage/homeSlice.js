@@ -3,22 +3,15 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   users: [],
   properties: [],
+  propertyDetails: null,
   offers: [],
   error: null,
 };
 
-export const adminSlice = createSlice({
-  name: "admin",
+export const homepageSlice = createSlice({
+  name: "home",
   initialState: initialState,
   reducers: {
-    fetchUsersSuccess: (state, actions) => {
-      state.users = actions.payload.data;
-      state.error = null;
-    },
-    fetchUsersFail: (state, actions) => {
-      state.users = [];
-      state.error = actions.payload.error;
-    },
     fetchPropertiesSuccess: (state, actions) => {
       state.properties = actions.payload.data;
       state.error = null;
@@ -35,16 +28,18 @@ export const adminSlice = createSlice({
       state.offers = [];
       state.error = actions.payload.error;
     },
+    fetchPropertyDetailsSuccess: (state, actions) => {
+        state.propertyDetails = actions.payload.data;
+    }
   },
 });
 
 export const {
-  fetchUsersSuccess,
-  fetchUsersFail,
   fetchPropertiesSuccess,
   fetchPropertiesFail,
   fetchOffersSuccess,
   fetchOffersFail,
-} = adminSlice.actions;
+  fetchPropertyDetailsSuccess
+} = homepageSlice.actions;
 
-export default adminSlice.reducer;
+export default homepageSlice.reducer;

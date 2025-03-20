@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   user: null,
@@ -7,7 +7,6 @@ const initialState = {
   refreshToken: null,
   error: null,
   role: null,
-  allUsers: [],
   success: false,
 };
 
@@ -16,55 +15,29 @@ export const authSlice = createSlice({
   initialState: initialState,
   reducers: {
     login: (state, actions) => {
-      const curUser = state.allUsers.find(
-        (item) => item.email == actions.payload.user.email
-      );
-      if (curUser) {
-        state.user = curUser;
-        state.accessToken = actions.payload.accessToken;
-        state.isAuthenticated = true;
-        state.role = curUser.role;
+      state.user = actions.payload.user;
+      state.isAuthenticated = true;
+      state.accessToken = actions.payload.accessToken;
+      state.refreshToken = actions.payload.refreshToken;
+      state.role = actions.payload.user.role;
 
-        localStorage.setItem("token", JSON.stringify({ state }));
-      }
+      localStorage.setItem("token", JSON.stringify({ ...actions.payload }));
     },
     logout: (state) => {
-      const users = state.allUsers;
-      Object.assign(state, { ...initialState, allUsers: users });
+      Object.assign(state, initialState);
       localStorage.removeItem("token");
     },
-    signupUser: (state, actions) => {
-      state.allUsers.push(actions.payload);
+    signupUser: (state) => {
       state.success = true;
     },
+    refreshToken: (state, actions) => {
+      state.accessToken = actions.payload.accessToken;
+      state.refreshToken = actions.payload.refreshToken;
+      state.user = actions.payload.user;
+    }
   },
 });
 
-// export const login = createAsyncThunk(
-//   "auth/login",
-//   async (credentials, { rejectWithValue }) => {
-//     try {
-//       const data = await loginUser(credentials);
-//       localStorage.setItem("refreshToken", data.refreshToken);
-//       return data;
-//     } catch (error) {
-//       return rejectWithValue(error.response?.data?.message || "Login failed");
-//     }
-//   }
-// );
-
-export const { login, logout, signupUser } = authSlice.actions;
-
-export const refreshToken = createAsyncThunk(
-  "auth/refreshToken",
-  async (_, { rejectWithValue }) => {
-    try {
-      const newAccessToken = await refreshAccessToken();
-      return newAccessToken;
-    } catch (error) {
-      return rejectWithValue("Failed to refresh token");
-    }
-  }
-);
+export const { login, logout, signupUser, refreshToken } = authSlice.actions;
 
 export default authSlice.reducer;
