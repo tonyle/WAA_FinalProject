@@ -7,7 +7,7 @@ const OwnerLayout = () => {
     return (
         <div className="flex min-h-screen">
             {/* Sidebar */}
-            <aside className="w-64 bg-gray-800 text-white p-6">
+            {/* <aside className="w-64 bg-gray-800 text-white p-6">
                 <div className="mb-8">
                     <Link to={"/"}>
                         <img alt="logo" className="w-24 mx-auto" src={reactLogo} />
@@ -20,7 +20,7 @@ const OwnerLayout = () => {
                     <Link to="/owner/offer-history" className="hover:bg-gray-700 p-2 rounded">Offer History</Link>
                     <Link to="/owner/messages" className="hover:bg-gray-700 p-2 rounded">Messages</Link>
                 </nav>
-            </aside>
+            </aside> */}
 
             {/* Main Content */}
             <div className="flex-1 flex flex-col">
