@@ -98,4 +98,15 @@ public class OfferServiceImpl implements OfferService {
         }
         return offers;
     }
+
+    @Override
+    public List<Offer> findAllByCustomerIdWithFilter(Long ownerId, Long propertyId, String location, String submissionDate) {
+        List<Offer> offers = offerRepo.findAllByCustomerIdWithFilter(ownerId, propertyId, location, submissionDate);
+        return offers;
+    }
+
+    @Override
+    public void delete(long id) {
+        offerRepo.deleteById(id);
+    }
 }

@@ -29,13 +29,10 @@ public class UserController {
     private ModelMapper modelMapper;
 
     @GetMapping
-    public ResponseEntity<List<UserDto>> findAll(@RequestParam(required = false) String status) {
-        List<UserDto> users;
-        if (status != null) {
-            users = userService.getUsersHaveStatus(status);
-        } else {
-            users = userService.findAll();
-        }
+    public ResponseEntity<List<UserDto>> findAll(@RequestParam(value = "status",required = false) String status,
+                                                 @RequestParam(value = "role",required = false) String role) {
+        List<UserDto> users = userService.findAllFilterByStatusAndRoles(status,role);
+
         return ResponseEntity.ok(users);
     }
 
