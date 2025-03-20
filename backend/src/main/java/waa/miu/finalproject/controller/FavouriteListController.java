@@ -37,7 +37,8 @@ public class FavouriteListController {
     }
 
     @PostMapping
-    public ResponseEntity<Map<String, String>> createFavouriteList(HttpServletRequest request, @RequestBody InputFavouriteDto inputFavouriteDto) {
+    public ResponseEntity<Map<String, String>> createFavouriteList(HttpServletRequest request,
+            @RequestBody InputFavouriteDto inputFavouriteDto) {
         String token = jwtUtil.extractTokenRequest(request);
         if (token != null) {
             TokenDto tokenDto = jwtUtil.getUserDtoFromClaims(token);
@@ -51,7 +52,8 @@ public class FavouriteListController {
     }
 
     @PutMapping("/{favouriteId}/properties/{propertyId}")
-    public ResponseEntity<Map<String, String>> addPropertyIntoFavouriteList(HttpServletRequest request, @PathVariable("favouriteId") long favouriteId, @PathVariable("propertyId") long propertyId) {
+    public ResponseEntity<Map<String, String>> addPropertyIntoFavouriteList(HttpServletRequest request,
+            @PathVariable("favouriteId") long favouriteId, @PathVariable("propertyId") long propertyId) {
         String token = jwtUtil.extractTokenRequest(request);
         if (token != null) {
             TokenDto tokenDto = jwtUtil.getUserDtoFromClaims(token);
@@ -65,7 +67,8 @@ public class FavouriteListController {
     }
 
     @DeleteMapping("/{favouriteId}/properties/{propertyId}")
-    public ResponseEntity<Map<String, String>> removePropertyfromFavouriteList(HttpServletRequest request, @PathVariable("favouriteId") long favouriteId, @PathVariable("propertyId") long propertyId) {
+    public ResponseEntity<Map<String, String>> removePropertyfromFavouriteList(HttpServletRequest request,
+            @PathVariable("favouriteId") long favouriteId, @PathVariable("propertyId") long propertyId) {
         String token = jwtUtil.extractTokenRequest(request);
         if (token != null) {
             TokenDto tokenDto = jwtUtil.getUserDtoFromClaims(token);
