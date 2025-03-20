@@ -1,9 +1,9 @@
 import { useDispatch, useSelector } from "react-redux";
-import { Navigate, Outlet } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { useEffect } from "react";
 import { login } from "../store/auth/authSlice";
 
-const ProtectedRoute = ({ allowedRoles }) => {
+const ProtectedRoute = ({ children, allowedRoles }) => {
     const { isAuthenticated, role, user } = useSelector((state) => state.auth);
     const dispatch = useDispatch();
 
@@ -18,7 +18,7 @@ const ProtectedRoute = ({ allowedRoles }) => {
 
     if (!allowedRoles.includes(role)) return <Navigate to="/" replace />;
 
-    return <Outlet />; // Render child routes
+    return children; // Render child routes
 };
 
 export default ProtectedRoute;
