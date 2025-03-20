@@ -77,8 +77,11 @@ public class OfferServiceImpl implements OfferService {
     }
 
     @Override
-    public void setOfferStatus(long offerId, OfferStatusEnum status) {
+    public void setOfferStatus(long offerId, OfferStatusEnum status, long ownerId) {
         Offer offer = offerRepo.findById(offerId).orElseThrow(() -> new RuntimeException("Offer not found"));
+        if (offer.getProperty().getUser().getId() != ownerId) {
+            throw new RuntimeException("Cannot update an offer status on this property.");
+        }
         offer.setStatus(status);
         if (status == OfferStatusEnum.ACCEPTED) {
             offer.getProperty().setStatus(PropertyStatusEnum.PENDING);
@@ -115,9 +118,9 @@ public class OfferServiceImpl implements OfferService {
     }
 
     @Override
-    public void delete(long id) {
+    public void delete(long id, long customerId) {
         Offer offer = offerRepo.findById(id).orElse(null);
-        if (offer.getProperty().getStatus() != PropertyStatusEnum.CONTINGENCY) {
+        if (offer.getProperty().getStatus() != PropertyStatusEnum.CONTINGENCY && offer.getUser().getId() == customerId) {
             offerRepo.deleteById(id);
         }
 

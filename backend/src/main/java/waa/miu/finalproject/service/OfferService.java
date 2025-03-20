@@ -17,7 +17,7 @@ public interface OfferService {
 
     List<Offer> findByOwnerId(long ownerId);
 
-    void setOfferStatus(long offerId, OfferStatusEnum status);
+    void setOfferStatus(long offerId, OfferStatusEnum status, long customerId);
 
     List<Offer> findByPropertyId(long l);
 
@@ -29,5 +29,5 @@ public interface OfferService {
     List<Offer> findAllByCustomerIdWithFilter(Long ownerId, Long propertyId, String location, String submissionDate,
             List<String> statuses);
 
-    void delete(long id);
+    void delete(long id, long customerId);
 }
