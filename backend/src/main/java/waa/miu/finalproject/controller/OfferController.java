@@ -8,13 +8,9 @@ import org.springframework.web.bind.annotation.*;
 import waa.miu.finalproject.entity.Offer;
 import waa.miu.finalproject.entity.dto.TokenDto;
 import waa.miu.finalproject.entity.dto.input.InputOfferDto;
-import waa.miu.finalproject.entity.dto.output.OfferDto;
 import waa.miu.finalproject.helper.JwtUtil;
 import waa.miu.finalproject.entity.dto.input.InputUpdateOfferStatusDto;
-import waa.miu.finalproject.entity.dto.output.PropertyDto;
 import waa.miu.finalproject.enums.RoleEnum;
-import waa.miu.finalproject.filter.JwtFilter;
-import waa.miu.finalproject.helper.JwtUtil;
 import waa.miu.finalproject.service.OfferService;
 
 import java.util.ArrayList;
@@ -35,8 +31,8 @@ public class OfferController {
             HttpServletRequest request,
             @RequestParam(value = "propertyId", required = false) Long propertyId,
             @RequestParam(value = "location", required = false) String location,
-            @RequestParam(value = "submissionDate", required = false) String submissionDate
-    ) {
+            @RequestParam(value = "submissionDate", required = false) String submissionDate,
+            @RequestParam(value = "statuses", required = false) List<String> statuses) {
         Long ownerId = null;
         List<Offer> offers = new ArrayList<>();
 
@@ -48,13 +44,13 @@ public class OfferController {
 
             System.out.println(tokenDto);
             if (tokenDto.getRoles().contains(RoleEnum.ADMIN.toString())) {
-                offers = offerService.findAllByOwnerIdWithFilter(ownerId,propertyId, location, submissionDate);
+                offers = offerService.findAllByOwnerIdWithFilter(ownerId, propertyId, location, submissionDate, statuses);
             } else if (tokenDto.getRoles().contains(RoleEnum.OWNER.toString())) {
                 ownerId = tokenDto.getUserId();
-                offers = offerService.findAllByOwnerIdWithFilter(ownerId,propertyId, location, submissionDate);
-            }else{
+                offers = offerService.findAllByOwnerIdWithFilter(ownerId, propertyId, location, submissionDate, statuses);
+            } else {
                 ownerId = tokenDto.getUserId();
-                offers = offerService.findAllByCustomerIdWithFilter(ownerId,propertyId, location, submissionDate);
+                offers = offerService.findAllByCustomerIdWithFilter(ownerId, propertyId, location, submissionDate, statuses);
             }
 
         }
@@ -69,8 +65,19 @@ public class OfferController {
     }
 
     @PostMapping
-    public void createOffer(@RequestBody InputOfferDto inputOffer) {
-        offerService.save(inputOffer);
+    public ResponseEntity<Map<String, String>> createOffer(HttpServletRequest request, @RequestBody InputOfferDto inputOffer) {
+        String token = jwtUtil.extractTokenRequest(request);
+
+        if (token != null) {
+            TokenDto tokenDto = jwtUtil.getUserDtoFromClaims(token);
+            long customerId = tokenDto.getUserId();
+
+            offerService.save(inputOffer, customerId);
+        } else {
+            Map<String, String> errorResponse = Map.of("error", "You don't have permission to access this resource");
+            return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
+        }
+        return null;
     }
 
     @GetMapping("/users/{id}")
@@ -80,7 +87,7 @@ public class OfferController {
 
     @PutMapping("/{id}")
     public void setOfferStatus(@RequestBody InputUpdateOfferStatusDto status, @PathVariable("id") long offerId) {
-        offerService.setOfferStatus(offerId,status.getStatus());
+        offerService.setOfferStatus(offerId, status.getStatus());
     }
 
     @DeleteMapping("/{id}")
@@ -88,12 +95,10 @@ public class OfferController {
         offerService.delete(id);
     }
 
-
     @GetMapping("/property/{id}")
     public ResponseEntity<List<Offer>> findOffersById(@PathVariable("id") long id) {
         List<Offer> offers = offerService.findByPropertyId(id);
         return ResponseEntity.ok(offers);
     }
-
 
 }
