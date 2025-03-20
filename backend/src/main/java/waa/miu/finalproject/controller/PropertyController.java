@@ -1,18 +1,14 @@
 package waa.miu.finalproject.controller;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import waa.miu.finalproject.entity.User;
+import org.springframework.web.multipart.MultipartFile;
 import waa.miu.finalproject.entity.dto.TokenDto;
-import waa.miu.finalproject.entity.Offer;
 import waa.miu.finalproject.entity.Property;
 import waa.miu.finalproject.entity.dto.input.InputPropertyDto;
 import waa.miu.finalproject.entity.dto.input.InputUpdatePropertyStatusDto;
-import waa.miu.finalproject.entity.dto.input.InputUpdateUserDto;
 import waa.miu.finalproject.entity.dto.output.PropertyDetailDto;
 import waa.miu.finalproject.entity.dto.output.PropertyDto;
 import waa.miu.finalproject.enums.PropertyTypeEnum;
@@ -22,7 +18,9 @@ import waa.miu.finalproject.repository.PropertyRepo;
 import waa.miu.finalproject.service.PropertyService;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("api/v1/properties")
@@ -88,5 +86,17 @@ public class PropertyController {
         propertyService.delete(id);
     }
 
+    @PostMapping("/{propertyId}/upload-photos")
+    public ResponseEntity<Map<String, Object>> uploadPhotos(
+            @PathVariable Long propertyId,
+            @RequestParam("files") List<MultipartFile> files) {
+
+        List<String> filePaths = propertyService.uploadPhotos(propertyId, files);
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "Photos uploaded successfully");
+        response.put("filePaths", filePaths);
+
+        return ResponseEntity.ok(response);
+    }
 
 }
