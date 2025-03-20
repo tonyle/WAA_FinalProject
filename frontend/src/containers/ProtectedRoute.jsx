@@ -1,6 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
 import { Navigate, Outlet } from "react-router-dom";
-import { UserRole } from "../constants/role";
 import { useEffect } from "react";
 import { login } from "../store/auth/authSlice";
 
@@ -11,7 +10,7 @@ const ProtectedRoute = ({ allowedRoles }) => {
     useEffect(() => {
         if (!user && localStorage.getItem("token")) {
             const token = localStorage.getItem("token");
-            dispatch(login(JSON.parse(token).state));
+            dispatch(login(JSON.parse(token)));
         }
     }, [dispatch, user]);
 

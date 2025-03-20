@@ -1,35 +1,29 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchPropertiesSuccess, fetchPropertiesFail } from '../../store/admin/adminSlice';
-import { approveProperty, getProperties } from '../../api/adminApi';
-import { PropertyStatuses, PropertyTypes } from '../../constants/types';
+import { fetchUsersFail, fetchUsersSuccess } from '../../store/admin/adminSlice';
+import { UserStatus } from '../../constants/types';
+import { activeOrDeactiveOwnerAccount, getUsers } from '../../api/adminApi';
 
-const PropertiesManagement = () => {
+const UserManagement = () => {
   const [tab, setTab] = useState(0);
   const dispatch = useDispatch();
-  const { properties } = useSelector((state) => state.admin);
+  const { users } = useSelector((state) => state.admin);
   const [searchText, setSearchText] = useState("");
   const renderBadgeClass = (status) => {
-    return !["NEW", "DEACTIVATED"].includes(status) ? "badge-active" : "badge-deactive";
+    return status === UserStatus.ACTIVE ? "badge-active" : "badge-deactive";
   };
-  const types = [PropertyTypes.RENT, PropertyTypes.SELL, PropertyTypes.BOTH];
   const [params, setParams] = useState({});
 
   useEffect(() => {
     // fetch data
     fetchData();
-  }, [dispatch, params]);
+  }, [params]);
 
   useEffect(() => {
+    // fetch data
     switch (tab) {
       case 1:
-        setParams({ propertyType: PropertyTypes.RENT });
-        break;
-      case 2:
-        setParams({ propertyType: PropertyTypes.SELL });
-        break;
-      case 3:
-        setParams({ propertyType: PropertyTypes.BOTH });
+        setParams({ status: UserStatus.ACTIVE });
         break;
       case 0:
       default:
@@ -40,29 +34,32 @@ const PropertiesManagement = () => {
 
   const fetchData = async () => {
     try {
-      const response = await getProperties(params);
-      dispatch(fetchPropertiesSuccess({ data: response.data }));
+      const res = await getUsers(params);
+      dispatch(fetchUsersSuccess({ data: res.data }));
     } catch (err) {
       console.log(err);
-      dispatch(fetchPropertiesFail("Can not fetch data"));
+      dispatch(fetchUsersFail("fetch users failed"));
     }
-  }
+  };
 
   const onHandleActiveAndDeactive = async (id) => {
-    try {
-      const res = await approveProperty(id);
 
-      const updatedOwners = properties.map((item) =>
-        item.id === id ? res.data : item
+    const curUser = users.find((owner) => owner.id === id);
+    try {
+      const res = await activeOrDeactiveOwnerAccount(id, { status: curUser.status === UserStatus.ACTIVE ? UserStatus.DEACTIVATED : UserStatus.ACTIVE });
+      console.log(res.data);
+
+      const updatedOwners = users.map((owner) =>
+        owner.id === id ? { ...owner, status: owner.status === UserStatus.ACTIVE ? UserStatus.DEACTIVATED : UserStatus.ACTIVE } : owner
       );
 
-      dispatch(fetchPropertiesSuccess({ data: updatedOwners }));
+      dispatch(fetchUsersSuccess({ data: updatedOwners }));
     } catch (err) {
       console.log(err);
     }
   };
 
-  const handleSearchProperty = () => {
+  const handleSearchOwners = () => {
     // fetch API
     setSearchText("");
   }
@@ -74,17 +71,13 @@ const PropertiesManagement = () => {
       {/* tabs */}
       <div className='flex flex-row gap-0 items-center justify-start border-b border-gray-200 tabs'>
         <div className={`${tab === 0 ? 'active' : ''} tab-item`} onClick={() => setTab(0)}>All</div>
-        {types.map((item, key) => {
-          return (
-            <div key={key} className={`${tab === key + 1 ? 'active' : ''} tab-item capitalize`} onClick={() => setTab(key + 1)}>{item.toLowerCase()}</div>
-          )
-        })}
+        <div className={`${tab === 1 ? 'active' : ''} tab-item`} onClick={() => setTab(1)}>Active</div>
       </div>
 
       {/* Search item */}
       {/* <div className='flex flex-row justify-end w-full items-stretch'>
         <input value={searchText} onChange={(e) => setSearchText(e.target.value)} type="text" className='border border-gray-200 p-2 rounded-l-md outline-0' />
-        <button onClick={handleSearchProperty} className='search-button'>Search</button>
+        <button onClick={handleSearchOwners} className='search-button'>Search</button>
       </div> */}
 
       {/* table */}
@@ -94,34 +87,32 @@ const PropertiesManagement = () => {
             <tr>
               {/* <th><input type="checkbox" name="check_all" /></th> */}
               <th>Id</th>
-              <th>Property</th>
-              <th>Description</th>
-              <th>Type</th>
-              <th>Price</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Role</th>
               <th>Status</th>
               <th>Actions</th>
             </tr>
           </thead>
 
           <tbody>
-            {properties && properties.length > 0 ? (
+            {users && users.length > 0 ? (
               <>
                 {
-                  properties.map((item, key) => (
+                  users.map((item, key) => (
                     <tr key={key}>
                       {/* <td><input type='checkbox' name={item.id}/></td> */}
                       <td>{item.id}</td>
                       <td>{item.name}</td>
-                      <td>{item.description}</td>
-                      <td>{item.type}</td>
-                      <td>{item.price}</td>
+                      <td>{item.email}</td>
+                      <td>{item.roles[0].role}</td>
                       <td><span className={`badge ${renderBadgeClass(item.status.toLowerCase())}`}>{item.status.toLowerCase()}</span></td>
                       <td>
                         <button
                           onClick={() => onHandleActiveAndDeactive(item.id)}
-                          className={`${item.status == PropertyStatuses.NEW ? '' : 'hidden'} text-sky-600 bg-slate-100 font-bold text-sm px-2 cursor-pointer`}
+                          className={`${item.status === UserStatus.ACTIVE ? 'bg-slate-100' : 'text-sky-600 bg-slate-100'} font-bold text-xs px-5 cursor-pointer`}
                         >
-                          Approve
+                          {item.status === UserStatus.ACTIVE ? 'Deactivate' : 'Activate'}
                         </button>
                       </td>
                     </tr>
@@ -130,7 +121,7 @@ const PropertiesManagement = () => {
               </>
             ) : (
               <tr>
-                <td colSpan="7" className="text-center py-4">No property found.</td>
+                <td colSpan="6" className="text-center py-4">No owner found.</td>
               </tr>
             )}
           </tbody>
@@ -140,4 +131,4 @@ const PropertiesManagement = () => {
   );
 }
 
-export default PropertiesManagement;
+export default UserManagement;
