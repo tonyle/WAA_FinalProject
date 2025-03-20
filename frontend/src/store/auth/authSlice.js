@@ -1,17 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  user: {
-    "id": 2,
-    "name": "John Doe",
-    "email": "john@example.com",
-    "phone": "987-654-3210",
-    "status": "ACTIVE",
-    "role": "CUSTOMER"
-  },
+  user: null,
   isAuthenticated: true,
-  accessToken: "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huQGV4YW1wbGUuY29tIiwicm9sZXMiOiJDVVNUT01FUiIsInR5cGUiOiJhY2Nlc3MiLCJleHAiOjE3NDM1MDY5MDcsInVzZXJJZCI6MiwiaWF0IjoxNzQyNDI2OTA3fQ.tDS8Ety0TKUO69d4PyQ6BpXZGcnXRcZTngCUIYxpr8ecfZiDtj4Mi7F-v4xthHws_5SGgGr4BBI-MBmcDmu-cQ",
-  refreshToken: "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huQGV4YW1wbGUuY29tIiwidHlwZSI6InJlZnJlc2giLCJleHAiOjE3NDM1MDY5MDcsImlhdCI6MTc0MjQyNjkwN30.sMwzAEPx-WXJ0vwI3099nu6fz8vFG0I8cqfVCN-ypCdxr6LIBvYqyzeTzzmt25z0FEeZN8vIW-SJowx2m6P59A",
+  accessToken: null,
+  refreshToken: null,
   error: null,
   role: null,
   success: false,

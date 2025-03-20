@@ -72,8 +72,8 @@ button:focus-visible {
 }
 #root {
   margin: auto;
-  padding: 2rem;
   text-align: center;
+  @apply px-16;
 }
 
 #main {

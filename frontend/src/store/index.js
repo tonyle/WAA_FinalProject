@@ -7,7 +7,7 @@ const store = configureStore({
   reducer: {
     auth: authReducer,
     admin: adminReducer,
-    home: homeReducer,,
+    home: homeReducer,
     customer:customerReducer
   },
 });
