@@ -225,8 +225,25 @@ public class DataInitializer implements CommandLineRunner {
             offer.setStatus(OfferStatusEnum.NEW);
             offer.setProperty(property);
             offer.setUser(customer);
-
             offerRepository.save(offer);
+
+            Property property1 = propertyRepository.findByName("Suburban House");
+            Offer offer1 = new Offer();
+            offer1.setType(OfferTypeEnum.RENT);
+            offer1.setOfferPrice(1100);
+            offer1.setStatus(OfferStatusEnum.ACCEPTED);
+            offer1.setProperty(property1);
+            offer1.setUser(customer);
+            offerRepository.save(offer1);
+
+            Property property2 = propertyRepository.findByName("abc");
+            Offer offer2 = new Offer();
+            offer2.setType(OfferTypeEnum.RENT);
+            offer2.setOfferPrice(1100);
+            offer2.setStatus(OfferStatusEnum.REJECTED);
+            offer2.setProperty(property2);
+            offer2.setUser(customer);
+            offerRepository.save(offer2);
         }
     }
 
