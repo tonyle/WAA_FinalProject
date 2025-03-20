@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchPropertiesSuccess, fetchPropertiesFail } from '../../store/admin/adminSlice';
-import { getProperties } from '../../api/adminApi';
-import { PropertyTypes } from '../../constants/types';
+import { approveProperty, getProperties } from '../../api/adminApi';
+import { PropertyStatuses, PropertyTypes } from '../../constants/types';
 
 const PropertiesManagement = () => {
   const [tab, setTab] = useState(0);
@@ -23,7 +23,7 @@ const PropertiesManagement = () => {
   useEffect(() => {
     switch (tab) {
       case 1:
-        setParams({propertyType: PropertyTypes.RENT});
+        setParams({ propertyType: PropertyTypes.RENT });
         break;
       case 2:
         setParams({ propertyType: PropertyTypes.SELL });
@@ -48,12 +48,18 @@ const PropertiesManagement = () => {
     }
   }
 
-  const onHandleActiveAndDeactive = (id) => {
-    const updatedOwners = properties.map((item) =>
-      item.id === id ? { ...item, status: item.status === "New" ? "AVAILABLE" : "New" } : item
-    );
+  const onHandleActiveAndDeactive = async (id) => {
+    try {
+      const res = await approveProperty(id);
 
-    dispatch(fetchPropertiesSuccess({ data: updatedOwners }));
+      const updatedOwners = properties.map((item) =>
+        item.id === id ? res.data : item
+      );
+
+      dispatch(fetchPropertiesSuccess({ data: updatedOwners }));
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const handleSearchProperty = () => {
@@ -109,13 +115,13 @@ const PropertiesManagement = () => {
                       <td>{item.description}</td>
                       <td>{item.type}</td>
                       <td>{item.price}</td>
-                      <td><span className={`badge ${renderBadgeClass(item.status)}`}>{item.status}</span></td>
+                      <td><span className={`badge ${renderBadgeClass(item.status.toLowerCase())}`}>{item.status.toLowerCase()}</span></td>
                       <td>
                         <button
                           onClick={() => onHandleActiveAndDeactive(item.id)}
-                          className={`${item.status !== 'NEW' ? 'hidden' : ''} text-sky-600 bg-slate-100 font-bold text-sm px-2 cursor-pointer`}
+                          className={`${item.status == PropertyStatuses.NEW ? '' : 'hidden'} text-sky-600 bg-slate-100 font-bold text-sm px-2 cursor-pointer`}
                         >
-                          {item.status}
+                          Approve
                         </button>
                       </td>
                     </tr>
