@@ -14,10 +14,13 @@ import waa.miu.finalproject.entity.dto.output.OfferDto;
 import waa.miu.finalproject.entity.dto.output.PropertyDto;
 import waa.miu.finalproject.enums.OfferStatusEnum;
 import waa.miu.finalproject.enums.OfferTypeEnum;
+import waa.miu.finalproject.enums.PropertyStatusEnum;
 import waa.miu.finalproject.enums.PropertyTypeEnum;
 import waa.miu.finalproject.repository.OfferRepo;
 import waa.miu.finalproject.repository.PropertyRepo;
 import waa.miu.finalproject.service.OfferService;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -65,9 +68,12 @@ public class OfferServiceImpl implements OfferService {
     }
 
     @Override
-    public void setOfferStatus(long offerId, String status) {
+    public void setOfferStatus(long offerId, OfferStatusEnum status) {
         Offer offer = offerRepo.findById(offerId).orElseThrow(() -> new RuntimeException("Offer not found"));
-        offer.setStatus(OfferStatusEnum.valueOf(status));
+        offer.setStatus(status);
+        if (status == OfferStatusEnum.ACCEPTED) {
+            offer.getProperty().setStatus(PropertyStatusEnum.PENDING);
+        }
         offerRepo.save(offer);
     }
 
@@ -79,5 +85,17 @@ public class OfferServiceImpl implements OfferService {
     @Override
     public List<Offer> findByLocation(String location) {
         return offerRepo.findByLocation(location);
+    }
+
+    @Override
+    public List<Offer> findAllByOwnerIdWithFilter(Long ownerId,Long propertyId, String location, String submissionDate) {
+        List<Offer> offers = new ArrayList<>();
+        if (ownerId == null) {
+            offers = offerRepo.findOffersByFilters(propertyId, location, submissionDate);
+            System.out.println(propertyId);
+        } else {
+            offers = offerRepo.findOffersByOwnerIdWithFilters(ownerId, propertyId, location, submissionDate);
+        }
+        return offers;
     }
 }

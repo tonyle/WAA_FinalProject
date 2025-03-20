@@ -72,6 +72,11 @@ public class PropertyServiceImpl implements PropertyService {
     }
 
     @Override
+    public Property findPropertyById(long id) {
+        return propertyRepo.findById(id).orElseThrow(() -> new RuntimeException("Property not found"));
+    }
+
+    @Override
     public void createProperty(InputPropertyDto propertyDto) {
         Optional<User> userOptional = userRepo.findById(propertyDto.getOwnerId());
         if (userOptional.isEmpty()) {
@@ -132,5 +137,10 @@ public class PropertyServiceImpl implements PropertyService {
         propertyRepo.deleteById(id);
     }
 
-
+    @Override
+    public void updateStatus(long id, PropertyStatusEnum status) {
+        Property property = propertyRepo.findById(id).orElseThrow(() -> new RuntimeException("Property not found"));
+        property.setStatus(status);
+        propertyRepo.save(property);
+    }
 }
