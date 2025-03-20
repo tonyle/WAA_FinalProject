@@ -14,6 +14,7 @@ import waa.miu.finalproject.entity.dto.output.OfferDto;
 import waa.miu.finalproject.entity.dto.output.PropertyDto;
 import waa.miu.finalproject.enums.OfferStatusEnum;
 import waa.miu.finalproject.enums.OfferTypeEnum;
+import waa.miu.finalproject.enums.PropertyStatusEnum;
 import waa.miu.finalproject.enums.PropertyTypeEnum;
 import waa.miu.finalproject.repository.OfferRepo;
 import waa.miu.finalproject.repository.PropertyRepo;
@@ -38,7 +39,7 @@ public class OfferServiceImpl implements OfferService {
 
     @Override
     public List<OfferDto> findAll(long userId) {
-        List<Offer> offers =  offerRepo.findAllOfferByUserId(userId);
+        List<Offer> offers = offerRepo.findAllOfferByUserId(userId);
         return offers.stream().map(p -> modelMapper.map(p, OfferDto.class)).collect(Collectors.toList());
     }
 
@@ -49,7 +50,11 @@ public class OfferServiceImpl implements OfferService {
 
     @Override
     public void save(InputOfferDto inputOffer) {
-        Property property = propertyRepo.findById(inputOffer.getPropertyId()).orElseThrow(() -> new RuntimeException("Property not found"));
+        Property property = propertyRepo.findById(inputOffer.getPropertyId())
+                .orElseThrow(() -> new RuntimeException("Property not found"));
+        if (!property.getStatus().equals(PropertyStatusEnum.AVAILABLE) && !property.getStatus().equals(PropertyStatusEnum.PENDING)) {
+            throw new RuntimeException("Cannot place an offer on this property.");
+        }
         Offer offer = new Offer();
         offer.setOfferPrice(inputOffer.getOfferPrice());
         OfferTypeEnum offerType = property.getType() == PropertyTypeEnum.SELL ? OfferTypeEnum.BUY : OfferTypeEnum.RENT;
@@ -61,7 +66,7 @@ public class OfferServiceImpl implements OfferService {
 
     @Override
     public List<Offer> findByOwnerId(long ownerId) {
-        return  offerRepo.getOffersByOwnerId(ownerId);
+        return offerRepo.getOffersByOwnerId(ownerId);
     }
 
     @Override

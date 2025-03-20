@@ -2,6 +2,7 @@ package waa.miu.finalproject.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import waa.miu.finalproject.entity.Offer;
@@ -12,6 +13,7 @@ import waa.miu.finalproject.helper.JwtUtil;
 import waa.miu.finalproject.service.OfferService;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("api/v1/offers")
@@ -23,14 +25,15 @@ public class OfferController {
     private JwtUtil jwtUtil;
 
     @GetMapping()
-    public ResponseEntity<List<OfferDto>> getAllOffers(HttpServletRequest request) {
+    public ResponseEntity<?> getAllOffers(HttpServletRequest request) {
         String token = jwtUtil.extractTokenRequest(request);
         if (token != null) {
             TokenDto tokenDto = jwtUtil.getUserDtoFromClaims(token);
             long userId = tokenDto.getUserId();
             return ResponseEntity.ok(offerService.findAll(userId));
         } else {
-            throw new RuntimeException("Cannot get offers");
+            Map<String, String> errorResponse = Map.of("error", "You don't have permission to access this resource");
+            return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
         }
     }
 
@@ -51,7 +54,7 @@ public class OfferController {
 
     @PutMapping("/{id}")
     public void setOfferStatus(@RequestBody String status, @PathVariable("id") long offerId) {
-        offerService.setOfferStatus(offerId,status);
+        offerService.setOfferStatus(offerId, status);
 
     }
 
