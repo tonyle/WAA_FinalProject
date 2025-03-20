@@ -9,6 +9,8 @@ import org.springframework.stereotype.Component;
 import waa.miu.finalproject.entity.*;
 import waa.miu.finalproject.repository.*;
 import waa.miu.finalproject.enums.*;
+import waa.miu.finalproject.service.UserService;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -22,16 +24,18 @@ public class DataInitializer implements CommandLineRunner {
     private final OfferRepo offerRepository;
     private final FavouriteListRepo favouriteListRepository;
     private final PasswordEncoder passwordEncoder;
+    private final PhotoRepo photoRepository;
 
     public DataInitializer(UserRepo userRepository, RoleRepo roleRepository,
                            PropertyRepo propertyRepository, AddressRepo addressRepository,
-                           OfferRepo offerRepository, FavouriteListRepo favouriteListRepository) {
+                           OfferRepo offerRepository, FavouriteListRepo favouriteListRepository, PhotoRepo photoRepository) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.propertyRepository = propertyRepository;
         this.addressRepository = addressRepository;
         this.offerRepository = offerRepository;
         this.favouriteListRepository = favouriteListRepository;
+        this.photoRepository = photoRepository;
         this.passwordEncoder = new BCryptPasswordEncoder();
     }
 
@@ -41,10 +45,12 @@ public class DataInitializer implements CommandLineRunner {
     public void run(String... args) throws Exception {
         seedRoles();
         seedUsers();
+        seedPhoto();
         seedAddress();
         seedProperties();
         seedOffers();
         seedFavouriteLists();
+
     }
 
     private void seedRoles() {
@@ -121,12 +127,31 @@ public class DataInitializer implements CommandLineRunner {
             addressRepository.saveAll(List.of(address1, address2, address3));
         }
     }
+    private void seedPhoto() {
+        if (photoRepository.count() == 0) {
+
+            Photo photo1 = new Photo();
+            photo1.setPath("photo/download.jpeg");
+
+            Photo photo2 = new Photo();
+            photo2.setPath("photo/download1.jpeg");
+
+
+
+
+            photoRepository.saveAll(List.of(photo1, photo2));
+        }
+    }
+
     private void seedProperties() {
         if (propertyRepository.count() == 0) {
             Optional<User> owner = userRepository.findById(Long.valueOf(3));
 
             Address address1 = addressRepository.findByCity("Keosauqua");
             Address address2 = addressRepository.findByCity("FairField");
+
+            Photo photo1 = photoRepository.findById(1L).get();
+            Photo photo2 = photoRepository.findById(2L).get();
 
             Property property1 = new Property();
             property1.setName("Luxury Apartment");
@@ -142,6 +167,8 @@ public class DataInitializer implements CommandLineRunner {
             property1.setUser(owner.get());
             property1.setAddress(address1);
             property1.setHouseType("Apartment");
+            property1.setPhotos(List.of(photo1, photo2));
+
 
             Property property2 = new Property();
             property2.setName("Suburban House");
