@@ -1,9 +1,9 @@
 package waa.miu.finalproject.entity.dto.output;
 
 import lombok.Data;
+import waa.miu.finalproject.entity.Address;
 import waa.miu.finalproject.entity.Offer;
 import waa.miu.finalproject.entity.Photo;
-import waa.miu.finalproject.entity.User;
 import waa.miu.finalproject.enums.PropertyStatusEnum;
 import waa.miu.finalproject.enums.PropertyTypeEnum;
 
@@ -27,6 +27,7 @@ public class PropertyDetailDto {
     private String material;
     private String style;
     private List<Photo> photos;
-    private User user;
+    private UserDetailDto user;
     private List<Offer> offers;
+    private Address address;
 }

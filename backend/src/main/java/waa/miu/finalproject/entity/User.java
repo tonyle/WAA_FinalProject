@@ -29,7 +29,7 @@ public class User {
     private List<Role> roles;
 
     @OneToMany(fetch = FetchType.LAZY)
-    @JsonManagedReference
+//    @JsonManagedReference
     private List<Property> ownedProperties;
 
     @OneToMany(fetch = FetchType.LAZY)
@@ -41,4 +41,9 @@ public class User {
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn
     private List<Offer> offers;
+
+    public void addFavouriteList(FavouriteList favouriteList) {
+        favouriteList.setUser(this);
+        this.favouriteLists.add(favouriteList);
+    }
 }

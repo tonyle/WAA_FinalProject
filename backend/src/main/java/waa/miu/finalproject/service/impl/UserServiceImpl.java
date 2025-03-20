@@ -12,6 +12,8 @@ import waa.miu.finalproject.entity.User;
 import waa.miu.finalproject.entity.dto.PostDto;
 import waa.miu.finalproject.entity.dto.UserDto;
 import waa.miu.finalproject.entity.dto.output.PostNoAuthorDto;
+import waa.miu.finalproject.enums.OwnerStatusEnum;
+import waa.miu.finalproject.enums.RoleEnum;
 import waa.miu.finalproject.repository.UserRepo;
 import waa.miu.finalproject.service.UserService;
 
@@ -36,6 +38,11 @@ public class UserServiceImpl implements UserService {
         User u = userRepo.findById(id).orElseThrow(() -> new RuntimeException("User with id " + id + " not found"));
 
         return modelMapper.map(u, UserDto.class);
+    }
+
+    @Override
+    public User getById(long id) {
+        return userRepo.findById(id).orElseThrow(() -> new RuntimeException("User with id " + id + " not found"));
     }
 
     @Override
@@ -73,4 +80,31 @@ public class UserServiceImpl implements UserService {
     public void delete(long id) {
         entityManager.remove(userRepo.findById(id));
     }
+
+    @Override
+    public List<UserDto> getUsersHaveStatus(String status) {
+        try {
+            OwnerStatusEnum statusEnum = OwnerStatusEnum.valueOf(status.toUpperCase()); // Convert String to Enum
+            return userRepo.findByStatus(statusEnum)
+                    .stream()
+                    .map(user -> modelMapper.map(user, UserDto.class))
+                    .collect(Collectors.toList());
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException("Invalid status: " + status);
+        }
+    }
+
+    @Override
+    public void setStatus(long id, String status) {
+        userRepo.findById(id).ifPresent(user -> user.setStatus(OwnerStatusEnum.valueOf(status.toUpperCase())));
+    }
+
+    @Override
+    public List<UserDto> findAllFilterByStatusAndRoles(OwnerStatusEnum status, RoleEnum role) {
+
+//
+        List<User> users = userRepo.findAllFilterByStatusAndRoles(status,role);
+        return users.stream().map(user -> modelMapper.map(user, UserDto.class)).collect(Collectors.toList());
+    }
+
 }
