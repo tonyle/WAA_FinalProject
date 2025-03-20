@@ -32,7 +32,7 @@ public class Property {
     String style;
 
     @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn
+    @JoinColumn(name="propertyId")
     private List<Photo> photos;
 
     @OneToOne(fetch = FetchType.EAGER)
