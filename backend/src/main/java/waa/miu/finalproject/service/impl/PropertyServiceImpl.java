@@ -5,7 +5,9 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import waa.miu.finalproject.entity.*;
 
 import waa.miu.finalproject.entity.dto.input.InputPropertyDto;
@@ -14,13 +16,21 @@ import waa.miu.finalproject.entity.dto.output.PropertyDto;
 import waa.miu.finalproject.enums.PropertyTypeEnum;
 import waa.miu.finalproject.enums.PropertyStatusEnum;
 import waa.miu.finalproject.repository.AddressRepo;
+import waa.miu.finalproject.repository.PhotoRepo;
 import waa.miu.finalproject.repository.PropertyRepo;
 import waa.miu.finalproject.repository.UserRepo;
 import waa.miu.finalproject.service.PropertyService;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -39,6 +49,11 @@ public class PropertyServiceImpl implements PropertyService {
     private UserRepo userRepo;
     @Autowired
     private AddressRepo addressRepo;
+
+    @Value("${file.upload-dir}")
+    private String uploadDir;
+    @Autowired
+    private PhotoRepo photoRepo;
 
     @Override
     public List<PropertyDto> findAll() {
@@ -145,4 +160,37 @@ public class PropertyServiceImpl implements PropertyService {
         property.setStatus(status);
         propertyRepo.save(property);
     }
+
+    @Override
+    public List<String> uploadPhotos(Long propertyId, List<MultipartFile> files) {
+        Property property = propertyRepo.findById(propertyId)
+                .orElseThrow(() -> new RuntimeException("Property not found"));
+
+        List<String> filePaths = new ArrayList<>();
+        String propertyUploadDir = uploadDir + "/properties/" + propertyId;
+        File dir = new File(propertyUploadDir);
+        if (!dir.exists()) dir.mkdirs();
+
+        for (MultipartFile file : files) {
+            try {
+                String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
+                Path filePath = Paths.get(propertyUploadDir, fileName);
+                Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+
+                // Save to DB
+                Photo photo = new Photo();
+                photo.setPath("/uploads/properties/" + propertyId + "/" + fileName);
+                photoRepo.save(photo);
+
+                property.getPhotos().add(photo);
+                filePaths.add(photo.getPath());
+            } catch (IOException e) {
+                throw new RuntimeException("File upload failed: " + e.getMessage());
+            }
+        }
+
+        propertyRepo.save(property);
+        return filePaths;
+    }
+
 }
