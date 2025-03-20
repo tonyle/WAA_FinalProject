@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchPropertiesSuccess } from "../store/hompage/homeSlice";
 import PropertyCard from "./Common/PropertyCard";
 import { getPropertiesWithoutAuth } from "../api/commonApi";
+import Banner from "./Common/Banner";
+import { disabledStatuses } from "./RentPage";
 
 const Homepage = () => {
     const { properties } = useSelector((state) => state.home);
@@ -17,7 +19,7 @@ const Homepage = () => {
     const fetchData = async () => {
         try {
             const res = await getPropertiesWithoutAuth({});
-            dispatch(fetchPropertiesSuccess({ data: res.data }));
+            dispatch(fetchPropertiesSuccess({ data: res.data.filter((item) => !disabledStatuses.includes(item.status)) }));
             setIsLoading(false);
         } catch (err) {
             console.log(err);
@@ -27,16 +29,7 @@ const Homepage = () => {
     return (
         <div className="w-full flex flex-col gap-10">
             {/* banner */}
-            <div className="banner h-90">
-                <h1 className="font-sans">Group <span className="font-mono">4</span></h1>
-                <ul className="members">
-                    <li>Xuan Huong Le</li>
-                    <li>Quang Nhien Luu</li>
-                    <li>Devesh Mittal</li>
-                    <li>Gantogtokh Oyundalai</li>
-                    <li>Thi Thanh Sen Doan</li>
-                </ul>
-            </div>
+            <Banner />
 
             {/* list properties */}
             <h2 className="text-center text-3xl font-sans font-semibold mt-10">All Properties</h2>

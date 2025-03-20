@@ -1,7 +1,7 @@
 // owner 
 import OwnerDashboard from './components/Owner/OwnerDashboard.jsx';
 import PropertyManagement from './components/Owner/PropertyManagement.tsx';
-import Offers from './components/Owner/Offers.tsx';
+import Offers from './components/Owner/Offers.jsx';
 import Messages from './components/Owner/Messages.tsx';
 import { Navigate, Route, Routes } from 'react-router'
 import AuthLayout from './containers/AuthLayout'
@@ -31,6 +31,7 @@ import UserManagement from './components/Admin/UserManagement.jsx';
 import RentPage from './components/RentPage.jsx';
 import SellPage from './components/SellPage.jsx';
 import PropertyDetailsPage from './components/PropertyDetailsPage.jsx';
+import FilterPropertiesPage from './components/FilterPropertiesPage.jsx';
 
 function App() {
   return (
@@ -48,6 +49,7 @@ function App() {
         <Route index element={<Homepage />} />
         <Route path='rent' element={<RentPage />} />
         <Route path='sell' element={<SellPage />} />
+        <Route path='filter' element={<FilterPropertiesPage />} />
         <Route path='property/:id' element={<PropertyDetailsPage />} />
       </Route>
 
@@ -70,7 +72,6 @@ function App() {
       <Route path="/owner" element={<ProtectedRoute allowedRoles={[UserRole.OWNER]} />}>
         <Route element={<OwnerLayout />}>
           <Route index element={<OwnerDashboard />} />
-
           <Route path="property-management" element={<PropertyManagement />} />
           <Route path="offers" element={<Offers />} />
           <Route path="messages" element={<Messages />} />

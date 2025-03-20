@@ -4,7 +4,10 @@ import { getProperties } from "../api/adminApi";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchPropertiesSuccess } from "../store/hompage/homeSlice";
 import PropertyCard from "./Common/PropertyCard";
-import { PropertyTypes } from "../constants/types";
+import { PropertyStatuses, PropertyTypes } from "../constants/types";
+import Banner from "./Common/Banner";
+
+export const disabledStatuses = [PropertyStatuses.NEW, PropertyStatuses.DEACTIVATED];
 
 const RentPage = () => {
     const { properties } = useSelector((state) => state.home);
@@ -18,7 +21,7 @@ const RentPage = () => {
     const fetchData = async () => {
         try {
             const res = await getProperties({ propertyType: PropertyTypes.RENT });
-            dispatch(fetchPropertiesSuccess({ data: res.data }));
+            dispatch(fetchPropertiesSuccess({ data: res.data.filter((item) => !disabledStatuses.includes(item.status)) }));
             setIsLoading(false);
         } catch (err) {
             console.log(err);
@@ -28,16 +31,7 @@ const RentPage = () => {
     return (
         <div className="w-full flex flex-col gap-10">
             {/* banner */}
-            <div className="banner h-90">
-                <h1 className="font-sans">Group <span className="font-mono">4</span></h1>
-                <ul className="members">
-                    <li>Xuan Huong Le</li>
-                    <li>Quang Nhien Luu</li>
-                    <li>Devesh Mittal</li>
-                    <li>Gantogtokh Oyundalai</li>
-                    <li>Thi Thanh Sen Doan</li>
-                </ul>
-            </div>
+            <Banner />
 
             {/* list properties */}
             <h2 className="text-center text-3xl font-sans font-semibold mt-10">Rent Properties</h2>

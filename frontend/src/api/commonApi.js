@@ -1,7 +1,7 @@
 import axios from "axios";
 import api from ".";
 
-const url =
+export const url =
   "https://finalprojectbackend-cyhghxg2hvemcfg2.canadacentral-01.azurewebsites.net/api/v1";
 
 export const getPropertiesWithoutAuth = async (params) => {
