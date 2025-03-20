@@ -1,5 +1,6 @@
 package waa.miu.finalproject.service;
 
+import org.springframework.web.multipart.MultipartFile;
 import waa.miu.finalproject.entity.Offer;
 
 import waa.miu.finalproject.entity.Property;
@@ -32,4 +33,6 @@ public interface PropertyService {
 
 
     void updateStatus(long id, PropertyStatusEnum status);
+
+    public List<String> uploadPhotos(Long propertyId, List<MultipartFile> files);
 }
