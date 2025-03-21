@@ -1,6 +1,6 @@
 // owner 
 import OwnerDashboard from './components/Owner/OwnerDashboard.jsx';
-import PropertyManagement from './components/Owner/PropertyManagement.tsx';
+import PropertyManagement from './components/Owner/PropertyManagement.jsx';
 import Offers from './components/Owner/Offers.jsx';
 import Messages from './components/Owner/Messages.tsx';
 import { Navigate, Route, Routes } from 'react-router'

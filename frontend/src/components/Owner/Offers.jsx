@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch} from "react-redux";
 import { fetchOffersSuccess } from "../../store/owner/ownerSlice";
 import { getOffers } from "../../api/adminApi";
+import { updateOffer } from "../../api/ownerApi";
 
 const mockOffers = [
   { id: 1, property: "Luxury Apartment", amount: "$500,000", status: "Pending" },
@@ -9,7 +10,6 @@ const mockOffers = [
 ];
 
 const Offers = () => {
-// const [offers, setOffers] = useState([]);
 const {offers} = useSelector((state) => state.owner);
 const dispatch = useDispatch();
 
@@ -25,12 +25,21 @@ const fetchData = async () => {
     }
   }
 
-  const handleAccept = (id) => {
-    setOffers(offers.map((offer) => (offer.id === id ? { ...offer, status: "Accepted" } : offer)));
+  const handleAccept = async (id) => {
+    //setOffers(offers.map((offer) => (offer.id === id ? { ...offer, status: "Accepted" } : offer)));
+    const res = await updateOffer( id, {status:"ACCEPTED"})
+    console.log("Devesh")
+    console.log(res)
+    fetchData();
   };
 
-  const handleReject = (id) => {
-    setOffers(offers.map((offer) => (offer.id === id ? { ...offer, status: "Rejected" } : offer)));
+  const handleReject = async(id) => {
+    //setOffers(offers.map((offer) => (offer.id === id ? { ...offer, status: "Rejected" } : offer)));
+    const res = await updateOffer( id, {status:"REJECTED"})
+    console.log("Devesh")
+    console.log(res)
+        fetchData();
+
   };
 
   return (
@@ -52,11 +61,11 @@ const fetchData = async () => {
             <tbody>
               {offers.map((offer) => (
                 <tr key={offer.id} className="border">
-                  <td className="border px-4 py-2">{offer.property}</td>
-                  <td className="border px-4 py-2">{offer.amount}</td>
+                  <td className="border px-4 py-2">{offer.property.name}</td>
+                  <td className="border px-4 py-2">{offer.offerPrice}</td>
                   <td className="border px-4 py-2">{offer.status}</td>
                   <td className="border px-4 py-2">
-                    {offer.status === "Pending" && (
+                    {offer.status === "NEW" && (
                       <>
                         <button onClick={() => handleAccept(offer.id)} className="bg-green-500 text-white px-3 py-1 rounded mr-2">Accept</button>
                         <button onClick={() => handleReject(offer.id)} className="bg-red-500 text-white px-3 py-1 rounded">Reject</button>
