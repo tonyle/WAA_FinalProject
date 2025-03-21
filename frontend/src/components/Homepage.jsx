@@ -40,6 +40,7 @@ const Homepage = () => {
 
     return (
         <div className="w-full flex flex-col gap-10 mt-34">
+            <Link to="/owner/property/13">Edit</Link>
             <FilterComponent filters={filters} setFilters={setFilters} />
             <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-8">
                 {!isLoading && properties.length > 0 && properties.map((item, key) => (

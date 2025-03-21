@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { getProperty, uploadPhotos } from "../../api/propertyApi";
 
 const UploadPhotos = () => {
@@ -9,9 +9,9 @@ const UploadPhotos = () => {
     const [success, setSuccess] = useState(false);
     const { id } = useParams();
     const [data, setData] = useState({});
+    const nagative = useNavigate();
 
     useEffect(() => {
-        console.log(id);
         if (id) {
             getPropertyDetail(id);
         }
@@ -20,7 +20,6 @@ const UploadPhotos = () => {
     const getPropertyDetail = async (id) => {
         try {
             const res = await getProperty(id);
-            console.log(res.data);
             const houseData = res.data;
             setData(houseData);
         } catch (err) {
@@ -49,6 +48,7 @@ const UploadPhotos = () => {
             setSuccess(false);
             await uploadPhotos(id, formData);
             setSuccess(true);
+            nagative("/owner");
         } catch (err) {
             setError("Failed to upload photos.");
             console.error(err);

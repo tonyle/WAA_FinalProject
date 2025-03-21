@@ -27,7 +27,7 @@ const OfferManagement = () => {
 
   return (
     <div className="flex flex-col gap-4 w-full">
-      <h2 className="text-2xl font-medium text-left">Customers</h2>
+      <h2 className="text-2xl font-medium text-left">Offers</h2>
 
       {/* table */}
       <div className='flex flex-row gap-2 w-full overflow-x-auto'>

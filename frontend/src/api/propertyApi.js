@@ -29,6 +29,7 @@ export const putProperty = async (id, data) => {
 
 export const uploadPhotos = async (id, data) => {
   try {
+    console.log(data);
     const res = await api.post(`/properties/${id}/upload-photos`, data, {
       headers: {
         "Content-Type": "multipart/form-data",

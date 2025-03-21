@@ -16,7 +16,6 @@ const AddProperty = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        console.log(id);
         if (id) {
             getPropertyDetail(id);
         }
@@ -25,7 +24,6 @@ const AddProperty = () => {
     const getPropertyDetail = async (id) => {
         try {
             const res = await getProperty(id);
-            console.log(res);
             const houseData = res.data;
             setFormData({
                 name: houseData.name,
@@ -57,7 +55,7 @@ const AddProperty = () => {
         bath: "",
         sqft: "",
         yearBuilt: "",
-        houseType: "",
+        // houseType: "",
         style: "",
         city: "",
         postalCode: "",
@@ -77,7 +75,7 @@ const AddProperty = () => {
             try {
                 const res = await putProperty(id, formData);
                 dispatch(addPropertySuccess({ data: res.data }));
-                navigate(`property/${res.data.id}/upload-images`);
+                navigate(`upload-images`);
             } catch (err) {
                 console.log(err);
             }
@@ -85,7 +83,7 @@ const AddProperty = () => {
             try {
                 const res = await addProperty(formData);
                 dispatch(addPropertySuccess({ data: res.data }));
-                navigate(`property/${res.data.id}/upload-images`);
+                navigate(`upload-images`);
             } catch (err) {
                 console.log(err);
             }
@@ -119,11 +117,11 @@ const AddProperty = () => {
                     Description
                     <input type="text" name="description" value={formData.description} onChange={handleChange} className="p-2 border rounded w-full" required />
                 </label>
-
+{/* 
                 <label className="text-left">
                     House Type
                     <input type="text" name="houseType" value={formData.houseType} onChange={handleChange} className="p-2 border rounded w-full" required />
-                </label>
+                </label> */}
 
                 <div className="grid grid-cols-2 gap-4">
                     <label className="text-left">
