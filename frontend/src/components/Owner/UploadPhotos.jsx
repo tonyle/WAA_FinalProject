@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { getProperty, uploadPhotos } from "../../api/propertyApi";
 
 const UploadPhotos = () => {
@@ -9,9 +9,9 @@ const UploadPhotos = () => {
     const [success, setSuccess] = useState(false);
     const { id } = useParams();
     const [data, setData] = useState({});
+    const nagative = useNavigate();
 
     useEffect(() => {
-        console.log(id);
         if (id) {
             getPropertyDetail(id);
         }
@@ -20,7 +20,6 @@ const UploadPhotos = () => {
     const getPropertyDetail = async (id) => {
         try {
             const res = await getProperty(id);
-            console.log(res.data);
             const houseData = res.data;
             setData(houseData);
         } catch (err) {
@@ -47,8 +46,11 @@ const UploadPhotos = () => {
             setUploading(true);
             setError(null);
             setSuccess(false);
-            await uploadPhotos(id, formData);
+            const res = await uploadPhotos(id, formData);
+            alert(res.data.message);
+
             setSuccess(true);
+            nagative("/owner");
         } catch (err) {
             setError("Failed to upload photos.");
             console.error(err);
@@ -85,7 +87,7 @@ const UploadPhotos = () => {
                     <div className="grid grid-cols-3 gap-4">
                         {data.photos.map((photo, index) => (
                             <div key={index} className="border p-2">
-                                <img src={photo} alt={`Property photo ${index + 1}`} className="w-full h-auto" />
+                                <img src={photo.path} alt={`Property photo ${index + 1}`} className="w-full h-auto" />
                             </div>
                         ))}
                     </div>

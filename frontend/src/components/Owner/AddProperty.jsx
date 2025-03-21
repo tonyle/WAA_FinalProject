@@ -16,7 +16,6 @@ const AddProperty = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        console.log(id);
         if (id) {
             getPropertyDetail(id);
         }
@@ -25,7 +24,6 @@ const AddProperty = () => {
     const getPropertyDetail = async (id) => {
         try {
             const res = await getProperty(id);
-            console.log(res);
             const houseData = res.data;
             setFormData({
                 name: houseData.name,
@@ -57,7 +55,7 @@ const AddProperty = () => {
         bath: "",
         sqft: "",
         yearBuilt: "",
-        houseType: "",
+        // houseType: "",
         style: "",
         city: "",
         postalCode: "",
@@ -77,7 +75,7 @@ const AddProperty = () => {
             try {
                 const res = await putProperty(id, formData);
                 dispatch(addPropertySuccess({ data: res.data }));
-                navigate(`property/${res.data.id}/upload-images`);
+                navigate(`upload-images`);
             } catch (err) {
                 console.log(err);
             }
@@ -85,7 +83,7 @@ const AddProperty = () => {
             try {
                 const res = await addProperty(formData);
                 dispatch(addPropertySuccess({ data: res.data }));
-                navigate(`property/${res.data.id}/upload-images`);
+                navigate(`upload-images`);
             } catch (err) {
                 console.log(err);
             }
@@ -94,7 +92,7 @@ const AddProperty = () => {
 
     return (
         <div className="lg:max-w-2xl max-w-lg mx-auto p-6 bg-white shadow-lg rounded-lg mt-34 my-10">
-            <h2 className="text-xl font-bold mb-4">Add Property</h2>
+            <h2 className="text-xl font-bold mb-4"><span>{id ? 'Edit' : 'Add'}</span> Property</h2>
 
             {error && <p className="text-red-500">{error}</p>}
             {loading && <p className="text-blue-500">Adding property...</p>}
@@ -119,11 +117,11 @@ const AddProperty = () => {
                     Description
                     <input type="text" name="description" value={formData.description} onChange={handleChange} className="p-2 border rounded w-full" required />
                 </label>
-
+{/* 
                 <label className="text-left">
                     House Type
                     <input type="text" name="houseType" value={formData.houseType} onChange={handleChange} className="p-2 border rounded w-full" required />
-                </label>
+                </label> */}
 
                 <div className="grid grid-cols-2 gap-4">
                     <label className="text-left">
@@ -179,7 +177,7 @@ const AddProperty = () => {
                 </label>
 
                 <button type="submit" className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 w-full" disabled={loading}>
-                    {loading ? "Adding..." : "Add Property"}
+                    {loading ? "Loading" : (id ? "Edit Property" : "Add Property")}
                 </button>
             </form>
         </div>

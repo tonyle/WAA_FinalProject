@@ -21,7 +21,7 @@ const PropertyCard = (props) => {
                     <ul className="text-sm text-gray-600 flex flex-row flex-wrap gap-4 justify-center">
                         <li className="inline-flex items-center"><FaBath /> : {bath}</li>
                         <li className="inline-flex items-center"><FaBed /> : {bed}</li>
-                        <li className="inline-flex items-center"><FaHouse /> : {houseType}</li>
+                        {/* <li className="inline-flex items-center"><FaHouse /> : {houseType}</li> */}
                         <li className="inline-flex items-center"><FaRulerCombined className="size-3" /> : {sqft}</li>
                     </ul>
                     <p className="text-xl font-semibold text-sky-800 mt-5">${price}</p>

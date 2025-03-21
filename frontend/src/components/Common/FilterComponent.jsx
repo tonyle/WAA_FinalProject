@@ -33,8 +33,7 @@ const FilterComponent = ({ filters, setFilters }) => {
     };
 
     return (
-        <div className="p-6 bg-white shadow-md rounded-lg flex flex-col gap-4 bg-gradient-to-b from-sky-400 via-sky-200 to-slate-100">
-            <h2 className="text-xl font-normal text-gray-800">Filter Properties</h2>
+        <div className="p-10 bg-white shadow-md rounded-lg flex flex-col gap-4 bg-gradient-to-b from-sky-400 via-sky-200 to-slate-100">
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
                 <select name="propertyType" value={localFilters.propertyType} onChange={handleChange} className="p-3 border border-slate-100 rounded bg-slate-50">
                     <option value="">Property Type</option>

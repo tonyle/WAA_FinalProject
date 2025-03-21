@@ -6,7 +6,6 @@ import PropertyCard from "./Common/PropertyCard";
 import { getPropertiesWithoutAuth } from "../api/commonApi";
 import { disabledStatuses } from "./RentPage";
 import FilterComponent from "./Common/FilterComponent";
-import { Link } from "react-router";
 
 const Homepage = () => {
     const { properties } = useSelector((state) => state.home);
