@@ -46,7 +46,9 @@ const UploadPhotos = () => {
             setUploading(true);
             setError(null);
             setSuccess(false);
-            await uploadPhotos(id, formData);
+            const res = await uploadPhotos(id, formData);
+            alert(res.data.message);
+
             setSuccess(true);
             nagative("/owner");
         } catch (err) {
@@ -85,7 +87,7 @@ const UploadPhotos = () => {
                     <div className="grid grid-cols-3 gap-4">
                         {data.photos.map((photo, index) => (
                             <div key={index} className="border p-2">
-                                <img src={photo} alt={`Property photo ${index + 1}`} className="w-full h-auto" />
+                                <img src={photo.path} alt={`Property photo ${index + 1}`} className="w-full h-auto" />
                             </div>
                         ))}
                     </div>

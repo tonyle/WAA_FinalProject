@@ -27,6 +27,8 @@ const ResetPassword = () => {
         try {
             const res = await resetPassword({ email: user.email, oldPassword , newPassword});
             dispatch(logout());
+
+            alert("Reset Password successfully");
             navigate("/auth/login");
         } catch (err) {
             console.log(err);

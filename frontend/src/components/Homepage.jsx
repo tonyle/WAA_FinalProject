@@ -6,7 +6,6 @@ import PropertyCard from "./Common/PropertyCard";
 import { getPropertiesWithoutAuth } from "../api/commonApi";
 import { disabledStatuses } from "./RentPage";
 import FilterComponent from "./Common/FilterComponent";
-import { Link } from "react-router";
 
 const Homepage = () => {
     const { properties } = useSelector((state) => state.home);
@@ -40,7 +39,6 @@ const Homepage = () => {
 
     return (
         <div className="w-full flex flex-col gap-10 mt-34">
-            <Link to="/owner/property/13">Edit</Link>
             <FilterComponent filters={filters} setFilters={setFilters} />
             <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-8">
                 {!isLoading && properties.length > 0 && properties.map((item, key) => (

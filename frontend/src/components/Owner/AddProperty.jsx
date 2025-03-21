@@ -92,7 +92,7 @@ const AddProperty = () => {
 
     return (
         <div className="lg:max-w-2xl max-w-lg mx-auto p-6 bg-white shadow-lg rounded-lg mt-34 my-10">
-            <h2 className="text-xl font-bold mb-4">Add Property</h2>
+            <h2 className="text-xl font-bold mb-4"><span>{id ? 'Edit' : 'Add'}</span> Property</h2>
 
             {error && <p className="text-red-500">{error}</p>}
             {loading && <p className="text-blue-500">Adding property...</p>}
@@ -177,7 +177,7 @@ const AddProperty = () => {
                 </label>
 
                 <button type="submit" className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 w-full" disabled={loading}>
-                    {loading ? "Adding..." : "Add Property"}
+                    {loading ? "Loading" : (id ? "Edit Property" : "Add Property")}
                 </button>
             </form>
         </div>
