@@ -11,7 +11,6 @@ export const UserStatus = {
 
 export const PropertyStatuses = {
   NEW: "NEW",
-  ACTIVE: "ACTIVE",
   DEACTIVATED: "DEACTIVATED",
   AVAILABLE: "AVAILABLE",
   PENDING: "PENDING",

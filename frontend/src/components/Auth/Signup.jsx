@@ -11,7 +11,7 @@ const Signup = () => {
     const dispatch = useDispatch();
     const refForm = useRef();
     const roles = [
-        UserRole.ADMIN, UserRole.OWNER, UserRole.CUSTOMER
+        UserRole.OWNER, UserRole.CUSTOMER
     ]
 
     const handleSubmit = async (e) => {
@@ -31,6 +31,7 @@ const Signup = () => {
         try {
             const res = await signup({email, name, phone, password, role});
             dispatch(signupUser(res.data));
+            alert("Signup successfully");
         } catch (err) {
             console.log(err);
         }

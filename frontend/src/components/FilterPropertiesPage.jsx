@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
-import "../styles/Homepage.css";
 import { useDispatch, useSelector } from "react-redux";
+import { getPropertiesWithoutAuth } from "../api/commonApi";
 import { fetchPropertiesSuccess } from "../store/hompage/homeSlice";
 import PropertyCard from "./Common/PropertyCard";
-import { getPropertiesWithoutAuth } from "../api/commonApi";
-import { disabledStatuses } from "./RentPage";
 import FilterComponent from "./Common/FilterComponent";
+import { disabledStatuses } from "./RentPage";
 
-const Homepage = () => {
+const FilterPropertiesPage = () => {
     const { properties } = useSelector((state) => state.home);
     const dispatch = useDispatch();
     const [isLoading, setIsLoading] = useState(true);
@@ -49,4 +48,4 @@ const Homepage = () => {
     );
 }
 
-export default Homepage;
+export default FilterPropertiesPage;

@@ -1,4 +1,6 @@
+import axios from "axios";
 import api from "../api";
+import { url } from "./commonApi";
 
 export const loginUser = async (credentials) => {
   try {
@@ -33,3 +35,12 @@ export const logoutUser = async () => {
   await api.post("/logout", { token: refreshToken });
   localStorage.removeItem("refreshToken");
 };
+
+export const resetPassword = async (data) => {
+  try {
+    const response = await axios.post(url + "/auth/resetpassword", data);
+    return response;
+  } catch (err) {
+    throw err;
+  }
+}
