@@ -21,7 +21,7 @@ const CustomerDashboard = () => {
     try {
       const res = await favs();
       dispatch(fetchFavSuccess({ data: res.data }));
-      console.log(favorities)
+    
     } catch (err) {
       dispatch(fetchFavFail({ err }));
       console.log(err);
@@ -36,7 +36,7 @@ const CustomerDashboard = () => {
     if (filters.priceFrom) queryParams.priceFrom = filters.priceFrom;
     if (filters.priceTo) queryParams.priceTo = filters.priceTo;
     
-    // console.log(queryParams)
+    
     try {
       const res = await getProperties(queryParams)
       dispatch(fetchPropertiesSuccess({data:res.data}));
@@ -62,14 +62,13 @@ const CustomerDashboard = () => {
         const res = await cancelProp(favorities[0].id,propertyId)  
       }else{
 
-          const res = await addProp(favorities[0].id,propertyId)
+        const res = await addProp(favorities[0].id,propertyId)
         
           
         
       }
       setRefresh(!refresh)
     }else{
-      
         await addFav();
         await fetchData()
         const updatedFavorities = store.getState().customer.favorities; // Get the latest Redux state
