@@ -30,7 +30,7 @@ export const ownerSlice = createSlice({
     },
     fetchPropertyDetailsSuccess: (state, actions) => {
         state.propertyDetails = actions.payload.data;
-    }
+    }, 
   },
 });
 

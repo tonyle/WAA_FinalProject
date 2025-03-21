@@ -3,7 +3,7 @@ import { Navigate, Outlet } from "react-router-dom";
 import { useEffect } from "react";
 import { login } from "../store/auth/authSlice";
 
-const ProtectedRoute = ({ allowedRoles }) => {
+const ProtectedRoute = ({ children, allowedRoles }) => {
     const { isAuthenticated, role, user } = useSelector((state) => state.auth);
     const dispatch = useDispatch();
 

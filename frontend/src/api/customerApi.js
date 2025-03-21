@@ -40,7 +40,7 @@ export const addFav = async (params) => {
   };
 export const offerProperty = async (body) => {
   try {
-    console.log(body)
+    
     const response = await api.post("/offers", body);
     return response;
   } catch (err) {
@@ -78,7 +78,7 @@ export const cancelOffer = async (id) => {
   };
   export const getProfDetail = async (id) => {
     try {
-    //   console.log(params)
+    
       const response = await api.get(`/properties/${id}`);
       return response;
     } catch (err) {

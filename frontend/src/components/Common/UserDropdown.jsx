@@ -25,6 +25,7 @@ const UserDropdown = () => {
                         <Link to="/owner"><span className="block px-4 py-2 text-sky-600 hover:bg-gray-100">
                             Dashboard</span></Link>
                         <Link to="/owner/property-management"><span className="block px-4 py-2 text-sky-600 hover:bg-gray-100">Manage Properties</span></Link>
+                        <Link to="/owner/create-property"><span className="block px-4 py-2 text-sky-600 hover:bg-gray-100">Create Property</span></Link>
                         <Link to="/owner/offers"><span className="block px-4 py-2 text-sky-600 hover:bg-gray-100">View Offers</span></Link>
                         <Link to="/owner/messages"><span className="block px-4 py-2 text-sky-600 hover:bg-gray-100">Messages</span></Link>
                     </>
