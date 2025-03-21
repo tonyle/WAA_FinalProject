@@ -31,6 +31,7 @@ const Signup = () => {
         try {
             const res = await signup({email, name, phone, password, role});
             dispatch(signupUser(res.data));
+            alert("Signup successfully");
         } catch (err) {
             console.log(err);
         }

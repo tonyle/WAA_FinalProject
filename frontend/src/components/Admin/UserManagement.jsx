@@ -66,7 +66,7 @@ const UserManagement = () => {
 
   return (
     <div className="flex flex-col gap-4 w-full">
-      <h2 className="text-2xl font-medium text-left">Propeties</h2>
+      <h2 className="text-2xl font-medium text-left">Users</h2>
 
       {/* tabs */}
       <div className='flex flex-row gap-0 items-center justify-start border-b border-gray-200 tabs'>

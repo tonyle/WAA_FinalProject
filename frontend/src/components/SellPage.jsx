@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import "../styles/Homepage.css";
-import { getProperties } from "../api/adminApi";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchPropertiesSuccess } from "../store/hompage/homeSlice";
 import PropertyCard from "./Common/PropertyCard";
 import { PropertyTypes } from "../constants/types";
 import Banner from "./Common/Banner";
 import { disabledStatuses } from "./RentPage";
+import { getPropertiesWithoutAuth } from "../api/commonApi";
 
 const SellPage = () => {
     const { properties } = useSelector((state) => state.home);
@@ -19,7 +19,7 @@ const SellPage = () => {
 
     const fetchData = async () => {
         try {
-            const res = await getProperties({ propertyType: PropertyTypes.SELL });
+            const res = await getPropertiesWithoutAuth({ propertyType: PropertyTypes.SELL });
             dispatch(fetchPropertiesSuccess({ data: res.data.filter((item) => !disabledStatuses.includes(item.status)) }));
             setIsLoading(false);
         } catch (err) {
