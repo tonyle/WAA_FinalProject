@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { Link } from "react-router";
+import { useEffect } from "react";
+import { Link, useNavigate } from "react-router";
+import { fetchPropSuccess } from "../../store/customer/customerSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { getProperties } from "../../api/adminApi";
+import { fetchPropertiesFail, fetchPropertiesSuccess } from "../../store/owner/ownerSlice";
+import { deleteProperty } from "../../api/ownerApi";
 
 const mockProperties = [
   { id: 1, name: "Luxury Apartment", status: "Available" },
@@ -7,15 +13,49 @@ const mockProperties = [
   { id: 3, name: "Downtown Condo", status: "Contingent" }
 ];
 
-const PropertyManagement = () => {
-  const [properties, setProperties] = useState(mockProperties);
 
-  const handleDelete = (id, status) => {
-    if (status === "Pending" || status === "Contingent") {
+
+const PropertyManagement = () => {
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const [refresh, setRefresh] = useState(false); 
+  const { properties } = useSelector((state) => state.owner);
+
+
+  useEffect(() => {
+    fetchData({});
+  }, [refresh]);
+
+  const fetchData = async (params) => {
+    try {
+      const response = await getProperties(params);
+      dispatch(fetchPropertiesSuccess({ data: response.data }));
+    } catch (err) {
+      console.log(err);
+      dispatch(fetchPropertiesFail("Can not fetch data"));
+    }
+  }
+
+
+  //const [properties, setProperties] = useState(mockProperties);
+
+  const handleDelete = async (id, status) => {
+    if (status === "PENDING" || status === "Contingent") {
       alert("You cannot delete a property that is pending or contingent.");
       return;
     }
-    setProperties(properties.filter((property) => property.id !== id));
+    try{
+      const res = await deleteProperty(id);
+      console.log(res)
+      //dispatch(fetchPropertiesSuccess)
+    } catch(err){
+      //dispatch()
+    }
+    
+    fetchData({});
+    //setProperties(properties.filter((property) => property.id !== id));
   };
 
   return (
@@ -37,7 +77,10 @@ const PropertyManagement = () => {
                 <td className="border px-4 py-2">{property.name}</td>
                 <td className="border px-4 py-2">{property.status}</td>
                 <td className="border px-4 py-2">
-                  <span className="bg-gray-500 text-white px-3 py-1 rounded mr-2">Edit</span>
+                  
+                  <button className="bg-gray-500 text-white px-3 py-1 rounded mr-2" onClick={() => navigate(`/owner/property/${property.id}`)}>
+  Edit
+</button>
                   <button onClick={() => handleDelete(property.id, property.status)} className="bg-red-500 text-white px-3 py-1 rounded">
                     Delete
                   </button>

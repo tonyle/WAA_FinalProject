@@ -10,7 +10,6 @@ const mockOffers = [
 ];
 
 const Offers = () => {
-// const [offers, setOffers] = useState([]);
 const {offers} = useSelector((state) => state.owner);
 const dispatch = useDispatch();
 
@@ -27,17 +26,20 @@ const fetchData = async () => {
   }
 
   const handleAccept = async (id) => {
-    setOffers(offers.map((offer) => (offer.id === id ? { ...offer, status: "Accepted" } : offer)));
+    //setOffers(offers.map((offer) => (offer.id === id ? { ...offer, status: "Accepted" } : offer)));
     const res = await updateOffer( id, {status:"ACCEPTED"})
     console.log("Devesh")
     console.log(res)
+    fetchData();
   };
 
   const handleReject = async(id) => {
-    setOffers(offers.map((offer) => (offer.id === id ? { ...offer, status: "Rejected" } : offer)));
+    //setOffers(offers.map((offer) => (offer.id === id ? { ...offer, status: "Rejected" } : offer)));
     const res = await updateOffer( id, {status:"REJECTED"})
     console.log("Devesh")
     console.log(res)
+        fetchData();
+
   };
 
   return (
