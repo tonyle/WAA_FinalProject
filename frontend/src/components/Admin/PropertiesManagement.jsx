@@ -52,11 +52,7 @@ const PropertiesManagement = () => {
     try {
       const res = await approveProperty(id);
 
-      const updatedOwners = properties.map((item) =>
-        item.id === id ? res.data : item
-      );
-
-      dispatch(fetchPropertiesSuccess({ data: updatedOwners }));
+      await fetchData();
     } catch (err) {
       console.log(err);
     }
